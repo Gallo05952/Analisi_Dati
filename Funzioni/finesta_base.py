@@ -102,7 +102,7 @@ class Interfaccia:
         try:
             self.FiltroIntervallo=self.IntervalloT.get()
             self.Filtro2=self.DaTempo.get()
-            if self.checkFiltro1.get()==True and self.Tin.get() and self.Tfin.get(): 
+            if self.IntervalloT.get()==True and self.Tin.get() and self.Tfin.get():
                 self.TempoIniziale=self.Tin.get()
                 print(self.TempoIniziale)
                 self.TempoFinale=self.tempoFIN.get()

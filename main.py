@@ -14,5 +14,5 @@ print(app.Filtro2)
 if app.Filtro2 == True:
     print(app.TempoDa)
 if app.FiltroIntervallo == True:
-    #print(app.TempoInizio)
-    print(app.TempoFine)
+    print(app.TempoIniziale)
+    print(app.TempoFinale)
