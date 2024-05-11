@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
+from tkinter import ttk
 
 
 class Interfaccia:
@@ -64,11 +65,24 @@ class Interfaccia:
         self.DaTempo = tk.BooleanVar()
 
         # Creazione dei Checkbutton
-        self.check1 = tk.Checkbutton(self.finestra_filtro, text="Opzione 1", variable=self.IntervalloT)
-        self.check1.grid(row=0, column=0)
+        self.testoFiltro = tk.Label(self.finestra_filtro, text="Seleziona la tipologia di filtro")
+        self.testoFiltro.grid(row=0, column=0)
+        self.check1 = tk.Checkbutton(self.finestra_filtro, text="Intervallo di tempo", variable=self.IntervalloT)
+        self.check1.grid(row=1, column=0)
+        self.TempoInizio = tk.Label(self.finestra_filtro, text="Tempo di inizio")
+        self.TempoInizio.grid(row=1, column=2)
         self.tempo = list(self.df['Data'].unique())
-        self.tempoIN = tk.StringVar(self.finestra_filtro)
-        self.Tin = tk.OptionMenu(self.finestra_filtro, self.tempoIN, *self.tempo)
-        self.Tin.grid(row=1, column=0)
+        self.tempoIN = tk.StringVar()
+        self.Tin = ttk.Combobox(self.finestra_filtro, textvariable=self.tempoIN)  # Usa ttk.Combobox invece di tk.OptionMenu
+        self.Tin['values'] = self.tempo  # Imposta i valori del Combobox
+        self.Tin.grid(row=1, column=3)
+
+        self.TempoFine = tk.Label(self.finestra_filtro, text="Tempo di fine")
+        self.TempoFine.grid(row=1, column=5)
+        self.tempoFIN = tk.StringVar()
+        self.Tfin = ttk.Combobox(self.finestra_filtro, textvariable=self.tempoFIN)
+        self.Tfin['values'] = self.tempo
+        self.Tfin.grid(row=1, column=6)
+
         self.check2 = tk.Checkbutton(self.finestra_filtro, text="Opzione 2", variable=self.DaTempo)
-        self.check2.grid(row=2, column=0)
+        self.check2.grid(row=3, column=0)
