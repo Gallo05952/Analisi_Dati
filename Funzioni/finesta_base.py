@@ -10,7 +10,7 @@ class Interfaccia:
     def FinestraPrincipale(self):
                 
             self.root.title("Finestra Principale")
-            self.root.geometry("300x200")
+            self.root.geometry("500x300")
 
             self.label_titolo= tk.Label(self.root, text="Analisi Dati")
             self.label_titolo.grid(row=0, column=0)
@@ -23,11 +23,12 @@ class Interfaccia:
             self.sfoglia_input=tk.Button(self.root,
                                         text="Seleziona da file",
                                         command=self.file_input_sfoglia)
-            
-
             self.sfoglia_input.grid(row=1, column=1)
-            # self.provazz=tk.Button(self.root, text="Prova2", command=self.prova2)
-            # self.provazz.grid(row=2, column=0)
+
+            self.diversi_progetti = ["CD - DisCO2very","CD - COP Aski","Nitrati"]
+            self.progetto_selezionata = tk.StringVar(self.root)
+            self.menu_a_discesa = tk.OptionMenu(self.root, self.progetto_selezionata, *self.diversi_progetti)
+            self.menu_a_discesa.grid(row=1, column=2)
 
             self.path_in = ""
 
