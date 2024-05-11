@@ -32,6 +32,7 @@ class Interfaccia:
 
             self.path_in = ""
 swsw
+mmoo
     def file_input_sfoglia(self):
         from . import AperturaFile
         self.path_in = filedialog.askopenfilename()
