@@ -31,7 +31,6 @@ class Interfaccia:
             self.menu_a_discesa.grid(row=1, column=2)
 
             self.path_in = ""
-
     def file_input_sfoglia(self):
         from . import AperturaFile
         self.path_in = filedialog.askopenfilename()
