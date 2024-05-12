@@ -19,7 +19,11 @@ class Interfaccia:
         self.MedianaS = False
         self.ModaS = False
         self.DeviazioneS = False
-        self.VarianzaS = False        
+        self.VarianzaS = False  
+        self.minimoS = False
+        self.massimoS = False
+        self.Dati_grezziS = False
+        self.Dati_filtratiS = False      
 
     def FinestraPrincipale(self):
         self.root.title("Finestra Principale")
@@ -60,6 +64,14 @@ class Interfaccia:
                             text="Statistiche",
                             command=self.FinestraStatistiche)
         self.pulsante_statistiche.grid(row=2, column=1)
+
+        # SALVA
+        self.OpzSalva=tk.BooleanVar()
+        self.pulsante_salva = tk.Checkbutton(
+            self.root,
+            text="Salva",
+            variable=self.OpzSalva)
+        self.pulsante_salva.grid(row=3, column=0)
 
         # Bottone OK
         self.ok_button = tk.Button(self.root, text="OK", command=self.Salvataggio)
@@ -154,7 +166,7 @@ class Interfaccia:
 
     def Salvataggio(self):  
         try:
-            print("BEPPEEE")
+            self.OpzSalvaS=self.OpzSalva.get()
         except AttributeError:
             print("Errore")
         finally:

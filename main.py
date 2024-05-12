@@ -1,5 +1,6 @@
 import tkinter as tk
 from Funzioni import *
+import numpy as np
 
 
 root = tk.Tk()
@@ -27,6 +28,7 @@ elif app.Filtro2==True:
     # print(len(abba))
 else:
     print("Nessun filtro attivo")
+    Df_filtrato=np.NaN
 
 ## FUNZIONI STATISTICHE
 statistiche_dafare=[app.MediaS,
@@ -65,11 +67,5 @@ elif (app.Dati_grezziS == True and
 else:
     print("Nessuna statistica selezionata")
 
-# QUESTE SONO LE VARIABILI PER CHIAMARE LE STATISTICHE
-print(app.MediaS)
-print(app.MedianaS)
-print(app.ModaS)
-print(app.DeviazioneS)
-print(app.VarianzaS)
-print(app.Dati_grezziS)
-print(app.Dati_filtratiS)
+# SCRITTURA DEI DATI SU FILE EXCEL
+print(app.OpzSalvaS)
