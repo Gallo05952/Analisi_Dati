@@ -10,6 +10,7 @@ root.mainloop()
 #data=app.df
 #print(data.columns)
 
+## FUNZIONI FILTRO
 if app.FiltroIntervallo==True:
     print("Filtro attivo")
     print("Tempo iniziale: ",app.TempoIniziale)
@@ -32,3 +33,5 @@ print(app.MedianaS)
 print(app.ModaS)
 print(app.DeviazioneS)
 print(app.VarianzaS)
+print(app.Dati_grezziS)
+print(app.Dati_filtratiS)

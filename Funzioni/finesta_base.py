@@ -171,6 +171,8 @@ class Interfaccia:
         self.Moda_var = tk.BooleanVar()
         self.Deviazione_var = tk.BooleanVar()
         self.Varianza_var = tk.BooleanVar()
+        self.Dati_grezzi_var = tk.BooleanVar()
+        self.Dati_filtrati_var = tk.BooleanVar()
 
         # SEZIONE STATISTICHE
         self.testoStat = tk.Label(self.finestra_stat, text="Seleziona la tipologia di statistica")
@@ -191,6 +193,13 @@ class Interfaccia:
         self.Varianza = tk.Checkbutton(self.finestra_stat, text="Varianza", variable=self.Varianza_var)
         self.Varianza.grid(row=5, column=0)
 
+        # SELEZIONA DATI    
+        self.SelezionaDati = tk.Label(self.finestra_stat, text="Seleziona i dati su cui fare le statistiche")
+        self.SelezionaDati.grid(row=0, column=2)
+        self.Dati_grezzi = tk.Checkbutton(self.finestra_stat, text="Dati grezzi", variable=self.Dati_grezzi_var)
+        self.Dati_grezzi.grid(row=1, column=2)
+        self.Dati_filtrati = tk.Checkbutton(self.finestra_stat, text="Dati filtrati", variable=self.Dati_filtrati_var)
+        self.Dati_filtrati.grid(row=2, column=2)
 
 
         # BOTTONE OK E CHIUSURA
@@ -204,6 +213,8 @@ class Interfaccia:
             self.ModaS=self.Moda_var.get()
             self.DeviazioneS=self.Deviazione_var.get()
             self.VarianzaS=self.Varianza_var.get()
+            self.Dati_grezziS=self.Dati_grezzi_var.get()
+            self.Dati_filtratiS=self.Dati_filtrati_var.get()
         except AttributeError:
             print("Errore")
         finally:
