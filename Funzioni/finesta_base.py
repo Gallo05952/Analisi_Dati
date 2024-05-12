@@ -11,6 +11,7 @@ class Interfaccia:
         self.save_path = ""
         self.tempo = []
         self.FiltroIntervallo = False
+        self.Filtro2 = False
         self.tempoIN = tk.StringVar()  # Inizializza self.tempoIN
         self.Tin = ttk.Combobox(textvariable=self.tempoIN)  # Inizializza self.Tin
         
@@ -47,6 +48,13 @@ class Interfaccia:
                             text="Filtra",
                             command=self.FinestraFiltro)
         self.pulsante_filtro.grid(row=2, column=0)
+
+        # STATISTICHE
+        self.pulsante_statistiche = tk.Button(
+                            self.root,
+                            text="Statistiche",
+                            command=self.FinestraStatistiche)
+        self.pulsante_statistiche.grid(row=2, column=1)
 
         # Bottone OK
         self.ok_button = tk.Button(self.root, text="OK", command=self.Salvataggio)
@@ -146,3 +154,20 @@ class Interfaccia:
             print("Errore")
         finally:
             getattr(self.root, 'destroy', lambda: None)()
+
+    def FinestraStatistiche(self):
+        self.finestra_stat = tk.Toplevel(self.root)
+        self.finestra_stat.title("Finestra Statistiche")
+        self.finestra_stat.geometry("1000x200")
+
+        # BOTTONE OK E CHIUSURA
+        self.ok_button_stat = tk.Button(self.finestra_stat, text="OK", command=self.SalvataggioStat)
+        self.ok_button_stat.grid(row=4, column=2, padx=10, pady=10)
+
+    def SalvataggioStat(self):
+        try:
+            print("BEPPEEE222")
+        except AttributeError:
+            print("Errore")
+        finally:
+            getattr(self.finestra_stat, 'destroy', lambda: None)()
