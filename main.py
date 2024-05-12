@@ -28,15 +28,39 @@ elif app.Filtro2==True:
 else:
     print("Nessun filtro attivo")
 
-
+## FUNZIONI STATISTICHE
+statistiche_dafare=[app.MediaS,
+                    app.MedianaS,
+                    app.ModaS,
+                    app.DeviazioneS,
+                    app.VarianzaS,
+                    app.minimoS,
+                    app.massimoS]
 if (app.Dati_grezziS == True and
     app.Dati_filtratiS == False):
     print("Statistiche sui dati grezzi")
+    statistiche_calcolate = Statistica(app.df,
+                                    statistiche_dafare).DatiStatistici()
+    print(statistiche_calcolate)
 elif (app.Dati_grezziS == False and
-    app.Dati_filtratiS == True):
-    print("Statistiche sui dati filtrati")
+    app.Dati_filtratiS == True): 
+    if (app.FiltroIntervallo==True or
+        app.Filtro2==True):
+        print("Statistiche sui dati filtrati")
+        statistiche_calcolate = Statistica(Df_filtrato,
+                                        statistiche_dafare).DatiStatistici()
+        print(statistiche_calcolate)
+    else: print("Devi selezionare il filtro da applicare")
 elif (app.Dati_grezziS == True and
     app.Dati_filtratiS == True):
+    if (app.FiltroIntervallo==True or
+        app.Filtro2==True):
+        calcola_statistiche_grezze = Statistica(app.df,
+                                        statistiche_dafare).DatiStatistici()
+        calcola_statistiche = Statistica(Df_filtrato,
+                                        statistiche_dafare).DatiStatistici()
+        statistiche_calcolate = [calcola_statistiche_grezze,
+                                calcola_statistiche]
     print("Statistiche sui dati grezzi e filtrati")
 else:
     print("Nessuna statistica selezionata")

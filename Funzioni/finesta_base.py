@@ -171,6 +171,8 @@ class Interfaccia:
         self.Moda_var = tk.BooleanVar()
         self.Deviazione_var = tk.BooleanVar()
         self.Varianza_var = tk.BooleanVar()
+        self.minimo_var = tk.BooleanVar()
+        self.massimo_var = tk.BooleanVar()
         self.Dati_grezzi_var = tk.BooleanVar()
         self.Dati_filtrati_var = tk.BooleanVar()
 
@@ -194,6 +196,12 @@ class Interfaccia:
         # STATISTICA: VARIANZA
         self.Varianza = tk.Checkbutton(self.finestra_stat, text="Varianza", variable=self.Varianza_var)
         self.Varianza.grid(row=5, column=0)
+        # STATISTICA: MINIMO
+        self.Minimo = tk.Checkbutton(self.finestra_stat, text="Minimo", variable=self.minimo_var)
+        self.Minimo.grid(row=6, column=0)
+        # STATISTICA: MASSIMO
+        self.Massimo = tk.Checkbutton(self.finestra_stat, text="Massimo", variable=self.massimo_var)
+        self.Massimo.grid(row=7, column=0)
 
         # SELEZIONA DATI    
         self.SelezionaDati = tk.Label(self.finestra_stat, 
@@ -218,6 +226,8 @@ class Interfaccia:
             self.ModaS=self.Moda_var.get()
             self.DeviazioneS=self.Deviazione_var.get()
             self.VarianzaS=self.Varianza_var.get()
+            self.minimoS=self.minimo_var.get()
+            self.massimoS=self.massimo_var.get()
             self.Dati_grezziS=self.Dati_grezzi_var.get()
             self.Dati_filtratiS=self.Dati_filtrati_var.get()
         except AttributeError:
