@@ -25,3 +25,10 @@ elif app.Filtro2==True:
     print(len(abba))
 else:
     print("Nessun filtro attivo")
+
+# QUESTE SONO LE VARIABILI PER CHIAMARE LE STATISTICHE
+print(app.MediaS)
+print(app.MedianaS)
+print(app.ModaS)
+print(app.DeviazioneS)
+print(app.VarianzaS)

@@ -13,8 +13,13 @@ class Interfaccia:
         self.FiltroIntervallo = False
         self.Filtro2 = False
         self.tempoIN = tk.StringVar()  # Inizializza self.tempoIN
-        self.Tin = ttk.Combobox(textvariable=self.tempoIN)  # Inizializza self.Tin
-        
+        self.Tin = ttk.Combobox(textvariable=self.tempoIN)  
+        # Inizializza self.Tin
+        self.MediaS = False
+        self.MedianaS = False
+        self.ModaS = False
+        self.DeviazioneS = False
+        self.VarianzaS = False        
 
     def FinestraPrincipale(self):
         self.root.title("Finestra Principale")
@@ -160,13 +165,45 @@ class Interfaccia:
         self.finestra_stat.title("Finestra Statistiche")
         self.finestra_stat.geometry("1000x200")
 
+        # CREAZIONE DELLE VARIABILI PER I CHECKBUTTON
+        self.Media_var = tk.BooleanVar()
+        self.Mediana_var = tk.BooleanVar()
+        self.Moda_var = tk.BooleanVar()
+        self.Deviazione_var = tk.BooleanVar()
+        self.Varianza_var = tk.BooleanVar()
+
+        # SEZIONE STATISTICHE
+        self.testoStat = tk.Label(self.finestra_stat, text="Seleziona la tipologia di statistica")
+        self.testoStat.grid(row=0, column=0)
+        # STATISTICA: MEDIA
+        self.Media = tk.Checkbutton(self.finestra_stat, text="Media", variable=self.Media_var)
+        self.Media.grid(row=1, column=0)
+        # STATISTICA: MEDIANA
+        self.Mediana = tk.Checkbutton(self.finestra_stat, text="Mediana", variable=self.Mediana_var)
+        self.Mediana.grid(row=2, column=0)
+        # STATISTICA: MODA
+        self.Moda = tk.Checkbutton(self.finestra_stat, text="Moda", variable=self.Moda_var)
+        self.Moda.grid(row=3, column=0)
+        # STATISTICA: DEVIAZIONE STANDARD
+        self.Deviazione = tk.Checkbutton(self.finestra_stat, text="Deviazione Standard", variable=self.Deviazione_var)
+        self.Deviazione.grid(row=4, column=0)
+        # STATISTICA: VARIANZA
+        self.Varianza = tk.Checkbutton(self.finestra_stat, text="Varianza", variable=self.Varianza_var)
+        self.Varianza.grid(row=5, column=0)
+
+
+
         # BOTTONE OK E CHIUSURA
         self.ok_button_stat = tk.Button(self.finestra_stat, text="OK", command=self.SalvataggioStat)
         self.ok_button_stat.grid(row=4, column=2, padx=10, pady=10)
 
     def SalvataggioStat(self):
         try:
-            print("BEPPEEE222")
+            self.MediaS=self.Media_var.get()
+            self.MedianaS=self.Mediana_var.get()
+            self.ModaS=self.Moda_var.get()
+            self.DeviazioneS=self.Deviazione_var.get()
+            self.VarianzaS=self.Varianza_var.get()
         except AttributeError:
             print("Errore")
         finally:
