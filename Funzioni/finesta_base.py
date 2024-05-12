@@ -71,7 +71,9 @@ class Interfaccia:
 
         # Creazione delle variabili per i Checkbutton
         self.IntervalloT = tk.BooleanVar()
+        self.IntervalloT.trace('w', self.update_checkboxes)
         self.DaTempo = tk.BooleanVar()
+        self.DaTempo.trace('w', self.update_checkboxes)
 
         # SEZIONE FILTRO
         self.testoFiltro = tk.Label(self.finestra_filtro, text="Seleziona la tipologia di filtro")
@@ -106,6 +108,15 @@ class Interfaccia:
         self.ok_button = tk.Button(self.finestra_filtro, text="OK", command=self.SalvataggioFiltro)
         self.ok_button.grid(row=4, column=2, padx=10, pady=10)
 
+    def update_checkboxes(self, *args):
+        if self.IntervalloT.get():
+            self.Filtro2.config(state='disabled')
+        elif self.DaTempo.get():
+            self.checkFiltro1.config(state='disabled')
+        else:
+            self.checkFiltro1.config(state='normal')
+            self.Filtro2.config(state='normal')
+    
     def SalvataggioFiltro(self):
         try:
             # checkbox filtro intervallo di tempo
