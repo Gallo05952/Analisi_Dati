@@ -16,6 +16,9 @@ if app.FiltroIntervallo==True:
     print("Tempo finale: ",app.TempoFinale)
 elif app.Filtro2==True:
     print("Filtro scarto attivo")
+    print(len(app.df))
     print("Tempo di scarto: ",app.TempoDa)
+    abba=FiltroTempo(app.df).FineTransitorio(app.TempoDa)
+    print(len(abba))
 else:
     print("Nessun filtro attivo")
