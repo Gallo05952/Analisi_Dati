@@ -175,7 +175,9 @@ class Interfaccia:
         self.Dati_filtrati_var = tk.BooleanVar()
 
         # SEZIONE STATISTICHE
-        self.testoStat = tk.Label(self.finestra_stat, text="Seleziona la tipologia di statistica")
+        self.testoStat = tk.Label(self.finestra_stat,
+                            text="Seleziona la tipologia di statistica",
+                            font=("Helvetica", 10, "bold"))
         self.testoStat.grid(row=0, column=0)
         # STATISTICA: MEDIA
         self.Media = tk.Checkbutton(self.finestra_stat, text="Media", variable=self.Media_var)
@@ -194,7 +196,10 @@ class Interfaccia:
         self.Varianza.grid(row=5, column=0)
 
         # SELEZIONA DATI    
-        self.SelezionaDati = tk.Label(self.finestra_stat, text="Seleziona i dati su cui fare le statistiche")
+        self.SelezionaDati = tk.Label(self.finestra_stat, 
+                    text="Seleziona i dati su cui fare le statistiche",
+                    font=("Helvetica", 10, "bold"))
+        
         self.SelezionaDati.grid(row=0, column=2)
         self.Dati_grezzi = tk.Checkbutton(self.finestra_stat, text="Dati grezzi", variable=self.Dati_grezzi_var)
         self.Dati_grezzi.grid(row=1, column=2)
