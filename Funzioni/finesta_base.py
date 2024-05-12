@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import ttk
+import datetime
+import os
   # Importa AperturaFile all'inizio del file
 
 class Interfaccia:
@@ -24,6 +26,9 @@ class Interfaccia:
         self.massimoS = False
         self.Dati_grezziS = False
         self.Dati_filtratiS = False      
+        self.current_time = datetime.datetime.now().strftime("%d-%m-%Y")
+        self.filepathD = os.path.join(os.path.expanduser("~"), "Desktop")   
+        self.filenameD = f"{self.current_time}_default_filename"
 
     def FinestraPrincipale(self):
         self.root.title("Finestra Principale")
@@ -65,7 +70,22 @@ class Interfaccia:
                             command=self.FinestraStatistiche)
         self.pulsante_statistiche.grid(row=2, column=1)
 
-        # SALVA
+        # SALVATAGGIO
+        # Label per mostrare il percorso di salvataggio
+        self.save_label = tk.Label(self.root, text="Nessuna cartella di salvataggio selezionata")
+        self.save_label.grid(row=5, column=1, padx=10, pady=10)
+
+        # Bottone per sfogliare le cartelle di salvataggio
+        self.save_button = tk.Button(self.root, text="Sfoglia", command=self.save_in)
+        self.save_button.grid(row=5, column=2, padx=10, pady=10)
+
+            # Label per mostrare il percorso di salvataggio
+        self.FileName = tk.Label(self.root, text="Nome file finale:")
+        self.FileName.grid(row=5, column=3, padx=10, pady=10)
+
+        # Entry per inserire il nome del file
+        self.file_nameC = tk.Entry(self.root)
+        self.file_nameC.grid(row=5, column=4, padx=10, pady=10)
         self.OpzSalva=tk.BooleanVar()
         self.pulsante_salva = tk.Checkbutton(
             self.root,
@@ -76,6 +96,10 @@ class Interfaccia:
         # Bottone OK
         self.ok_button = tk.Button(self.root, text="OK", command=self.Salvataggio)
         self.ok_button.grid(row=4, column=2, padx=10, pady=10)
+
+        self.filepath = ""
+        self.save_path = ""
+        self.FileName = ""
 
     def file_input_sfoglia(self):
         ####
@@ -167,6 +191,13 @@ class Interfaccia:
     def Salvataggio(self):  
         try:
             self.OpzSalvaS=self.OpzSalva.get()
+            self.file_name = self.file_nameC.get()
+            if not self.FileName:  # Check if file_name is empty
+                self.FileName = self.filenameD  # Assign a default file name
+            if not self.save_path:
+                self.save_path = self.filepathD
+            self.savename = self.save_path + '/' + self.FileName + '_' + self.current_time +  ".xlsx"
+            self.savename = self.savename.replace("/", '\\')
         except AttributeError:
             print("Errore")
         finally:
@@ -246,3 +277,9 @@ class Interfaccia:
             print("Errore")
         finally:
             getattr(self.finestra_stat, 'destroy', lambda: None)()
+
+    def save_in(self):
+        # Apri il dialogo per selezionare la directory
+        self.save_path = filedialog.askdirectory()
+        if self.save_path:
+            self.save_label.config(text=f"Salva in: {self.save_path}")

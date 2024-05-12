@@ -8,9 +8,9 @@ app = Interfaccia(root)
 app.FinestraPrincipale()
 root.mainloop()
 
-#data=app.df
-#print(data.columns)
-
+print(1)
+print(app.filepath)
+print(2)
 ## FUNZIONI FILTRO
 if app.FiltroIntervallo==True:
     # print("Filtro attivo")
@@ -64,8 +64,8 @@ elif (app.Dati_grezziS == True and
         statistiche_calcolate = [calcola_statistiche_grezze,
                                 calcola_statistiche]
     print("Statistiche sui dati grezzi e filtrati")
-else:
-    print("Nessuna statistica selezionata")
+else: print("Nessuna statistica selezionata")
 
 # SCRITTURA DEI DATI SU FILE EXCEL
-print(app.OpzSalvaS)
+# if app.Filtro2 == True or app.FiltroIntervallo == True: Filtro = True
+# Preferenze = [Filtro, app.Dati_grezziS, app.Dati_filtratiS]

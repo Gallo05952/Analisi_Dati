@@ -8,8 +8,7 @@ class ScritturaExcel:
 
 
     def Scrittura(self,statistiche):
-        if len(statistiche)>1:
-            self.Scrittura_Statistiche(statistiche)
+        
 
     def Scrittura_F_S(self,df,df_filtrato,statistica_F,statistica):# Create a Pandas Excel writer using XlsxWriter as the engine.
         writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
