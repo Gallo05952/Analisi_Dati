@@ -14,6 +14,9 @@ if app.FiltroIntervallo==True:
     print("Filtro attivo")
     print("Tempo iniziale: ",app.TempoIniziale)
     print("Tempo finale: ",app.TempoFinale)
+    print(len(app.df))
+    abba=FiltroTempo(app.df).FiltraPerTempo(app.TempoIniziale,app.TempoFinale)
+    print(len(abba))
 elif app.Filtro2==True:
     print("Filtro scarto attivo")
     print(len(app.df))

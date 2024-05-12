@@ -25,3 +25,14 @@ class FiltroTempo:
         df_filtered = self.df[self.df.iloc[:, 0] >= end_time].copy()
         print(end_time)
         return df_filtered
+    
+    def FiltraPerTempo(self, start_time_str, end_time_str):
+        start_time = datetime.strptime(start_time_str, '%H:%M').time()  # Convert the string to a datetime.time object
+        end_time = datetime.strptime(end_time_str, '%H:%M').time()  # Convert the string to a datetime.time object
+
+        # Convert the first column to datetime.time
+        self.df.iloc[:, 0] = pd.to_datetime(self.df.iloc[:, 0], format='%H:%M').dt.time
+
+        # Filter the DataFrame
+        df_filtered = self.df[(self.df.iloc[:, 0] >= start_time) & (self.df.iloc[:, 0] <= end_time)].copy()
+        return df_filtered
