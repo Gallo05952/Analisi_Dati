@@ -3,9 +3,10 @@ L'obiettivo di questo codice è produrre un'analisi dati:
 Features:
 1) import dei diversi tipi di dati:
     riconoscimento dell'estensione e funzione di conseguenza
+        i diversi tipi di file da importare verranno implementati man man che si incontrano
 2) filtro dei dati:
-    -) intervallo di tempo
-    -) da un certo tempo
+    -) intervallo di tempo ()
+    -) da un certo tempo ()
 
 3) Statistiche
 
