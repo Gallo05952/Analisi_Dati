@@ -37,7 +37,8 @@ class Interfaccia:
         # TITOLO
         self.label_titolo= tk.Label(self.root, 
                                     text="Analisi Dati",
-                                    font=("Helvetica", 18, "bold"))
+                                    font=("Helvetica", 18, "bold"),
+                                    fg="red")
         self.label_titolo.grid(row=0, column=2)
 
         # Import del file
@@ -81,6 +82,13 @@ class Interfaccia:
                             text="Statistiche",
                             command=self.FinestraStatistiche)
         self.pulsante_statistiche.grid(row=2, column=2)
+
+        # CORRELAZIONI
+        self.pulsante_correlazioni = tk.Button(
+                            self.root,
+                            text="Correlazioni",
+                            command=self.FinestraCorrelazioni)
+        self.pulsante_correlazioni.grid(row=2, column=3)
 
         # SALVATAGGIO
         # Label per mostrare il percorso di salvataggio
@@ -145,25 +153,28 @@ class Interfaccia:
         self.DaTempo.trace('w', self.update_checkboxes)
 
         # SEZIONE FILTRO
-        self.testoFiltro = tk.Label(self.finestra_filtro, text="Seleziona la tipologia di filtro")
+        self.testoFiltro = tk.Label(self.finestra_filtro,
+                            text="Seleziona la tipologia di filtro", 
+                            font=("Helvetica", 10, "bold"),
+                            fg="red")
         self.testoFiltro.grid(row=0, column=0)
         # FILTRO INTERVALLO DI TEMPO
         # TEMPO INIZIO
         self.checkFiltro1 = tk.Checkbutton(self.finestra_filtro, text="Intervallo di tempo", variable=self.IntervalloT)
         self.checkFiltro1.grid(row=1, column=0)
         self.TempoInizio = tk.Label(self.finestra_filtro, text="Tempo di inizio")
-        self.TempoInizio.grid(row=1, column=2)
+        self.TempoInizio.grid(row=1, column=1)
         self.tempoIN = tk.StringVar()
         self.Tin = ttk.Combobox(self.finestra_filtro, textvariable=self.tempoIN)  # Usa ttk.Combobox invece di tk.OptionMenu
         self.Tin['values'] = self.tempo  # Imposta i valori del Combobox
-        self.Tin.grid(row=1, column=3)
+        self.Tin.grid(row=1, column=2)
         # TEMPO FINE
         self.TempoFine = tk.Label(self.finestra_filtro, text="Tempo di fine")
-        self.TempoFine.grid(row=1, column=5)
+        self.TempoFine.grid(row=1, column=3)
         self.tempoFIN = tk.StringVar()
         self.Tfin = ttk.Combobox(self.finestra_filtro, textvariable=self.tempoFIN)
         self.Tfin['values'] = self.tempo
-        self.Tfin.grid(row=1, column=6)
+        self.Tfin.grid(row=1, column=4)
         # FILTRO SCARTO INIZIALE TEMPORALE
         self.Filtro2 = tk.Checkbutton(self.finestra_filtro, text="Scarto Iniziale", variable=self.DaTempo)
         self.Filtro2.grid(row=3, column=0)
@@ -227,7 +238,7 @@ class Interfaccia:
     def FinestraStatistiche(self):
         self.finestra_stat = tk.Toplevel(self.root)
         self.finestra_stat.title("Finestra Statistiche")
-        self.finestra_stat.geometry("1000x200")
+        self.finestra_stat.geometry("1000x400")
 
         # CREAZIONE DELLE VARIABILI PER I CHECKBUTTON
         self.Media_var = tk.BooleanVar()
@@ -243,7 +254,8 @@ class Interfaccia:
         # SEZIONE STATISTICHE
         self.testoStat = tk.Label(self.finestra_stat,
                             text="Seleziona la tipologia di statistica",
-                            font=("Helvetica", 10, "bold"))
+                            font=("Helvetica", 10, "bold"),
+                            fg="red")
         self.testoStat.grid(row=0, column=0)
         # STATISTICA: MEDIA
         self.Media = tk.Checkbutton(self.finestra_stat, text="Media", variable=self.Media_var)
@@ -270,18 +282,19 @@ class Interfaccia:
         # SELEZIONA DATI    
         self.SelezionaDati = tk.Label(self.finestra_stat, 
                     text="Seleziona i dati su cui fare le statistiche",
-                    font=("Helvetica", 10, "bold"))
+                    font=("Helvetica", 10, "bold"),
+                    fg="red")
         
-        self.SelezionaDati.grid(row=0, column=2)
+        self.SelezionaDati.grid(row=0, column=3)
         self.Dati_grezzi = tk.Checkbutton(self.finestra_stat, text="Dati grezzi", variable=self.Dati_grezzi_var)
-        self.Dati_grezzi.grid(row=1, column=2)
+        self.Dati_grezzi.grid(row=1, column=3)
         self.Dati_filtrati = tk.Checkbutton(self.finestra_stat, text="Dati filtrati", variable=self.Dati_filtrati_var)
-        self.Dati_filtrati.grid(row=2, column=2)
+        self.Dati_filtrati.grid(row=2, column=3)
 
 
         # BOTTONE OK E CHIUSURA
         self.ok_button_stat = tk.Button(self.finestra_stat, text="OK", command=self.SalvataggioStat)
-        self.ok_button_stat.grid(row=4, column=2, padx=10, pady=10)
+        self.ok_button_stat.grid(row=8, column=2, padx=10, pady=10)
 
     def SalvataggioStat(self):
         try:
@@ -298,6 +311,63 @@ class Interfaccia:
             print("Errore")
         finally:
             getattr(self.finestra_stat, 'destroy', lambda: None)()
+
+    def FinestraCorrelazioni(self):
+        self.finestra_corr = tk.Toplevel(self.root)
+        self.finestra_corr.title("Finestra Correlazioni")
+        self.finestra_corr.geometry("1000x400")
+        self.Pearson_var = tk.BooleanVar()
+        self.Spearman_var = tk.BooleanVar()
+        self.Kendall_var = tk.BooleanVar()
+        self.Dati_grezziCorr_var = tk.BooleanVar()
+        self.Dati_filtratiCorr_var = tk.BooleanVar()
+        # SEZIONE CORRELAZIONI
+        self.testoCorr = tk.Label(self.finestra_corr,
+                            text="Seleziona la tipologia di correlazione",
+                            font=("Helvetica", 10, "bold"),
+                            fg="red")
+        self.testoCorr.grid(row=0, column=0)
+
+        # CORRELAZIONE: PEARSON
+        self.Pearson = tk.Checkbutton(self.finestra_corr, text="Pearson",variable=self.Pearson_var)
+        self.Pearson.grid(row=1, column=0)
+
+        # CORRELAZIONE: SPEARMAN
+        self.Spearman = tk.Checkbutton(self.finestra_corr, text="Spearman",variable=self.Spearman_var)
+        self.Spearman.grid(row=2, column=0)
+
+        # CORRELAZIONE: KENDALL
+        self.Kendall = tk.Checkbutton(self.finestra_corr, text="Kendall",variable=self.Kendall_var)
+        self.Kendall.grid(row=3, column=0)
+
+        # TIPOLOGIA DI DATI
+        self.SelezionaDatiCorr = tk.Label(self.finestra_corr,
+                            text="Seleziona i dati su cui fare le correlazioni",
+                            font=("Helvetica", 10, "bold"),
+                            fg="red")
+        self.SelezionaDatiCorr.grid(row=0, column=3)
+
+        self.Dati_grezziCorr = tk.Checkbutton(self.finestra_corr, text="Dati grezzi",variable=self.Dati_grezziCorr_var)
+        self.Dati_grezziCorr.grid(row=1, column=3)
+        
+        self.Dati_filtratiCorr = tk.Checkbutton(self.finestra_corr, text="Dati filtrati",variable=self.Dati_filtratiCorr_var)
+        self.Dati_filtratiCorr.grid(row=2, column=3)
+
+        # BOTTONE OK E CHIUSURA
+        self.ok_button_corr = tk.Button(self.finestra_corr, text="OK", command=self.SalvataggioCorr)
+        self.ok_button_corr.grid(row=8, column=2, padx=10, pady=10)
+
+    def SalvataggioCorr(self):
+        try:
+            self.PearsonS=self.Pearson_var.get()
+            self.SpearmanS=self.Spearman_var.get()
+            self.KendallS=self.Kendall_var.get()
+            self.Dati_grezziCorrS=self.Dati_grezziCorr_var.get()
+            self.Dati_filtratiCorrS=self.Dati_filtratiCorr_var.get()
+        except AttributeError:
+            print("Errore")
+        finally:
+            getattr(self.finestra_corr, 'destroy', lambda: None)()
 
     def save_in(self):
         # Apri il dialogo per selezionare la directory
