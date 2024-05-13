@@ -7,7 +7,14 @@ class ScritturaExcel:
         self.filepath = filepath
 
 
-    def Scrittura(self,statistiche):
+    def Scrittura(self,df):
+        writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
+
+        # Write each dataframe to a different worksheet.
+        df.to_excel(writer, sheet_name='Filtrati')
+
+        # Close the Pandas Excel writer and output the Excel file.
+        writer.close()
         
 
     def Scrittura_F_S(self,df,df_filtrato,statistica_F,statistica):# Create a Pandas Excel writer using XlsxWriter as the engine.

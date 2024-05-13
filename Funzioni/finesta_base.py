@@ -35,26 +35,32 @@ class Interfaccia:
         self.root.geometry("500x300")
 
         # TITOLO
-        self.label_titolo= tk.Label(self.root, text="Analisi Dati")
+        self.label_titolo= tk.Label(self.root, 
+                                    text="Analisi Dati",
+                                    font=("Helvetica", 18, "bold"))
         self.label_titolo.grid(row=0, column=0)
 
         # Import del file
-        self.label_file_in= tk.Label(self.root, text="File da importare")
+        self.label_file_in= tk.Label(self.root, 
+                                    text="File da importare",
+                                    font=("Helvetica", 10, "bold"))
         self.label_file_in.grid(row=1, column=0)
 
         # TIPO DI PROGETTO - X IL FUTURO
         self.sfoglia_input=tk.Button(self.root,
-                                    text="Seleziona da file",
+                                    text="Seleziona file",
+                                    font=("Helvetica", 10, "bold"),
                                     command=self.file_input_sfoglia)
         self.sfoglia_input.grid(row=1, column=1)
 
-        self.diversi_progetti = [
-            "CD - DisCO2very",
-            "CD - COP Aski",
-            "Nitrati"]
-        self.progetto_selezionata = tk.StringVar(self.root)
-        self.menu_a_discesa = tk.OptionMenu(self.root, self.progetto_selezionata, *self.diversi_progetti)
-        self.menu_a_discesa.grid(row=1, column=2)
+        #! MENU A DISCESA per la selezione del progetto nel caso di formato diversi con la stessa estensione
+        # self.diversi_progetti = [
+        #     "CD - DisCO2very",
+        #     "CD - COP Aski",
+        #     "Nitrati"]
+        # self.progetto_selezionata = tk.StringVar(self.root)
+        # self.menu_a_discesa = tk.OptionMenu(self.root, self.progetto_selezionata, *self.diversi_progetti)
+        # self.menu_a_discesa.grid(row=1, column=2)
         
         # FILTRO
         self.pulsante_filtro = tk.Button(
@@ -72,29 +78,38 @@ class Interfaccia:
 
         # SALVATAGGIO
         # Label per mostrare il percorso di salvataggio
-        self.save_label = tk.Label(self.root, text="Nessuna cartella di salvataggio selezionata")
-        self.save_label.grid(row=5, column=1, padx=10, pady=10)
+        self.save_label = tk.Label(self.root, 
+                                text="Nessuna cartella di salvataggio selezionata",
+                                font=("Helvetica", 10, "bold"))
+        self.save_label.grid(row=3, column=1, padx=10, pady=10)
 
         # Bottone per sfogliare le cartelle di salvataggio
-        self.save_button = tk.Button(self.root, text="Sfoglia", command=self.save_in)
-        self.save_button.grid(row=5, column=2, padx=10, pady=10)
+        self.save_button = tk.Button(self.root, 
+                                    text="Sfoglia",
+                                    command=self.save_in)
+        self.save_button.grid(row=3, column=2, padx=10, pady=10)
 
             # Label per mostrare il percorso di salvataggio
-        self.FileName = tk.Label(self.root, text="Nome file finale:")
-        self.FileName.grid(row=5, column=3, padx=10, pady=10)
+        self.FileName = tk.Label(self.root,
+                                text="Nome file finale:",
+                                font=("Helvetica", 10, "bold"))
+        self.FileName.grid(row=3, column=3, padx=10, pady=10)
 
         # Entry per inserire il nome del file
         self.file_nameC = tk.Entry(self.root)
-        self.file_nameC.grid(row=5, column=4, padx=10, pady=10)
+        self.file_nameC.grid(row=3, column=4, padx=10, pady=10)
         self.OpzSalva=tk.BooleanVar()
         self.pulsante_salva = tk.Checkbutton(
             self.root,
             text="Salva",
+            font=("Helvetica", 10, "bold"),
             variable=self.OpzSalva)
         self.pulsante_salva.grid(row=3, column=0)
 
         # Bottone OK
-        self.ok_button = tk.Button(self.root, text="OK", command=self.Salvataggio)
+        self.ok_button = tk.Button(self.root,
+                                text="OK",
+                                font=("Helvetica", 18, "bold"),command=self.Salvataggio)
         self.ok_button.grid(row=4, column=2, padx=10, pady=10)
 
         self.filepath = ""
@@ -111,7 +126,6 @@ class Interfaccia:
             self.label_file_in.config(text=self.path_in)
             self.df=AperturaFile(self.path_in).Apertura() #se cambia il formato vai in AperuraFile e aggiungi la funzione di conversione da file a dataframe
             self.tempo=list(self.df['Data'].unique())
-            print(self.df['Data'])
 
     def FinestraFiltro(self):
         self.finestra_filtro = tk.Toplevel(self.root)
@@ -192,11 +206,12 @@ class Interfaccia:
         try:
             self.OpzSalvaS=self.OpzSalva.get()
             self.file_name = self.file_nameC.get()
-            if not self.FileName:  # Check if file_name is empty
-                self.FileName = self.filenameD  # Assign a default file name
+            print(self.file_name)
+            if not self.file_name:  # Check if file_name is empty
+                self.file_name = self.filenameD  
             if not self.save_path:
                 self.save_path = self.filepathD
-            self.savename = self.save_path + '/' + self.FileName + '_' + self.current_time +  ".xlsx"
+            self.savename = self.save_path + '/' + self.file_name + '_' + self.current_time +  ".xlsx"
             self.savename = self.savename.replace("/", '\\')
         except AttributeError:
             print("Errore")

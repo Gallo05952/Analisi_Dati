@@ -65,5 +65,6 @@ else: print("Nessuna statistica selezionata")
 
 # SCRITTURA DEI DATI SU FILE EXCEL
 print(app.savename)
+#ScritturaExcel(app.savename).Scrittura(Df_filtrato)
 # if app.Filtro2 == True or app.FiltroIntervallo == True: Filtro = True
 # Preferenze = [Filtro, app.Dati_grezziS, app.Dati_filtratiS]
