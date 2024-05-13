@@ -106,14 +106,16 @@ elif (app.Dati_grezziCorrS == True and app.Dati_filtratiCorrS == True):
         correlazione_grezzi = Correlazione(app.df).Kendall()
         correlazione_filtrati = Correlazione(Df_filtrato).Kendall()
         correlazione.append([correlazione_grezzi,correlazione_filtrati])
+else: print("Nessuna correlazione selezionata")
 
 
 # SCRITTURA DEI DATI SU FILE EXCEL
+correlazioni_da_fare=[app.PearsonS,app.SpearmanS,app.KendallS]
 if (app.OpzSalvaS == True):
     ScritturaExcel(app.savename).Scrittura(app.df,
                                         Df_filtrato,statistiche_calcolate,
-                                        statistiche_dafare)
+                                        statistiche_dafare,
+                                        correlazione,
+                                        correlazioni_da_fare)
 # if app.Filtro2 == True or app.FiltroIntervallo == True: Filtro = True
 # Preferenze = [Filtro, app.Dati_grezziS, app.Dati_filtratiS]
-
-print(app.PearsonS,app.SpearmanS,app.KendallS,app.Dati_grezziCorrS,app.Dati_filtratiCorrS)
