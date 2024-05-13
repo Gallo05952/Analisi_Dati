@@ -7,7 +7,8 @@ root = tk.Tk()
 app = Interfaccia(root)
 app.FinestraPrincipale()
 root.mainloop()
-
+statistiche_calcolate=[]
+statistiche_dafare=[]
 ## FUNZIONI FILTRO
 if app.FiltroIntervallo==True:
     # print("Filtro attivo")
@@ -64,7 +65,9 @@ elif (app.Dati_grezziS == True and
 else: print("Nessuna statistica selezionata")
 
 # SCRITTURA DEI DATI SU FILE EXCEL
-print(app.savename)
-#ScritturaExcel(app.savename).Scrittura(Df_filtrato)
+if (app.OpzSalvaS == True):
+    ScritturaExcel(app.savename).Scrittura(app.df,
+                                        Df_filtrato,statistiche_calcolate,
+                                        statistiche_dafare)
 # if app.Filtro2 == True or app.FiltroIntervallo == True: Filtro = True
 # Preferenze = [Filtro, app.Dati_grezziS, app.Dati_filtratiS]

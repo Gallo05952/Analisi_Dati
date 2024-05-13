@@ -32,13 +32,13 @@ class Interfaccia:
 
     def FinestraPrincipale(self):
         self.root.title("Finestra Principale")
-        self.root.geometry("500x300")
+        self.root.geometry("1000x300")
 
         # TITOLO
         self.label_titolo= tk.Label(self.root, 
                                     text="Analisi Dati",
                                     font=("Helvetica", 18, "bold"))
-        self.label_titolo.grid(row=0, column=0)
+        self.label_titolo.grid(row=0, column=2)
 
         # Import del file
         self.label_file_in= tk.Label(self.root, 
@@ -61,20 +61,26 @@ class Interfaccia:
         # self.progetto_selezionata = tk.StringVar(self.root)
         # self.menu_a_discesa = tk.OptionMenu(self.root, self.progetto_selezionata, *self.diversi_progetti)
         # self.menu_a_discesa.grid(row=1, column=2)
-        
+
+        # POSSIBILTà
+        self.label_possibilita = tk.Label(self.root, 
+                                    text="Possibili azioni sui dati:",
+                                    font=("Helvetica", 10, "bold"))
+        self.label_possibilita.grid(row=2, column=0)
+
         # FILTRO
         self.pulsante_filtro = tk.Button(
                             self.root,
                             text="Filtra",
                             command=self.FinestraFiltro)
-        self.pulsante_filtro.grid(row=2, column=0)
+        self.pulsante_filtro.grid(row=2, column=1)
 
         # STATISTICHE
         self.pulsante_statistiche = tk.Button(
                             self.root,
                             text="Statistiche",
                             command=self.FinestraStatistiche)
-        self.pulsante_statistiche.grid(row=2, column=1)
+        self.pulsante_statistiche.grid(row=2, column=2)
 
         # SALVATAGGIO
         # Label per mostrare il percorso di salvataggio
@@ -298,3 +304,4 @@ class Interfaccia:
         self.save_path = filedialog.askdirectory()
         if self.save_path:
             self.save_label.config(text=f"Salva in: {self.save_path}")
+            self.pulsante_salva.select()
