@@ -1,3 +1,4 @@
+
 import os
 import pandas as pd
 import numpy as np
@@ -39,7 +40,7 @@ class AperturaFile:
         df = pd.DataFrame(data_rows, columns=column_names)
         # Convert all string values to float, replacing commas with periods
         #df.iloc[1:, 2:] = df.iloc[1:, 2:].applymap(lambda x: pd.to_numeric(x.replace(',', '.'), errors='coerce') if isinstance(x, str) else x)
-        df.iloc[0:, 2:] = df.iloc[0:, 2:].apply(lambda series: series.map(lambda x: pd.to_numeric(x.replace(',', '.'), errors='coerce') if isinstance(x, str) else x))
+        df.iloc[0:, 1:] = df.iloc[0:, 1:].apply(lambda series: series.map(lambda x: pd.to_numeric(x.replace(',', '.'), errors='coerce') if isinstance(x, str) else x))
         df=df.replace('', np.nan)
         #df['Data'] = pd.to_datetime(df['Data'], format='%d/%m/%Y %H:%M')
         try:

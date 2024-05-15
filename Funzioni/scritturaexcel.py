@@ -1,5 +1,6 @@
 
 import pandas as pd
+import numpy as np
 
 class ScritturaExcel:
 
@@ -7,60 +8,100 @@ class ScritturaExcel:
         self.filepath = filepath
 
 
-    def Scrittura(self,statistiche):
+    def Scrittura(self,df,
+                Df_filtrato,
+                statistiche_calcolate,
+                statistiche_dafare,
+                correlazioni,
+                correlazioni_da_fare):
+            self.writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
+            self.ScritturaOriginali(df)
+            if Df_filtrato:  
+                self.ScritturaFiltrati(Df_filtrato)
+            if statistiche_dafare:
+                self.ScritturaStatistiche(statistiche_calcolate,
+                                        statistiche_dafare)
+            if correlazioni_da_fare:
+                self.ScritturaCorrelazioni(correlazioni,
+                                        correlazioni_da_fare)
+            
+
+            # Close the Pandas Excel writer and output the Excel file.
+            self.writer.close()
         
+    def ScritturaOriginali(self,df):
+        df.to_excel(self.writer, sheet_name='Originali')
 
-    def Scrittura_F_S(self,df,df_filtrato,statistica_F,statistica):# Create a Pandas Excel writer using XlsxWriter as the engine.
-        writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
+    def ScritturaFiltrati(self,Df_filtrato):
+        Df_filtrato.to_excel(self.writer, sheet_name='Filtrati')
 
-        # Write each dataframe to a different worksheet.
-        df.to_excel(writer, sheet_name='Originali')
-        df_filtrato.to_excel(writer, sheet_name='Filtrati')
-        dascrivere = pd.DataFrame(statistica_F).T
-        #dascrivere.to_excel(writer, sheet_name='Statistiche')
-        dascrivere.applymap(lambda x: x.values[0] if isinstance(x, pd.Series) else x).to_excel(writer, sheet_name='Statistiche Filtrate')
-        dascrivere2 = pd.DataFrame(statistica).T
-        #dascrivere.to_excel(writer, sheet_name='Statistiche')
-        dascrivere2.applymap(lambda x: x.values[0] if isinstance(x, pd.Series) else x).to_excel(writer, sheet_name='Statistiche')
-        # Close the Pandas Excel writer and output the Excel file.
-        writer.close()
+    def ScritturaStatistiche(self,
+                            statistiche_calcolate,
+                            statistiche_dafare
+                            ):
+        NomiStat_gen=['Media','Mediana','Moda','Deviazione','Varianza','Minimo','Massimo']
+        NomiStat=[NomiStat_gen[i] 
+                for i in range(len(statistiche_dafare))
+                if statistiche_dafare[i]]
+        if all(isinstance(item,list) for item in statistiche_calcolate):
+            NomiFogli=['Statistiche dei grezzi',
+                    'Statistiche dei filtrati']
+            for i in range(len(statistiche_calcolate)):
+                df_stat = pd.DataFrame(statistiche_calcolate[i]).T
+                df_stat.columns = NomiStat
+                df_stat.to_excel(self.writer, sheet_name=NomiFogli[i])
+        else:
+            df_stat = pd.DataFrame(statistiche_calcolate).T
+            df_stat.columns = NomiStat
+            df_stat.to_excel(self.writer, sheet_name='Statistiche')
 
-    def Scrittura_F_NS(self,df,df_filtrato):# Create a Pandas Excel writer using XlsxWriter as the engine.
-        writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
 
-        # Write each dataframe to a different worksheet.
-        df.to_excel(writer, sheet_name='Originali')
-        df_filtrato.to_excel(writer, sheet_name='Filtrati')
-
-        # Close the Pandas Excel writer and output the Excel file.
-        writer.close()
-
-    def Scrittura_NF_S(self,df,statistica):# Create a Pandas Excel writer using XlsxWriter as the engine.
-        writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
-
-        # Write each dataframe to a different worksheet.
-        df.to_excel(writer, sheet_name='Originali')
-        dascrivere = pd.DataFrame(statistica).T
-        #dascrivere.to_excel(writer, sheet_name='Statistiche')
-        dascrivere.applymap(lambda x: x.values[0] if isinstance(x, pd.Series) else x).to_excel(writer, sheet_name='Statistiche')
-        # Close the Pandas Excel writer and output the Excel file.
-        writer.close()
-
-    def Scrittura_NF_NS(self,df):# Create a Pandas Excel writer using XlsxWriter as the engine.
-        writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
-
-        # Write each dataframe to a different worksheet.
-        df.to_excel(writer, sheet_name='Originali')
-
-        # Close the Pandas Excel writer and output the Excel file.
-        writer.close()
-
-    def Scrittura_COP(self,df,df_COP):
-        writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
-
-        # Write each dataframe to a different worksheet.
-        df.to_excel(writer, sheet_name='Originali')
-        df_COP.to_excel(writer, sheet_name='COP')
-
-        # Close the Pandas Excel writer and output the Excel file.
-        writer.close()
+    def ScritturaCorrelazioni(self,
+                            correlazioni,
+                            correlazioni_da_fare):
+        NomiCorr_gen=['Pearson','Spearman','Kendall']
+        NomiCorr=[NomiCorr_gen[i] 
+                for i in range(len(correlazioni_da_fare))
+                if correlazioni_da_fare[i]]
+        if all(isinstance(item, list) for item in correlazioni):
+            NomiFogli=['Correlazioni dei grezzi',
+                    'Correlazioni dei filtrati']
+            for i in range(len(correlazioni)):
+                if NomiCorr[i] == "Pearson":
+                    correlazioni[i][0].to_excel(self.writer, sheet_name='Pearson_grezzi')
+                    correlazioni[i][1].to_excel(self.writer, sheet_name='Pearson_filtrati')
+                elif NomiCorr[i] == "Spearman":
+                    correlazioni[i][0].to_excel(self.writer, sheet_name='Spearman_grezzi')
+                    correlazioni[i][1].to_excel(self.writer, sheet_name='Spearman_filtrati')
+                elif NomiCorr[i] == "Kendall":
+                    correlazioni[i][0].to_excel(self.writer, sheet_name='Kendall_grezzi')
+                    correlazioni[i][1].to_excel(self.writer, sheet_name='Kendall_filtrati')
+        else:
+            for i in range(len(correlazioni)):
+                if NomiCorr[i] == "Pearson":
+                    correlazioni[i].to_excel(self.writer, sheet_name='Pearson')
+                elif NomiCorr[i] == "Spearman":
+                    correlazioni[i].to_excel(self.writer, sheet_name='Spearman')
+                elif NomiCorr[i] == "Kendall":
+                    correlazioni[i].to_excel(self.writer, sheet_name='Kendall')
+        # if len(correlazioni[0])==1:
+        #     for i in range(len(correlazioni)):
+        #         if NomiCorr[i] == "Pearson":
+        #             correlazioni[i].to_excel(self.writer, sheet_name='Pearson')
+        #         elif NomiCorr[i] == "Spearman":
+        #             correlazioni[i].to_excel(self.writer, sheet_name='Spearman')
+        #         elif NomiCorr[i] == "Kendall":
+        #             correlazioni[i].to_excel(self.writer, sheet_name='Kendall')
+        # else:
+        #     NomiFogli=['Correlazioni dei grezzi',
+        #             'Correlazioni dei filtrati']
+        #     for i in range(len(correlazioni)):
+        #         if NomiCorr[i] == "Pearson":
+        #             correlazioni[i][0].to_excel(self.writer, sheet_name='Pearson_grezzi')
+        #             correlazioni[i][1].to_excel(self.writer, sheet_name='Pearson_filtrati')
+        #         elif NomiCorr[i] == "Spearman":
+        #             correlazioni[i][0].to_excel(self.writer, sheet_name='Spearman_grezzi')
+        #             correlazioni[i][1].to_excel(self.writer, sheet_name='Spearman_filtrati')
+        #         elif NomiCorr[i] == "Kendall":
+        #             correlazioni[i][0].to_excel(self.writer, sheet_name='Kendall_grezzi')
+        #             correlazioni[i][1].to_excel(self.writer, sheet_name='Kendall_filtrati')
