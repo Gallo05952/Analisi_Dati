@@ -25,7 +25,12 @@ class Interfaccia:
         self.minimoS = False
         self.massimoS = False
         self.Dati_grezziS = False
-        self.Dati_filtratiS = False      
+        self.Dati_filtratiS = False 
+        self.PearsonS = False
+        self.SpearmanS = False
+        self.KendallS = False
+        self.Dati_grezziCorrS = False
+        self.Dati_filtratiCorrS = False     
         self.current_time = datetime.datetime.now().strftime("%d-%m-%Y")
         self.filepathD = os.path.join(os.path.expanduser("~"), "Desktop")   
         self.filenameD = f"{self.current_time}_default_filename"
@@ -139,7 +144,7 @@ class Interfaccia:
         if self.path_in:  # Aggiorna il Label solo se è stato selezionato un file
             self.label_file_in.config(text=self.path_in)
             self.df=AperturaFile(self.path_in).Apertura() #se cambia il formato vai in AperuraFile e aggiungi la funzione di conversione da file a dataframe
-            self.tempo=list(self.df['Data'].unique())
+            self.tempo = list(self.df.iloc[:, 0].unique())
 
     def FinestraFiltro(self):
         self.finestra_filtro = tk.Toplevel(self.root)
