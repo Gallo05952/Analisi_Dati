@@ -26,7 +26,7 @@ elif app.Filtro2==True:
     # print(len(abba))
 else:
     print("Nessun filtro attivo")
-    Df_filtrato=np.NaN
+    Df_filtrato=[]
 
 ## FUNZIONI STATISTICHE
 statistiche_dafare=[app.MediaS,

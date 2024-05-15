@@ -16,7 +16,7 @@ class ScritturaExcel:
                 correlazioni_da_fare):
             self.writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
             self.ScritturaOriginali(df)
-            if not Df_filtrato.empty:  
+            if Df_filtrato:  
                 self.ScritturaFiltrati(Df_filtrato)
             if statistiche_dafare:
                 self.ScritturaStatistiche(statistiche_calcolate,
@@ -43,17 +43,18 @@ class ScritturaExcel:
         NomiStat=[NomiStat_gen[i] 
                 for i in range(len(statistiche_dafare))
                 if statistiche_dafare[i]]
-        if len(statistiche_calcolate)==1:
-            df_stat = pd.DataFrame(statistiche_calcolate).T
-            df_stat.columns = NomiStat
-            df_stat.to_excel(self.writer, sheet_name='Statistiche')
-        else:
+        if all(isinstance(item,list) for item in statistiche_calcolate):
             NomiFogli=['Statistiche dei grezzi',
                     'Statistiche dei filtrati']
             for i in range(len(statistiche_calcolate)):
                 df_stat = pd.DataFrame(statistiche_calcolate[i]).T
                 df_stat.columns = NomiStat
                 df_stat.to_excel(self.writer, sheet_name=NomiFogli[i])
+        else:
+            df_stat = pd.DataFrame(statistiche_calcolate).T
+            df_stat.columns = NomiStat
+            df_stat.to_excel(self.writer, sheet_name='Statistiche')
+
 
     def ScritturaCorrelazioni(self,
                             correlazioni,
