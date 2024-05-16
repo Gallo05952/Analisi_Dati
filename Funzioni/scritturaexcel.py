@@ -16,7 +16,7 @@ class ScritturaExcel:
                 correlazioni_da_fare):
             self.writer = pd.ExcelWriter(self.filepath, engine='xlsxwriter')
             self.ScritturaOriginali(df)
-            if Df_filtrato:  
+            if not Df_filtrato.empty:  
                 self.ScritturaFiltrati(Df_filtrato)
             if statistiche_dafare:
                 self.ScritturaStatistiche(statistiche_calcolate,
