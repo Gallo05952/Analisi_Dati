@@ -56,6 +56,7 @@ class Interfaccia:
         self.sfoglia_input=tk.Button(self.root,
                                     text="Seleziona file",
                                     font=("Helvetica", 10, "bold"),
+                                    bg="light grey",
                                     command=self.file_input_sfoglia)
         self.sfoglia_input.grid(row=1, column=1)
 
@@ -78,6 +79,8 @@ class Interfaccia:
         self.pulsante_filtro = tk.Button(
                             self.root,
                             text="Filtra",
+                            font=("Helvetica", 10, "bold"),
+                            bg="light grey",
                             command=self.FinestraFiltro)
         self.pulsante_filtro.grid(row=2, column=1)
 
@@ -85,51 +88,70 @@ class Interfaccia:
         self.pulsante_statistiche = tk.Button(
                             self.root,
                             text="Statistiche",
+                            font=("Helvetica", 10, "bold"),
+                            bg="light grey",
                             command=self.FinestraStatistiche)
-        self.pulsante_statistiche.grid(row=2, column=2)
+        self.pulsante_statistiche.grid(row=2, column=2,padx=(0, 20))
 
         # CORRELAZIONI
         self.pulsante_correlazioni = tk.Button(
                             self.root,
                             text="Correlazioni",
+                            font=("Helvetica", 10, "bold"),
+                            bg="light grey",
                             command=self.FinestraCorrelazioni)
-        self.pulsante_correlazioni.grid(row=2, column=3)
+        self.pulsante_correlazioni.grid(row=2, column=3,padx=(0, 20))
+
+        # GRAFICI
+        self.pulsante_grafici = tk.Button(
+                            self.root,
+                            text="Grafici",
+                            font=("Helvetica", 10, "bold"),
+                            bg="light grey",
+                            command=self.FinestraGrafici)
+        self.pulsante_grafici.grid(row=2, column=4,padx=(0, 20))
+
 
         # SALVATAGGIO
         # Label per mostrare il percorso di salvataggio
         self.save_label = tk.Label(self.root, 
                                 text="Nessuna cartella di salvataggio selezionata",
                                 font=("Helvetica", 10, "bold"))
-        self.save_label.grid(row=3, column=1, padx=10, pady=10)
+        self.save_label.grid(row=4, column=0, padx=10, pady=10)
 
         # Bottone per sfogliare le cartelle di salvataggio
         self.save_button = tk.Button(self.root, 
                                     text="Sfoglia",
+                                    font=("Helvetica", 10, "bold"),
+                                    bg="light grey",
                                     command=self.save_in)
-        self.save_button.grid(row=3, column=2, padx=10, pady=10)
+        self.save_button.grid(row=4, column=1, padx=10, pady=10)
 
             # Label per mostrare il percorso di salvataggio
         self.FileName = tk.Label(self.root,
                                 text="Nome file finale:",
                                 font=("Helvetica", 10, "bold"))
-        self.FileName.grid(row=3, column=3, padx=10, pady=10)
+        self.FileName.grid(row=3, column=0, padx=10, pady=10)
 
         # Entry per inserire il nome del file
         self.file_nameC = tk.Entry(self.root)
-        self.file_nameC.grid(row=3, column=4, padx=10, pady=10)
+        self.file_nameC.grid(row=3, column=1, padx=10, pady=10)
         self.OpzSalva=tk.BooleanVar()
         self.pulsante_salva = tk.Checkbutton(
             self.root,
             text="Salva",
-            font=("Helvetica", 10, "bold"),
+            font=("Helvetica", 12, "bold"),
+            fg="blue",
             variable=self.OpzSalva)
-        self.pulsante_salva.grid(row=3, column=0)
+        self.pulsante_salva.grid(row=3, column=2)
 
         # Bottone OK
         self.ok_button = tk.Button(self.root,
                                 text="OK",
-                                font=("Helvetica", 18, "bold"),command=self.Salvataggio)
-        self.ok_button.grid(row=4, column=2, padx=10, pady=10)
+                                font=("Helvetica", 18, "bold"),
+                                bg="light grey",
+                                command=self.Salvataggio)
+        self.ok_button.grid(row=5, column=2, padx=10, pady=10)
 
         self.filepath = ""
         self.save_path = ""
@@ -373,6 +395,49 @@ class Interfaccia:
             print("Errore")
         finally:
             getattr(self.finestra_corr, 'destroy', lambda: None)()
+
+    def FinestraGrafici(self):
+        self.finestra_graf = tk.Toplevel(self.root)
+        self.finestra_graf.title("Finestra Grafici")
+        self.finestra_graf.geometry("1000x400")
+
+        # SEZIONE GRAFICI
+        self.testoGraf = tk.Label(self.finestra_graf,
+                            text="Seleziona la tipologia di dati di cui fare il grafico",
+                            font=("Helvetica", 10, "bold"),
+                            fg="red")
+        self.testoGraf.grid(row=0, column=0, columnspan=2)
+
+        #empty row
+        self.empty_row = tk.Label(self.finestra_graf, text="")
+        self.empty_row.grid(row=1, column=0)
+
+        # GRAFICO: DATI GREZZI
+        self.GraficiGrezzi=tk.Button(self.finestra_graf,
+                                    text="Dati grezzi",
+                                    font=("Helvetica", 10, "bold"),
+                                    bg="light grey")
+        self.GraficiGrezzi.grid(row=2, column=0)
+
+        # GRAFICO: DATI FILTRATI
+        self.GraficiFiltrati=tk.Button(self.finestra_graf,
+                                    text="Dati filtrati",
+                                    font=("Helvetica", 10, "bold"),
+                                    bg="light grey")
+        self.GraficiFiltrati.grid(row=2, column=1)
+
+        # BOTTONE OK E CHIUSURA
+        self.ok_button_graf = tk.Button(self.finestra_graf,
+                                        text="OK",
+                                        font=("Helvetica", 18, "bold"),
+                                        bg="light grey")
+        self.ok_button_graf.grid(row=2, column=1, padx=10, pady=10)
+
+        self.chiusura_fin_graf = tk.Button(self.finestra_graf,
+                                            text="Chiudi",
+                                            font=("Helvetica", 18, "bold"),
+                                            bg="light grey",
+                                            command=self.finestra_graf.destroy)
 
     def save_in(self):
         # Apri il dialogo per selezionare la directory
