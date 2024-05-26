@@ -72,7 +72,10 @@ if (app.Dati_grezziCorrS == True and
     print("Correlazione sui dati grezzi")
     if app.PearsonS == True:
         print("Pearson")
-        correlazione.append(Correlazione(app.df).Pearson())
+        corr = Correlazione(app.df).Pearson()
+        if app.correlazione_graficabiliS == "Pearson":
+            Correlazione(app.df).GraficoPearson(corr)
+        correlazione.append(corr)
     if app.SpearmanS == True:
         correlazione.append(Correlazione(app.df).Spearman())
         print("Spearman")
