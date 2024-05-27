@@ -73,7 +73,10 @@ if (app.Dati_grezziCorrS == True and
 elif (app.Dati_grezziCorrS == False and app.Dati_filtratiCorrS == True):
     if app.PearsonS == True:
         print("Pearson")
-        correlazione.append(Correlazione(Df_filtrato).Pearson())
+        corr=Correlazione(Df_filtrato).Pearson()
+        if app.correlazione_graficabiliS == "Pearson":
+            Correlazione(Df_filtrato).GraficoPearson(corr,app.file_name)
+        correlazione.append(corr)
     if app.SpearmanS == True:
         print("Spearman")
         correlazione.append(Correlazione(Df_filtrato).Spearman())
@@ -86,6 +89,11 @@ elif (app.Dati_grezziCorrS == True and app.Dati_filtratiCorrS == True):
         print("Pearson")
         correlazione_grezzi = Correlazione(app.df).Pearson()
         correlazione_filtrati = Correlazione(Df_filtrato).Pearson()
+        if app.correlazione_graficabiliS == "Pearson":
+            file_name_grezzi = app.file_name + "_Grezzi"
+            Correlazione(app.df).GraficoPearson(correlazione_grezzi,file_name_grezzi)
+            file_name_filtrati = app.file_name + "_Filtrati"
+            Correlazione(Df_filtrato).GraficoPearson(correlazione_filtrati,file_name_filtrati)
         correlazione.append([correlazione_grezzi,correlazione_filtrati])
     if app.SpearmanS == True:
         print("Spearman")
