@@ -111,7 +111,6 @@ class Interfaccia:
                             command=self.FinestraGrafici)
         self.pulsante_grafici.grid(row=2, column=4,padx=(0, 20))
 
-
         # SALVATAGGIO
         # Label per mostrare il percorso di salvataggio
         self.save_label = tk.Label(self.root, 
@@ -296,22 +295,33 @@ class Interfaccia:
                                         variable=self.Media_var)
             self.Media.grid(row=1, column=0)
             # STATISTICA: MEDIANA
-            self.Mediana = tk.Checkbutton(self.finestra_stat, text="Mediana", variable=self.Mediana_var)
+            self.Mediana = tk.Checkbutton(self.finestra_stat,
+                                        text="Mediana", 
+                                        variable=self.Mediana_var)
             self.Mediana.grid(row=2, column=0)
             # STATISTICA: MODA
-            self.Moda = tk.Checkbutton(self.finestra_stat, text="Moda", variable=self.Moda_var)
+            self.Moda = tk.Checkbutton(self.finestra_stat,
+                                    text="Moda",
+                                    variable=self.Moda_var)
             self.Moda.grid(row=3, column=0)
             # STATISTICA: DEVIAZIONE STANDARD
-            self.Deviazione = tk.Checkbutton(self.finestra_stat, text="Deviazione Standard", variable=self.Deviazione_var)
+            self.Deviazione = tk.Checkbutton(self.finestra_stat,
+                                            text="Deviazione Standard", variable=self.Deviazione_var)
             self.Deviazione.grid(row=4, column=0)
             # STATISTICA: VARIANZA
-            self.Varianza = tk.Checkbutton(self.finestra_stat, text="Varianza", variable=self.Varianza_var)
+            self.Varianza = tk.Checkbutton(self.finestra_stat, 
+                                        text="Varianza", 
+                                        variable=self.Varianza_var)
             self.Varianza.grid(row=5, column=0)
             # STATISTICA: MINIMO
-            self.Minimo = tk.Checkbutton(self.finestra_stat, text="Minimo", variable=self.minimo_var)
+            self.Minimo = tk.Checkbutton(self.finestra_stat,
+                                        text="Minimo",
+                                        variable=self.minimo_var)
             self.Minimo.grid(row=6, column=0)
             # STATISTICA: MASSIMO
-            self.Massimo = tk.Checkbutton(self.finestra_stat, text="Massimo", variable=self.massimo_var)
+            self.Massimo = tk.Checkbutton(self.finestra_stat,
+                                        text="Massimo",
+                                        variable=self.massimo_var)
             self.Massimo.grid(row=7, column=0)
         except AttributeError:
             print("Errore nel checkbox delle statistiche")
@@ -331,7 +341,7 @@ class Interfaccia:
             self.Dati_grezzi.grid(row=1, column=3)
 
             self.Dati_filtrati = tk.Checkbutton(self.finestra_stat,
-            text="Dati filtrati", variable=self.Dati_filtrati_var)
+                                        text="Dati filtrati", variable=self.Dati_filtrati_var)
             self.Dati_filtrati.grid(row=2, column=3)
         except AttributeError:
             print("Errore nel checkbox dei dati")
