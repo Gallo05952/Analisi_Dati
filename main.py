@@ -37,7 +37,7 @@ def App(finesta_principale):
     # BOTTONE CARICA FILE
     bottone_carica_file = tk.Button(finesta_principale,
                             text="Carica File", 
-                            command=lambda: Caricamento(label_file_in),
+                            command=lambda: Caricamento(label_file_in,bottone_carica_file, bottone_filtro, bottone_statistiche),
                             bg="light grey",
                             fg="bLACK")
     bottone_carica_file.grid(row=2, column=0)
@@ -47,72 +47,86 @@ def App(finesta_principale):
                         text="")
     empty_row.grid(row=3, column=0)
 
+    # BOTTONE FILTRO
     bottone_filtro = tk.Button(finesta_principale,
                             text="Filtro",
-                            command=Filtro(finesta_principale).FinestraFiltro,
+                            command=lambda: Filtraggio(finesta_principale, tempo,bottone_filtro),
                             bg="light grey",
                             fg="black")
     bottone_filtro.grid(row=4, column=0)
 
+    #€ EMPTY ROW
+    empty_row = tk.Label(finesta_principale,
+                        text="")
+    empty_row.grid(row=5, column=0)
 
-def Caricamento(label_file_in):
+    # BOTTONE STATISTICHE
+    bottone_statistiche = tk.Button(finesta_principale,
+                                    text="Statistiche",
+                                    command=lambda: Statistiche(finesta_principale,df, df_filtrato,bottone_statistiche),
+                                    bg="light grey",
+                                    fg="black")
+    bottone_statistiche.grid(row=6, column=0)
+
+    # EMPTY ROW
+    empty_row = tk.Label(finesta_principale,
+                        text="")
+    empty_row.grid(row=7, column=0)
+
+    # BOTTONE CORRELAZIONE
+    bottone_correlazione = tk.Button(finesta_principale,
+                                    text="Correlazione",
+                                    command=lambda: Correlzioniamo(finesta_principale, df, df_filtrato, bottone_correlazione),
+                                    bg="light grey",
+                                    fg="black")
+    bottone_correlazione.grid(row=8, column=0)
+
+def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,):
     global df, tempo  # Riferimento alle variabili globali
     path, df, tempo = CaricaFile().file_input_sfoglia()
     label_file_in.config(text=path)
+    if df is not None:
+        bottone_filtro.config(bg="light blue")
+        bottone_statistiche.config(bg="light blue")
 
+def Filtraggio(finestra_principale, tempo, bottone_filtro):
+    global df_filtrato
+    filtro = Filtro(finestra_principale, tempo, df)
+    filtro.FinestraFiltro()
+    finestra_principale.wait_window(filtro.finestra_filtro)
+    df_filtrato = filtro.DataFrame_filtrato()
+    if df_filtrato is not None:
+        bottone_filtro.config(bg="light green")
+
+def Statistiche(finestra_principale,df,df_filtrato,bottone_statistiche):
+    global df_statistiche
+    stat= FinestraStatistiche(root, df, df_filtrato)
+    stat.Finestra()
+    finestra_principale.wait_window(stat.finestra_stat)
+    df_statistiche = stat.get_Stat()
+    print(df_statistiche)
+    if df_statistiche is not None:
+        bottone_statistiche.config(bg="light green")
+    
+def Correlzioniamo(finestra_principale, df, df_filtrato, bottone_correlazione):
+    global df_correlazione
+    correlazione = FinestraCorrelazioni(root, df, df_filtrato)
+    correlazione.Finestra()
+    finestra_principale.wait_window(correlazione.finestra_corr)
+    df_correlazione = correlazione.get_correlzioni()
+    if df_correlazione is not None:
+        bottone_correlazione.config(bg="light green")
+    print(df_correlazione)
 
 df = None
 tempo = None
+df_filtrato = None
+df_statistiche = None
+df_correlazione = None
 root = tk.Tk()
 app=App(root)
 root.mainloop()
 
-
-
-    # # BOTTONE CARICA FILE
-    # bottone_carica_file = tk.Button(finesta_principale, text="Carica File", command=CaricaFile, bg="blue", fg="white")
-    # bottone_carica_file.pack()
-
-    # # BOTTONE FILTRO
-    # bottone_filtro = tk.Button(finesta_principale, text="Filtro", command=Filtro, bg="blue", fg="white")
-    # bottone_filtro.pack()
-
-    # # BOTTONE STATISTICHE
-    # bottone_statistiche = tk.Button(finesta_principale, text="Statistiche", command=Statistiche, bg="blue", fg="white")
-    # bottone_statistiche.pack()
-
-    # # BOTTONE CORRELAZIONE
-    # bottone_correlazione = tk.Button(finesta_principale, text="Correlazione", command=Correlazione, bg="blue", fg="white")
-    # bottone_correlazione.pack()
-
-    # # BOTTONE SALVA
-    # bottone_salva = tk.Button(finesta_principale, text="Salva", command=Salva, bg="blue", fg="white")
-    # bottone_salva.pack()
-
-    # # BOTTONE ESCI
-    # bottone_esci = tk.Button(finesta_principale, text="Esci", command=finesta_principale.quit, bg="red", fg="white")
-    # bottone_esci.pack()
-
-    # finesta_principale.mainloop()
-
-
-
-
-
-
-
-# statistiche_calcolate=[]
-# statistiche_dafare=[]
-
-# ## FUNZIONI FILTRO
-# if app.FiltroIntervallo==True:
-#     Df_filtrato=FiltroTempo(app.df).FiltraPerTempo(app.TempoIniziale,
-#                                             app.TempoFinale)
-# elif app.Filtro2==True: 
-#     Df_filtrato=FiltroTempo(app.df).FineTransitorio(app.TempoDa)
-# else:
-#     print("Nessun filtro attivo")
-#     Df_filtrato=[]
 
 # ## FUNZIONI STATISTICHE
 # statistiche_dafare=[app.MediaS,

@@ -6,3 +6,5 @@ from .scritturaexcel import ScritturaExcel
 from .correlazioni import Correlazione
 from .carica_file import CaricaFile
 from .finestra_filtro import Filtro
+from .finestra_statistiche import FinestraStatistiche
+from .finestra_correlzioni import FinestraCorrelazioni
