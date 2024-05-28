@@ -2,6 +2,7 @@ from .correlazioni import Correlazione
 import pandas as pd
 import numpy as np
 import tkinter as tk
+from tkinter import messagebox
 
 class FinestraCorrelazioni:
 
@@ -101,20 +102,23 @@ class FinestraCorrelazioni:
             correlazioni_grezze = Pearson, Spearman, Kendall
             correlazioni_grezze = [i for i in correlazioni_grezze if i is not None]
         elif self.Dati_filtrati_var.get()==True:
-            if self.Pearson_var.get()==True:
-                Pearson = Correlazione(self.df_filtrato).Pearson()
-            else:  
-                Pearson = None
-            if self.Spearman_var.get()==True:
-                Spearman = Correlazione(self.df_filtrato).Spearman()
+            if self.df_filtrato is not None:
+                if self.Pearson_var.get()==True:
+                    Pearson = Correlazione(self.df_filtrato).Pearson()
+                else:  
+                    Pearson = None
+                if self.Spearman_var.get()==True:
+                    Spearman = Correlazione(self.df_filtrato).Spearman()
+                else:
+                    Spearman = None
+                if self.Kendall_var.get()==True:
+                    Kendall = Correlazione(self.df_filtrato).Kendall()
+                else:
+                    Kendall = None
+                correlazioni_filtrate = Pearson, Spearman, Kendall
+                correlazioni_filtrate = [i for i in correlazioni_filtrate if i is not None]
             else:
-                Spearman = None
-            if self.Kendall_var.get()==True:
-                Kendall = Correlazione(self.df_filtrato).Kendall()
-            else:
-                Kendall = None
-            correlazioni_filtrate = Pearson, Spearman, Kendall
-            correlazioni_filtrate = [i for i in correlazioni_filtrate if i is not None]
+                messagebox.showerror("Errore", "Nessun filtro selezionato")
         return correlazioni_grezze, correlazioni_filtrate
                 
             

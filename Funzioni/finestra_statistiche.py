@@ -1,5 +1,6 @@
 import tkinter as tk
 import numpy as np
+from tkinter import messagebox
 from Funzioni import *
 
 class FinestraStatistiche:
@@ -124,7 +125,10 @@ class FinestraStatistiche:
             stat_grezze=None
         # STATISTICHE SUI DATI FILTRATI
         if self.Dati_filtrati_var.get():
-            stat_filtrati=self.StatisticheFiltrati()
+            if self.df_filtrato is not None:
+                stat_filtrati=self.StatisticheFiltrati()
+            else:
+                messagebox.showerror("Errore", "Non hai selezionato ancora nessun filtro")
         else:
             stat_filtrati=None
         self.finestra_stat.destroy()

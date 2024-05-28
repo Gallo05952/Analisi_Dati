@@ -37,7 +37,9 @@ def App(finesta_principale):
     # BOTTONE CARICA FILE
     bottone_carica_file = tk.Button(finesta_principale,
                             text="Carica File", 
-                            command=lambda: Caricamento(label_file_in,bottone_carica_file, bottone_filtro, bottone_statistiche),
+                            command=lambda: Caricamento(label_file_in,
+                                                    bottone_carica_file,bottone_filtro, bottone_statistiche,
+                                                    bottone_correlazione),
                             bg="light grey",
                             fg="bLACK")
     bottone_carica_file.grid(row=2, column=0)
@@ -81,13 +83,28 @@ def App(finesta_principale):
                                     fg="black")
     bottone_correlazione.grid(row=8, column=0)
 
-def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,):
+    # EMPTY ROW
+    empty_row = tk.Label(finesta_principale,
+                        text="")
+    empty_row.grid(row=9, column=0)
+
+    # BOTTONE SALVA
+    bottone_salva = tk.Button(finesta_principale,
+                            text="Excel Salva",
+                            command=lambda: Salva(),
+                            bg="light grey",
+                            fg="black")
+    bottone_salva.grid(row=10, column=0)
+
+
+def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,bottone_correlazione):
     global df, tempo  # Riferimento alle variabili globali
     path, df, tempo = CaricaFile().file_input_sfoglia()
     label_file_in.config(text=path)
     if df is not None:
         bottone_filtro.config(bg="light blue")
         bottone_statistiche.config(bg="light blue")
+        bottone_correlazione.config(bg="light blue")
 
 def Filtraggio(finestra_principale, tempo, bottone_filtro):
     global df_filtrato
@@ -105,7 +122,7 @@ def Statistiche(finestra_principale,df,df_filtrato,bottone_statistiche):
     finestra_principale.wait_window(stat.finestra_stat)
     df_statistiche = stat.get_Stat()
     print(df_statistiche)
-    if df_statistiche is not None:
+    if df_statistiche[0] is not None or df_statistiche[1] is not None:
         bottone_statistiche.config(bg="light green")
     
 def Correlzioniamo(finestra_principale, df, df_filtrato, bottone_correlazione):
@@ -114,9 +131,14 @@ def Correlzioniamo(finestra_principale, df, df_filtrato, bottone_correlazione):
     correlazione.Finestra()
     finestra_principale.wait_window(correlazione.finestra_corr)
     df_correlazione = correlazione.get_correlzioni()
-    if df_correlazione is not None:
-        bottone_correlazione.config(bg="light green")
     print(df_correlazione)
+    if df_correlazione[0] or df_correlazione[1] or df_correlazione[2]:
+        bottone_correlazione.config(bg="light green")
+
+def Salva():
+    fines_salva=FinestraSalvataggio(root, df, df_filtrato, df_statistiche, df_correlazione)
+    fines_salva.Finestra()
+
 
 df = None
 tempo = None
