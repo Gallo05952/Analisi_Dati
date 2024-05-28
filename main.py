@@ -9,21 +9,13 @@ app.FinestraPrincipale()
 root.mainloop()
 statistiche_calcolate=[]
 statistiche_dafare=[]
+
 ## FUNZIONI FILTRO
 if app.FiltroIntervallo==True:
-    # print("Filtro attivo")
-    # print("Tempo iniziale: ",app.TempoIniziale)
-    # print("Tempo finale: ",app.TempoFinale)
-    # print(len(app.df))
     Df_filtrato=FiltroTempo(app.df).FiltraPerTempo(app.TempoIniziale,
                                             app.TempoFinale)
-    #print(len(abba))
 elif app.Filtro2==True: 
-    # print("Filtro scarto attivo")
-    # print(len(app.df))
-    # print("Tempo di scarto: ",app.TempoDa)
     Df_filtrato=FiltroTempo(app.df).FineTransitorio(app.TempoDa)
-    # print(len(abba))
 else:
     print("Nessun filtro attivo")
     Df_filtrato=[]
@@ -38,18 +30,14 @@ statistiche_dafare=[app.MediaS,
                     app.massimoS]
 if (app.Dati_grezziS == True and
     app.Dati_filtratiS == False):
-    print("Statistiche sui dati grezzi")
     statistiche_calcolate = Statistica(app.df,
                                     statistiche_dafare).DatiStatistici()
-    print(statistiche_calcolate)
 elif (app.Dati_grezziS == False and
     app.Dati_filtratiS == True): 
     if (app.FiltroIntervallo==True or
         app.Filtro2==True):
-        print("Statistiche sui dati filtrati")
         statistiche_calcolate = Statistica(Df_filtrato,
                                         statistiche_dafare).DatiStatistici()
-        print(statistiche_calcolate)
     else: print("Devi selezionare il filtro da applicare")
 elif (app.Dati_grezziS == True and
     app.Dati_filtratiS == True):
@@ -72,7 +60,10 @@ if (app.Dati_grezziCorrS == True and
     print("Correlazione sui dati grezzi")
     if app.PearsonS == True:
         print("Pearson")
-        correlazione.append(Correlazione(app.df).Pearson())
+        corr = Correlazione(app.df).Pearson()
+        if app.correlazione_graficabiliS == "Pearson":
+            Correlazione(app.df).GraficoPearson(corr,app.file_name)
+        correlazione.append(corr)
     if app.SpearmanS == True:
         correlazione.append(Correlazione(app.df).Spearman())
         print("Spearman")
@@ -82,7 +73,10 @@ if (app.Dati_grezziCorrS == True and
 elif (app.Dati_grezziCorrS == False and app.Dati_filtratiCorrS == True):
     if app.PearsonS == True:
         print("Pearson")
-        correlazione.append(Correlazione(Df_filtrato).Pearson())
+        corr=Correlazione(Df_filtrato).Pearson()
+        if app.correlazione_graficabiliS == "Pearson":
+            Correlazione(Df_filtrato).GraficoPearson(corr,app.file_name)
+        correlazione.append(corr)
     if app.SpearmanS == True:
         print("Spearman")
         correlazione.append(Correlazione(Df_filtrato).Spearman())
@@ -95,6 +89,11 @@ elif (app.Dati_grezziCorrS == True and app.Dati_filtratiCorrS == True):
         print("Pearson")
         correlazione_grezzi = Correlazione(app.df).Pearson()
         correlazione_filtrati = Correlazione(Df_filtrato).Pearson()
+        if app.correlazione_graficabiliS == "Pearson":
+            file_name_grezzi = app.file_name + "_Grezzi"
+            Correlazione(app.df).GraficoPearson(correlazione_grezzi,file_name_grezzi)
+            file_name_filtrati = app.file_name + "_Filtrati"
+            Correlazione(Df_filtrato).GraficoPearson(correlazione_filtrati,file_name_filtrati)
         correlazione.append([correlazione_grezzi,correlazione_filtrati])
     if app.SpearmanS == True:
         print("Spearman")

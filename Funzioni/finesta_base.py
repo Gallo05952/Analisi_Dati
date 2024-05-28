@@ -56,6 +56,7 @@ class Interfaccia:
         self.sfoglia_input=tk.Button(self.root,
                                     text="Seleziona file",
                                     font=("Helvetica", 10, "bold"),
+                                    bg="light grey",
                                     command=self.file_input_sfoglia)
         self.sfoglia_input.grid(row=1, column=1)
 
@@ -78,6 +79,8 @@ class Interfaccia:
         self.pulsante_filtro = tk.Button(
                             self.root,
                             text="Filtra",
+                            font=("Helvetica", 10, "bold"),
+                            bg="light grey",
                             command=self.FinestraFiltro)
         self.pulsante_filtro.grid(row=2, column=1)
 
@@ -85,51 +88,69 @@ class Interfaccia:
         self.pulsante_statistiche = tk.Button(
                             self.root,
                             text="Statistiche",
+                            font=("Helvetica", 10, "bold"),
+                            bg="light grey",
                             command=self.FinestraStatistiche)
-        self.pulsante_statistiche.grid(row=2, column=2)
+        self.pulsante_statistiche.grid(row=2, column=2,padx=(0, 20))
 
         # CORRELAZIONI
         self.pulsante_correlazioni = tk.Button(
                             self.root,
                             text="Correlazioni",
+                            font=("Helvetica", 10, "bold"),
+                            bg="light grey",
                             command=self.FinestraCorrelazioni)
-        self.pulsante_correlazioni.grid(row=2, column=3)
+        self.pulsante_correlazioni.grid(row=2, column=3,padx=(0, 20))
+
+        # GRAFICI
+        self.pulsante_grafici = tk.Button(
+                            self.root,
+                            text="Grafici",
+                            font=("Helvetica", 10, "bold"),
+                            bg="light grey",
+                            command=self.FinestraGrafici)
+        self.pulsante_grafici.grid(row=2, column=4,padx=(0, 20))
 
         # SALVATAGGIO
         # Label per mostrare il percorso di salvataggio
         self.save_label = tk.Label(self.root, 
                                 text="Nessuna cartella di salvataggio selezionata",
                                 font=("Helvetica", 10, "bold"))
-        self.save_label.grid(row=3, column=1, padx=10, pady=10)
+        self.save_label.grid(row=4, column=0, padx=10, pady=10)
 
         # Bottone per sfogliare le cartelle di salvataggio
         self.save_button = tk.Button(self.root, 
                                     text="Sfoglia",
+                                    font=("Helvetica", 10, "bold"),
+                                    bg="light grey",
                                     command=self.save_in)
-        self.save_button.grid(row=3, column=2, padx=10, pady=10)
+        self.save_button.grid(row=4, column=1, padx=10, pady=10)
 
             # Label per mostrare il percorso di salvataggio
         self.FileName = tk.Label(self.root,
                                 text="Nome file finale:",
                                 font=("Helvetica", 10, "bold"))
-        self.FileName.grid(row=3, column=3, padx=10, pady=10)
+        self.FileName.grid(row=3, column=0, padx=10, pady=10)
 
         # Entry per inserire il nome del file
         self.file_nameC = tk.Entry(self.root)
-        self.file_nameC.grid(row=3, column=4, padx=10, pady=10)
+        self.file_nameC.grid(row=3, column=1, padx=10, pady=10)
         self.OpzSalva=tk.BooleanVar()
         self.pulsante_salva = tk.Checkbutton(
             self.root,
             text="Salva",
-            font=("Helvetica", 10, "bold"),
+            font=("Helvetica", 12, "bold"),
+            fg="blue",
             variable=self.OpzSalva)
-        self.pulsante_salva.grid(row=3, column=0)
+        self.pulsante_salva.grid(row=3, column=2)
 
         # Bottone OK
         self.ok_button = tk.Button(self.root,
                                 text="OK",
-                                font=("Helvetica", 18, "bold"),command=self.Salvataggio)
-        self.ok_button.grid(row=4, column=2, padx=10, pady=10)
+                                font=("Helvetica", 18, "bold"),
+                                bg="light grey",
+                                command=self.Salvataggio)
+        self.ok_button.grid(row=5, column=2, padx=10, pady=10)
 
         self.filepath = ""
         self.save_path = ""
@@ -246,15 +267,18 @@ class Interfaccia:
         self.finestra_stat.geometry("1000x400")
 
         # CREAZIONE DELLE VARIABILI PER I CHECKBUTTON
-        self.Media_var = tk.BooleanVar()
-        self.Mediana_var = tk.BooleanVar()
-        self.Moda_var = tk.BooleanVar()
-        self.Deviazione_var = tk.BooleanVar()
-        self.Varianza_var = tk.BooleanVar()
-        self.minimo_var = tk.BooleanVar()
-        self.massimo_var = tk.BooleanVar()
-        self.Dati_grezzi_var = tk.BooleanVar()
-        self.Dati_filtrati_var = tk.BooleanVar()
+        try:
+            self.Media_var = tk.BooleanVar()
+            self.Mediana_var = tk.BooleanVar()
+            self.Moda_var = tk.BooleanVar()
+            self.Deviazione_var = tk.BooleanVar()
+            self.Varianza_var = tk.BooleanVar()
+            self.minimo_var = tk.BooleanVar()
+            self.massimo_var = tk.BooleanVar()
+            self.Dati_grezzi_var = tk.BooleanVar()
+            self.Dati_filtrati_var = tk.BooleanVar()
+        except AttributeError:
+            print("Errore nella creazione delle variabili per i checkbutton")
 
         # SEZIONE STATISTICHE
         self.testoStat = tk.Label(self.finestra_stat,
@@ -262,43 +286,70 @@ class Interfaccia:
                             font=("Helvetica", 10, "bold"),
                             fg="red")
         self.testoStat.grid(row=0, column=0)
+
+        # CHECK BOX STATISTICHE
+        try:
         # STATISTICA: MEDIA
-        self.Media = tk.Checkbutton(self.finestra_stat, text="Media", variable=self.Media_var)
-        self.Media.grid(row=1, column=0)
-        # STATISTICA: MEDIANA
-        self.Mediana = tk.Checkbutton(self.finestra_stat, text="Mediana", variable=self.Mediana_var)
-        self.Mediana.grid(row=2, column=0)
-        # STATISTICA: MODA
-        self.Moda = tk.Checkbutton(self.finestra_stat, text="Moda", variable=self.Moda_var)
-        self.Moda.grid(row=3, column=0)
-        # STATISTICA: DEVIAZIONE STANDARD
-        self.Deviazione = tk.Checkbutton(self.finestra_stat, text="Deviazione Standard", variable=self.Deviazione_var)
-        self.Deviazione.grid(row=4, column=0)
-        # STATISTICA: VARIANZA
-        self.Varianza = tk.Checkbutton(self.finestra_stat, text="Varianza", variable=self.Varianza_var)
-        self.Varianza.grid(row=5, column=0)
-        # STATISTICA: MINIMO
-        self.Minimo = tk.Checkbutton(self.finestra_stat, text="Minimo", variable=self.minimo_var)
-        self.Minimo.grid(row=6, column=0)
-        # STATISTICA: MASSIMO
-        self.Massimo = tk.Checkbutton(self.finestra_stat, text="Massimo", variable=self.massimo_var)
-        self.Massimo.grid(row=7, column=0)
+            self.Media = tk.Checkbutton(self.finestra_stat, 
+                                        text="Media", 
+                                        variable=self.Media_var)
+            self.Media.grid(row=1, column=0)
+            # STATISTICA: MEDIANA
+            self.Mediana = tk.Checkbutton(self.finestra_stat,
+                                        text="Mediana", 
+                                        variable=self.Mediana_var)
+            self.Mediana.grid(row=2, column=0)
+            # STATISTICA: MODA
+            self.Moda = tk.Checkbutton(self.finestra_stat,
+                                    text="Moda",
+                                    variable=self.Moda_var)
+            self.Moda.grid(row=3, column=0)
+            # STATISTICA: DEVIAZIONE STANDARD
+            self.Deviazione = tk.Checkbutton(self.finestra_stat,
+                                            text="Deviazione Standard", variable=self.Deviazione_var)
+            self.Deviazione.grid(row=4, column=0)
+            # STATISTICA: VARIANZA
+            self.Varianza = tk.Checkbutton(self.finestra_stat, 
+                                        text="Varianza", 
+                                        variable=self.Varianza_var)
+            self.Varianza.grid(row=5, column=0)
+            # STATISTICA: MINIMO
+            self.Minimo = tk.Checkbutton(self.finestra_stat,
+                                        text="Minimo",
+                                        variable=self.minimo_var)
+            self.Minimo.grid(row=6, column=0)
+            # STATISTICA: MASSIMO
+            self.Massimo = tk.Checkbutton(self.finestra_stat,
+                                        text="Massimo",
+                                        variable=self.massimo_var)
+            self.Massimo.grid(row=7, column=0)
+        except AttributeError:
+            print("Errore nel checkbox delle statistiche")
 
-        # SELEZIONA DATI    
-        self.SelezionaDati = tk.Label(self.finestra_stat, 
-                    text="Seleziona i dati su cui fare le statistiche",
-                    font=("Helvetica", 10, "bold"),
-                    fg="red")
-        
-        self.SelezionaDati.grid(row=0, column=3)
-        self.Dati_grezzi = tk.Checkbutton(self.finestra_stat, text="Dati grezzi", variable=self.Dati_grezzi_var)
-        self.Dati_grezzi.grid(row=1, column=3)
-        self.Dati_filtrati = tk.Checkbutton(self.finestra_stat, text="Dati filtrati", variable=self.Dati_filtrati_var)
-        self.Dati_filtrati.grid(row=2, column=3)
+        # CHECK BOX PER LA SELEZIONE DEI DATI
+        try:
+            # SELEZIONA DATI    
+            self.SelezionaDati = tk.Label(self.finestra_stat, 
+                        text="Seleziona i dati su cui fare le statistiche",
+                        font=("Helvetica", 10, "bold"),
+                        fg="red")          
+            self.SelezionaDati.grid(row=0, column=3)
 
+            self.Dati_grezzi = tk.Checkbutton(self.finestra_stat, 
+                                            text="Dati grezzi", 
+                                            variable=self.Dati_grezzi_var)
+            self.Dati_grezzi.grid(row=1, column=3)
+
+            self.Dati_filtrati = tk.Checkbutton(self.finestra_stat,
+                                        text="Dati filtrati", variable=self.Dati_filtrati_var)
+            self.Dati_filtrati.grid(row=2, column=3)
+        except AttributeError:
+            print("Errore nel checkbox dei dati")
 
         # BOTTONE OK E CHIUSURA
-        self.ok_button_stat = tk.Button(self.finestra_stat, text="OK", command=self.SalvataggioStat)
+        self.ok_button_stat = tk.Button(self.finestra_stat,
+                                        text="OK", 
+                                        command=self.SalvataggioStat)
         self.ok_button_stat.grid(row=8, column=2, padx=10, pady=10)
 
     def SalvataggioStat(self):
@@ -318,14 +369,19 @@ class Interfaccia:
             getattr(self.finestra_stat, 'destroy', lambda: None)()
 
     def FinestraCorrelazioni(self):
-        self.finestra_corr = tk.Toplevel(self.root)
-        self.finestra_corr.title("Finestra Correlazioni")
-        self.finestra_corr.geometry("1000x400")
-        self.Pearson_var = tk.BooleanVar()
-        self.Spearman_var = tk.BooleanVar()
-        self.Kendall_var = tk.BooleanVar()
-        self.Dati_grezziCorr_var = tk.BooleanVar()
-        self.Dati_filtratiCorr_var = tk.BooleanVar()
+        # CREAZIONE DELLA FINESTRA E DELLE VARIABILI
+        try:
+            self.finestra_corr = tk.Toplevel(self.root)
+            self.finestra_corr.title("Finestra Correlazioni")
+            self.finestra_corr.geometry("1000x400")
+            self.Pearson_var = tk.BooleanVar()
+            self.Spearman_var = tk.BooleanVar()
+            self.Kendall_var = tk.BooleanVar()
+            self.Dati_grezziCorr_var = tk.BooleanVar()
+            self.Dati_filtratiCorr_var = tk.BooleanVar()
+        except AttributeError:
+            print("Errore nella creazione della finestra e delle variabili")
+        
         # SEZIONE CORRELAZIONI
         self.testoCorr = tk.Label(self.finestra_corr,
                             text="Seleziona la tipologia di correlazione",
@@ -333,33 +389,67 @@ class Interfaccia:
                             fg="red")
         self.testoCorr.grid(row=0, column=0)
 
-        # CORRELAZIONE: PEARSON
-        self.Pearson = tk.Checkbutton(self.finestra_corr, text="Pearson",variable=self.Pearson_var)
-        self.Pearson.grid(row=1, column=0)
+        # CHECK BOX CORRELAZIONI
+        try: 
+            # CORRELAZIONE: PEARSON
+            self.Pearson = tk.Checkbutton(self.finestra_corr, 
+                                        text="Pearson",
+                                        variable=self.Pearson_var)
+            self.Pearson.grid(row=1, column=0)
 
-        # CORRELAZIONE: SPEARMAN
-        self.Spearman = tk.Checkbutton(self.finestra_corr, text="Spearman",variable=self.Spearman_var)
-        self.Spearman.grid(row=2, column=0)
+            # CORRELAZIONE: SPEARMAN
+            self.Spearman = tk.Checkbutton(self.finestra_corr,
+                                            text="Spearman",
+                                            variable=self.Spearman_var)
+            self.Spearman.grid(row=2, column=0)
 
-        # CORRELAZIONE: KENDALL
-        self.Kendall = tk.Checkbutton(self.finestra_corr, text="Kendall",variable=self.Kendall_var)
-        self.Kendall.grid(row=3, column=0)
+            # CORRELAZIONE: KENDALL
+            self.Kendall = tk.Checkbutton(self.finestra_corr, 
+                                        text="Kendall",
+                                        variable=self.Kendall_var)
+            self.Kendall.grid(row=3, column=0)
+        except AttributeError:
+            print("Errore nel checkbox delle correlazioni")
 
-        # TIPOLOGIA DI DATI
-        self.SelezionaDatiCorr = tk.Label(self.finestra_corr,
-                            text="Seleziona i dati su cui fare le correlazioni",
+        # CHECK BOX PER LA SELEZIONE DEI DATI
+        try:
+            # TIPOLOGIA DI DATI
+            self.SelezionaDatiCorr = tk.Label(self.finestra_corr,
+                                text="Seleziona i dati su cui fare le correlazioni",
+                                font=("Helvetica", 10, "bold"),
+                                fg="red")
+            self.SelezionaDatiCorr.grid(row=0, column=3)
+
+            self.Dati_grezziCorr = tk.Checkbutton(self.finestra_corr, 
+                                                text="Dati grezzi",
+                                                variable=self.Dati_grezziCorr_var)
+            self.Dati_grezziCorr.grid(row=1, column=3)
+            
+            self.Dati_filtratiCorr = tk.Checkbutton(self.finestra_corr, 
+                                                    text="Dati filtrati",
+                                                    variable=self.Dati_filtratiCorr_var)
+            self.Dati_filtratiCorr.grid(row=2, column=3)
+        except AttributeError:
+            print("Errore nel checkbox dei dati")
+
+        # CHECK BOX PER DECIDERE CHE VARIABILI GRAFICARE
+        try:
+            self.label_selezione_grafici = tk.Label(self.finestra_corr,
+                            text="Seleziona le variabili da graficare",
                             font=("Helvetica", 10, "bold"),
                             fg="red")
-        self.SelezionaDatiCorr.grid(row=0, column=3)
+            self.label_selezione_grafici.grid(row=0, column=5)
 
-        self.Dati_grezziCorr = tk.Checkbutton(self.finestra_corr, text="Dati grezzi",variable=self.Dati_grezziCorr_var)
-        self.Dati_grezziCorr.grid(row=1, column=3)
-        
-        self.Dati_filtratiCorr = tk.Checkbutton(self.finestra_corr, text="Dati filtrati",variable=self.Dati_filtratiCorr_var)
-        self.Dati_filtratiCorr.grid(row=2, column=3)
+            correlzioni_possibili=["Pearson","Spearman","Kendall"]
+            self.correlazione_graficabili=ttk.Combobox(self.finestra_corr,values=correlzioni_possibili)
+            self.correlazione_graficabili.grid(row=1, column=5)
 
+        except AttributeError as e:
+            print("Errore nella selezione delle variabili: ", e)
         # BOTTONE OK E CHIUSURA
-        self.ok_button_corr = tk.Button(self.finestra_corr, text="OK", command=self.SalvataggioCorr)
+        self.ok_button_corr = tk.Button(self.finestra_corr,
+                                        text="OK",
+                                        command=self.SalvataggioCorr)
         self.ok_button_corr.grid(row=8, column=2, padx=10, pady=10)
 
     def SalvataggioCorr(self):
@@ -369,10 +459,54 @@ class Interfaccia:
             self.KendallS=self.Kendall_var.get()
             self.Dati_grezziCorrS=self.Dati_grezziCorr_var.get()
             self.Dati_filtratiCorrS=self.Dati_filtratiCorr_var.get()
+            self.correlazione_graficabiliS=self.correlazione_graficabili.get()
         except AttributeError:
             print("Errore")
         finally:
             getattr(self.finestra_corr, 'destroy', lambda: None)()
+
+    def FinestraGrafici(self):
+        self.finestra_graf = tk.Toplevel(self.root)
+        self.finestra_graf.title("Finestra Grafici")
+        self.finestra_graf.geometry("1000x400")
+
+        # SEZIONE GRAFICI
+        self.testoGraf = tk.Label(self.finestra_graf,
+                            text="Seleziona la tipologia di dati di cui fare il grafico",
+                            font=("Helvetica", 10, "bold"),
+                            fg="red")
+        self.testoGraf.grid(row=0, column=0, columnspan=2)
+
+        #empty row
+        self.empty_row = tk.Label(self.finestra_graf, text="")
+        self.empty_row.grid(row=1, column=0)
+
+        # GRAFICO: DATI GREZZI
+        self.GraficiGrezzi=tk.Button(self.finestra_graf,
+                                    text="Dati grezzi",
+                                    font=("Helvetica", 10, "bold"),
+                                    bg="light grey")
+        self.GraficiGrezzi.grid(row=2, column=0)
+
+        # GRAFICO: DATI FILTRATI
+        self.GraficiFiltrati=tk.Button(self.finestra_graf,
+                                    text="Dati filtrati",
+                                    font=("Helvetica", 10, "bold"),
+                                    bg="light grey")
+        self.GraficiFiltrati.grid(row=2, column=1)
+
+        # BOTTONE OK E CHIUSURA
+        self.ok_button_graf = tk.Button(self.finestra_graf,
+                                        text="OK",
+                                        font=("Helvetica", 18, "bold"),
+                                        bg="light grey")
+        self.ok_button_graf.grid(row=2, column=1, padx=10, pady=10)
+
+        self.chiusura_fin_graf = tk.Button(self.finestra_graf,
+                                            text="Chiudi",
+                                            font=("Helvetica", 18, "bold"),
+                                            bg="light grey",
+                                            command=self.finestra_graf.destroy)
 
     def save_in(self):
         # Apri il dialogo per selezionare la directory
