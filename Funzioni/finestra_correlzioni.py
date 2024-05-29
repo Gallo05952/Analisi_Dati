@@ -29,7 +29,7 @@ class FinestraCorrelazioni:
         # SEZIONE CORRELAZIONI
         self.testoCorr = tk.Label(self.finestra_corr,
                             text="Seleziona la tipologia di correlazione",
-                            font=("Helvetica", 10, "bold"),
+                            font=("Helvetica", 14, "bold"),
                             fg="red")
         self.testoCorr.grid(row=0, column=0)
 
@@ -38,26 +38,29 @@ class FinestraCorrelazioni:
         # CORRELAZIONE: PEARSON
             self.Pearson_cb = tk.Checkbutton(self.finestra_corr, 
                                         text="Pearson", 
+                                        font=("Helvetica", 12),
                                         variable=self.Pearson_var)
             self.Pearson_cb.grid(row=1, column=0)
             # CORRELAZIONE: SPEARMAN
-            self.Spearman_cb = tk.Checkbutton(self.finestra_corr,
-                                        text="Spearman", 
-                                        variable=self.Spearman_var)
-            self.Spearman_cb.grid(row=2, column=0)
+            # self.Spearman_cb = tk.Checkbutton(self.finestra_corr,
+            #                             text="Spearman", 
+            #                             variable=self.Spearman_var)
+            # self.Spearman_cb.grid(row=2, column=0)
             # CORRELAZIONE: KENDALL
-            self.Kendall_cb = tk.Checkbutton(self.finestra_corr,
-                                    text="Kendall",
-                                    variable=self.Kendall_var)
-            self.Kendall_cb.grid(row=3, column=0)
+            # self.Kendall_cb = tk.Checkbutton(self.finestra_corr,
+            #                         text="Kendall",
+            #                         variable=self.Kendall_var)
+            # self.Kendall_cb.grid(row=3, column=0)
             # DATI GREZZI
             self.Dati_grezzi_cb = tk.Checkbutton(self.finestra_corr,
                                         text="Dati grezzi",
+                                        font=("Helvetica", 12),
                                         variable=self.Dati_grezzi_var)
             self.Dati_grezzi_cb.grid(row=1, column=1)
             # DATI FILTRATI
             self.Dati_filtrati_cb = tk.Checkbutton(self.finestra_corr,
                                         text="Datifiltrati",
+                                        font=("Helvetica", 12),
                                         variable=self.Dati_filtrati_var)
             self.Dati_filtrati_cb.grid(row=2, column=1)
             # BOTTONE CONFERMA
@@ -65,6 +68,7 @@ class FinestraCorrelazioni:
                                         text="Conferma",
                                         command=lambda: self.Conferma(),
                                         bg="light grey",
+                                        font=("Helvetica", 12),
                                         fg="black")
             self.bottone_conferma.grid(row=6, column=0)
         except AttributeError:
@@ -86,6 +90,7 @@ class FinestraCorrelazioni:
     def get_correlzioni(self):
         correlazioni_filtrate=[]
         correlazioni_grezze=[]
+        preferenze=[]
         if self.Dati_grezzi_var.get()==True:
             if self.Pearson_var.get()==True:
                 Pearson = Correlazione(self.df).Pearson()
@@ -101,7 +106,8 @@ class FinestraCorrelazioni:
                 Kendall = None
             correlazioni_grezze = Pearson, Spearman, Kendall
             correlazioni_grezze = [i for i in correlazioni_grezze if i is not None]
-        elif self.Dati_filtrati_var.get()==True:
+        else: correlazioni_grezze = None
+        if self.Dati_filtrati_var.get()==True:
             if self.df_filtrato is not None:
                 if self.Pearson_var.get()==True:
                     Pearson = Correlazione(self.df_filtrato).Pearson()
@@ -119,7 +125,14 @@ class FinestraCorrelazioni:
                 correlazioni_filtrate = [i for i in correlazioni_filtrate if i is not None]
             else:
                 messagebox.showerror("Errore", "Nessun filtro selezionato")
-        return correlazioni_grezze, correlazioni_filtrate
+        else: correlazioni_filtrate = None
+        if self.Pearson_var.get()==True:
+            preferenze.append("Pearson")
+        if self.Spearman_var.get()==True:
+            preferenze.append("Spearman")
+        if self.Kendall_var==True:
+            preferenze.append("Kendall")
+        return correlazioni_grezze, correlazioni_filtrate, preferenze
                 
             
 

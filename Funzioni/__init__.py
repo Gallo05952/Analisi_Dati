@@ -9,3 +9,4 @@ from .finestra_filtro import Filtro
 from .finestra_statistiche import FinestraStatistiche
 from .finestra_correlzioni import FinestraCorrelazioni
 from .finestra_salvataggio import FinestraSalvataggio
+from .finestra_grafici_base import FinestraGraficiBase

@@ -32,7 +32,7 @@ class FinestraStatistiche:
         # SEZIONE STATISTICHE
         self.testoStat = tk.Label(self.finestra_stat,
                             text="Seleziona la tipologia di statistica",
-                            font=("Helvetica", 10, "bold"),
+                            font=("Helvetica", 14),
                             fg="red")
         self.testoStat.grid(row=0, column=0)
 
@@ -41,35 +41,43 @@ class FinestraStatistiche:
         # STATISTICA: MEDIA
             self.Media_cb = tk.Checkbutton(self.finestra_stat, 
                                         text="Media", 
+                                        font=("Helvetica", 12),
                                         variable=self.Media_var)
             self.Media_cb.grid(row=1, column=0)
             # STATISTICA: MEDIANA
             self.Mediana_cb = tk.Checkbutton(self.finestra_stat,
-                                        text="Mediana", 
+                                        text="Mediana",
+                                        font=("Helvetica", 12),
                                         variable=self.Mediana_var)
             self.Mediana_cb.grid(row=2, column=0)
             # STATISTICA: MODA
             self.Moda_cb = tk.Checkbutton(self.finestra_stat,
                                     text="Moda",
+                                    font=("Helvetica", 12),
                                     variable=self.Moda_var)
             self.Moda_cb.grid(row=3, column=0)
             # STATISTICA: DEVIAZIONE STANDARD
             self.Deviazione_cb = tk.Checkbutton(self.finestra_stat,
-                                            text="Deviazione Standard", variable=self.Deviazione_var)
+                                            text="Deviazione Standard", 
+                                            font=("Helvetica", 12),
+                                            variable=self.Deviazione_var)
             self.Deviazione_cb.grid(row=4, column=0)
             # STATISTICA: VARIANZA
             self.Varianza_cb = tk.Checkbutton(self.finestra_stat, 
                                         text="Varianza", 
+                                        font=("Helvetica", 12),
                                         variable=self.Varianza_var)
             self.Varianza_cb.grid(row=5, column=0)
             # STATISTICA: MINIMO
             self.Minimo_cb = tk.Checkbutton(self.finestra_stat,
                                         text="Minimo",
+                                        font=("Helvetica", 12),
                                         variable=self.minimo_var)
             self.Minimo_cb.grid(row=6, column=0)
             # STATISTICA: MASSIMO
             self.Massimo_cb = tk.Checkbutton(self.finestra_stat,
                                         text="Massimo",
+                                        font=("Helvetica", 12),
                                         variable=self.massimo_var)
             self.Massimo_cb.grid(row=7, column=0)
         except AttributeError:
@@ -80,17 +88,20 @@ class FinestraStatistiche:
             # SELEZIONA DATI    
             self.SelezionaDati = tk.Label(self.finestra_stat, 
                         text="Seleziona i dati su cui fare le statistiche",
-                        font=("Helvetica", 10, "bold"),
+                        font=("Helvetica", 14, "bold"),
                         fg="red")          
             self.SelezionaDati.grid(row=0, column=3)
 
             self.Dati_grezzi = tk.Checkbutton(self.finestra_stat, 
-                                            text="Dati grezzi", 
-                                            variable=self.Dati_grezzi_var)
+                                        text="Dati grezzi", 
+                                        font=("Helvetica", 12),
+                                        variable=self.Dati_grezzi_var)
             self.Dati_grezzi.grid(row=1, column=3)
 
             self.Dati_filtrati = tk.Checkbutton(self.finestra_stat,
-                                        text="Dati filtrati", variable=self.Dati_filtrati_var)
+                                        text="Dati filtrati", 
+                                        font=("Helvetica", 12),
+                                        variable=self.Dati_filtrati_var)
             self.Dati_filtrati.grid(row=2, column=3)
         except AttributeError:
             print("Errore nel checkbox dei dati")
@@ -98,6 +109,7 @@ class FinestraStatistiche:
         # BOTTONE OK E CHIUSURA
         self.ok_button_stat = tk.Button(self.finestra_stat,
                                         text="OK", 
+                                        font=("Helvetica", 12),
                                         command=self.SalvataggioStat)
         self.ok_button_stat.grid(row=8, column=2, padx=10, pady=10)
 

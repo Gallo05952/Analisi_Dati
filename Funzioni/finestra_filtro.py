@@ -13,7 +13,6 @@ class Filtro:
         self.finestra_filtro = tk.Toplevel(self.root)
         self.finestra_filtro.title("Finestra Filtro")
         self.finestra_filtro.geometry("1000x200")
-        print(self.tempo)
         # Creazione delle variabili per i Checkbutton
         self.IntervalloT = tk.BooleanVar()
         self.IntervalloT.trace('w', self.update_checkboxes)
@@ -23,18 +22,21 @@ class Filtro:
         # SEZIONE FILTRO
         self.testoFiltro = tk.Label(self.finestra_filtro,
                             text="Seleziona la tipologia di filtro", 
-                            font=("Helvetica", 10, "bold"),
+                            font=("Helvetica", 14, "bold"),
                             fg="red")
         self.testoFiltro.grid(row=0, column=0)
 
         # FILTRO INTERVALLO DI TEMPO
         # TEMPO INIZIO
         self.checkFiltro1 = tk.Checkbutton(self.finestra_filtro, 
-                                        text="Intervallo di tempo", variable=self.IntervalloT)
+                                        text="Intervallo di tempo", 
+                                        font=("Helvetica", 12),
+                                        variable=self.IntervalloT)
         self.checkFiltro1.grid(row=1, column=0)
 
         self.TempoInizio = tk.Label(self.finestra_filtro,
-                                    text="Tempo di inizio")
+                                    text="Tempo di inizio",
+                                    font=("Helvetica", 12))
         self.TempoInizio.grid(row=1, column=1)
 
         self.tempoIN = tk.StringVar()
@@ -45,7 +47,8 @@ class Filtro:
         self.Tin.grid(row=1, column=2)
         # TEMPO FINE
         self.TempoFine = tk.Label(self.finestra_filtro,
-                                text="Tempo di fine")
+                                text="Tempo di fine",
+                                font=("Helvetica", 12))
         self.TempoFine.grid(row=1, column=3)
 
         self.tempoFIN = tk.StringVar()
@@ -57,11 +60,14 @@ class Filtro:
 
         # FILTRO SCARTO INIZIALE TEMPORALE
         self.Filtro2 = tk.Checkbutton(self.finestra_filtro,
-                                    text="Scarto Iniziale", variable=self.DaTempo)
+                                    text="Scarto Iniziale", 
+                                    font=("Helvetica", 12),
+                                    variable=self.DaTempo)
         self.Filtro2.grid(row=3, column=0)
 
         self.TempoDa = tk.Label(self.finestra_filtro,
-                                text="Tempo d'inizio")
+                                text="Tempo d'inizio",
+                                font=("Helvetica", 12))
         self.TempoDa.grid(row=3, column=1)
 
         self.tempoDa=tk.StringVar()
@@ -72,7 +78,10 @@ class Filtro:
         self.TDa.grid(row=3, column=2)
 
         #BOTTONE OK E CHIUSURA
-        self.ok_button = tk.Button(self.finestra_filtro, text="OK", command=self.SalvataggioFiltro)
+        self.ok_button = tk.Button(self.finestra_filtro,
+                                    text="OK",
+                                    font=("Helvetica", 12),
+                                    command=self.SalvataggioFiltro)
         self.ok_button.grid(row=4, column=2, padx=10, pady=10)
 
     def update_checkboxes(self, *args):
