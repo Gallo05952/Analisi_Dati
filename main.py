@@ -165,7 +165,6 @@ def Statistiche(finestra_principale,df,df_filtrato,bottone_statistiche):
         df_stati_filtrati=None
     df_statistiche=[df_stati_grezzi,df_stati_filtrati]
         
-    
 def Correlzioniamo(finestra_principale, df, df_filtrato, bottone_correlazione):
     global df_correlazione, preferenze_corr
     correlazione = FinestraCorrelazioni(root, df, df_filtrato)
@@ -218,7 +217,8 @@ def Grafici_Statistica():
     pass
 
 def Grafici_Correlazione():
-    pass
+    FinestraGraficiCorrelazioni(root, df, df_filtrato, df_correlazione, preferenze_corr).Finestra()
+
 #MAIN RUN
 try:
     df = None
@@ -226,6 +226,7 @@ try:
     df_filtrato = None
     df_statistiche = None
     df_correlazione = None
+    preferenze_corr = None
     root = tk.Tk()
     app=App(root)
     root.mainloop()

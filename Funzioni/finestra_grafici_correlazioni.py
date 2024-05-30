@@ -170,9 +170,6 @@ class FinestraGraficiCorrelazioni:
             print("Dati grezzi selezionati")
             # fai un instogramma con le x e le y selezionate
             try:  
-                print(type(self.df_corr[0]))
-                print(len(self.df_corr[0]))
-                print(self.df_corr[0])
                 import numpy as np
                 x_graf=[x1, x2, x3, x4, x5]
                 x_graf = [x for x in x_graf if x != ""]
@@ -182,20 +179,63 @@ class FinestraGraficiCorrelazioni:
                 indices_x = [self.variabili.index(x) for x in x_graf if x in self.variabili]
                 indices_y = [self.variabili.index(y) for y in y_graf if y in self.variabili]
                 df_graf = pd.DataFrame(np.squeeze(self.df_corr[0]))
-                # prendi le righe indicate dagli indici_x dal dataframe df_graf
-
 
                 righe_selezionate = df_graf.iloc[indices_x]
+                # Riassegna i nomi delle righe
 
                 colonne_selezionate = righe_selezionate.iloc[:,indices_y]
-                print(righe_selezionate)
-                print(colonne_selezionate)
+                colonne_selezionate.index = x_graf
+
+                # Riassegna i nomi delle colonne
+                colonne_selezionate.columns = y_graf
+
+                corr_long = colonne_selezionate.unstack().reset_index()
+                corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
+        
+        # Creazione del barplot con Plotly
+                fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
                 # crea il grafico
-                fig = px.bar(df_graf)
+                fig.show()
                 messagebox.showinfo("Grafico creato", "Il grafico è stato creato")                
             except AttributeError:
                 #visualizza il tipo di errore attraverso il print
                 print("Errore nella creazione del grafico:" + str(AttributeError))
+        if self.dati_filtrati.get() == True:
+            if self.df_corr[1] == None:
+                messagebox.showinfo("Errore", "Non ci sono dati filtrati")
+            else:
+                try:  
+                    import numpy as np
+                    x_graf=[x1, x2, x3, x4, x5]
+                    x_graf = [x for x in x_graf if x != ""]
+                    y_graf=[y1, y2, y3, y4, y5]
+                    y_graf = [y for y in y_graf if y != ""]
+                    # trova l'indice corrispondente delle x in df_corr
+                    indices_x = [self.variabili.index(x) for x in x_graf if x in self.variabili]
+                    indices_y = [self.variabili.index(y) for y in y_graf if y in self.variabili]
+                    df_graf = pd.DataFrame(np.squeeze(self.df_corr[1]))
+
+                    righe_selezionate = df_graf.iloc[indices_x]
+                    # Riassegna i nomi delle righe
+
+                    colonne_selezionate = righe_selezionate.iloc[:,indices_y]
+                    colonne_selezionate.index = x_graf
+
+                    # Riassegna i nomi delle colonne
+                    colonne_selezionate.columns = y_graf
+
+                    corr_long = colonne_selezionate.unstack().reset_index()
+                    corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
+            
+            # Creazione del barplot con Plotly
+                    fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
+                    # crea il grafico
+                    fig.show()
+                    messagebox.showinfo("Grafico creato", "Il grafico è stato creato")                
+                except AttributeError:
+                    #visualizza il tipo di errore attraverso il print
+                    print("Errore nella creazione del grafico:" + str(AttributeError))
+
 
 
 
