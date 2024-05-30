@@ -76,46 +76,46 @@ def App(finesta_principale):
                         text="")
     empty_row.grid(row=7, column=0)
 
-    # BOTTONE CORRELAZIONE
-    bottone_correlazione = tk.Button(finesta_principale,
-                                    text="Correlazione",
-                                    command=lambda: Correlzioniamo(finesta_principale, df, df_filtrato, bottone_correlazione),
-                                    bg="light grey",
-                                    font=("Arial", 12),
-                                    fg="black")
-    bottone_correlazione.grid(row=8, column=0)
+    # # BOTTONE CORRELAZIONE
+    # bottone_correlazione = tk.Button(finesta_principale,
+    #                                 text="Correlazione",
+    #                                 command=lambda: Correlzioniamo(finesta_principale, df, df_filtrato, bottone_correlazione),
+    #                                 bg="light grey",
+    #                                 font=("Arial", 12),
+    #                                 fg="black")
+    # bottone_correlazione.grid(row=8, column=0)
 
-    # EMPTY ROW
-    empty_row = tk.Label(finesta_principale,
-                        text="")
-    empty_row.grid(row=9, column=0)
+    # # EMPTY ROW
+    # empty_row = tk.Label(finesta_principale,
+    #                     text="")
+    # empty_row.grid(row=9, column=0)
 
-    # BOTTONE GRAFICI VARIABILI
-    bottone_grafici = tk.Button(finesta_principale,
-                            text="Grafici",
-                            command=lambda: Grafici_Variabili(),
-                            bg="light grey",
-                            font=("Arial", 12),
-                            fg="black")
-    bottone_grafici.grid(row=4, column=2)
+    # # BOTTONE GRAFICI VARIABILI
+    # bottone_grafici = tk.Button(finesta_principale,
+    #                         text="Grafici",
+    #                         command=lambda: Grafici_Variabili(),
+    #                         bg="light grey",
+    #                         font=("Arial", 12),
+    #                         fg="black")
+    # bottone_grafici.grid(row=4, column=2)
 
-    # BOTTONE GRAFICI STATISTICA
-    bottone_grafici_stat = tk.Button(finesta_principale,
-                                text="Grafici Statistica",
-                                command=lambda: Grafici_Statistica(),
-                                bg="light grey",
-                                font=("Arial", 12),
-                                fg="black")
-    bottone_grafici_stat.grid(row=6, column=2)
+    # # BOTTONE GRAFICI STATISTICA
+    # bottone_grafici_stat = tk.Button(finesta_principale,
+    #                             text="Grafici Statistica",
+    #                             command=lambda: Grafici_Statistica(),
+    #                             bg="light grey",
+    #                             font=("Arial", 12),
+    #                             fg="black")
+    # bottone_grafici_stat.grid(row=6, column=2)
 
-    # BOTTONE GRAFICI CORRELAZIONE
-    bottone_grafici_corr = tk.Button(finesta_principale,
-                                text="Grafici Correlazione",
-                                command=lambda: Grafici_Correlazione(),
-                                bg="light grey",
-                                font=("Arial", 12),
-                                fg="black")
-    bottone_grafici_corr.grid(row=8, column=2)
+    # # BOTTONE GRAFICI CORRELAZIONE
+    # bottone_grafici_corr = tk.Button(finesta_principale,
+    #                             text="Grafici Correlazione",
+    #                             command=lambda: Grafici_Correlazione(),
+    #                             bg="light grey",
+    #                             font=("Arial", 12),
+    #                             fg="black")
+    # bottone_grafici_corr.grid(row=8, column=2)
 
     # BOTTONE SALVA
     bottone_salva = tk.Button(finesta_principale,
@@ -177,18 +177,16 @@ def Correlzioniamo(finestra_principale, df, df_filtrato, bottone_correlazione):
         df_corr_grezze=[]
         for i in range(len(corr_grezze)):
             df_corr_grezze.append(pd.DataFrame(corr_grezze[i]))
-        print(type(df_corr_grezze))
-        print(df_corr_grezze)
     else:
         df_corr_grezze = None
     if corr_filtrate is not None:
         df_corr_filtrate=[]
         for i in range(len(corr_filtrate)):
             df_corr_filtrate.append(pd.DataFrame(corr_filtrate[i]))
-        print(type(df_corr_filtrate[0]))
+        print("Correlazioni filtrate")
         print(df_corr_filtrate)
     else:
-        df_corr_filtrate = None
+        df_corr_filtrate = ""
 
     df_correlazione = [df_corr_grezze, df_corr_filtrate]
 

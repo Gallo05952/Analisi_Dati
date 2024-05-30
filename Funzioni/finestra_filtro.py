@@ -24,13 +24,13 @@ class Filtro:
                             text="Seleziona la tipologia di filtro", 
                             font=("Helvetica", 14, "bold"),
                             fg="red")
-        self.testoFiltro.grid(row=0, column=0)
+        self.testoFiltro.grid(row=0, column=0, columnspan=3)
 
         # FILTRO INTERVALLO DI TEMPO
         # TEMPO INIZIO
         self.checkFiltro1 = tk.Checkbutton(self.finestra_filtro, 
                                         text="Intervallo di tempo", 
-                                        font=("Helvetica", 12),
+                                        font=("Helvetica", 12, "bold"),
                                         variable=self.IntervalloT)
         self.checkFiltro1.grid(row=1, column=0)
 
@@ -61,7 +61,7 @@ class Filtro:
         # FILTRO SCARTO INIZIALE TEMPORALE
         self.Filtro2 = tk.Checkbutton(self.finestra_filtro,
                                     text="Scarto Iniziale", 
-                                    font=("Helvetica", 12),
+                                    font=("Helvetica", 12, "bold"),
                                     variable=self.DaTempo)
         self.Filtro2.grid(row=3, column=0)
 

@@ -20,14 +20,14 @@ class FinestraSalvataggio:
         # SEZIONE SALVATAGGIO
         self.testoSalva = tk.Label(self.finestra_salva,
                             text="Salva i dati",
-                            font=("Helvetica", 14, "bold"),
+                            font=("Helvetica", 18, "bold"),
                             fg="red")
-        self.testoSalva.grid(row=0, column=0)
+        self.testoSalva.grid(row=0, column=0, columnspan=3)
         
         # riga per inserire il nome del file
         self.nomefile = tk.Label(self.finestra_salva,
                             text="Nome del file",
-                            font=("Helvetica", 12),
+                            font=("Helvetica", 14),
                             fg="red")
         self.nomefile.grid(row=1, column=0)
 
@@ -37,19 +37,20 @@ class FinestraSalvataggio:
         # riga per selezionare il percorso
         self.percorso = tk.Label(self.finestra_salva,
                             text="Percorso",
-                            font=("Helvetica", 12),
+                            font=("Helvetica", 14),
                             fg="red")
         self.percorso.grid(row=2, column=0)
 
         #sfoglial percorso
         self.sfoglia = tk.Button(self.finestra_salva, text="Sfoglia", 
-                                font=("Helvetica", 12),
+                                font=("Helvetica", 14),
+                                bg="light grey",
                                 command=self.scegli_percorso)
         self.sfoglia.grid(row=2, column=1)
 
         #visualizza il percorso
         self.percorso_path = tk.Label(self.finestra_salva,
-                                    font=("Helvetica", 12))
+                                    font=("Helvetica", 14))
         self.percorso_path.grid(row=2, column=2)
 
         #empty row
@@ -64,22 +65,33 @@ class FinestraSalvataggio:
         self.salva_statistiche_filt = tk.BooleanVar()
         self.salva_correlazioni_filt = tk.BooleanVar()
 
-        self.salva_grezzi_cb = tk.Checkbutton(self.finestra_salva, text="Dati grezzi", variable=self.salva_grezzi)
+        self.salva_grezzi_cb = tk.Checkbutton(self.finestra_salva, 
+                                            text="Dati grezzi", variable=self.salva_grezzi)
         self.salva_grezzi_cb.grid(row=4, column=0)
 
-        self.salva_filtrati_cb = tk.Checkbutton(self.finestra_salva, text="Dati filtrati", variable=self.salva_filtrati)
+        self.salva_filtrati_cb = tk.Checkbutton(self.finestra_salva,
+                                        text="Dati filtrati", variable=self.salva_filtrati)
         self.salva_filtrati_cb.grid(row=4, column=1)
 
-        self.salva_statistiche_cb = tk.Checkbutton(self.finestra_salva, text="Statistiche Grezzi", variable=self.salva_statistiche)
+        self.salva_statistiche_cb = tk.Checkbutton(self.finestra_salva,
+                                        text="Statistiche Grezzi", variable=self.salva_statistiche)
         self.salva_statistiche_cb.grid(row=5, column=0)
 
-        self.salva_statistiche_filt_cb = tk.Checkbutton(self.finestra_salva, text="Statistiche Filtrati", variable=self.salva_statistiche_filt)
+        self.salva_statistiche_filt_cb = tk.Checkbutton(
+                                self.finestra_salva,
+                                text="Statistiche Filtrati", variable=self.salva_statistiche_filt)
         self.salva_statistiche_filt_cb.grid(row=5, column=1)
 
-        self.salva_correlazioni_cb = tk.Checkbutton(self.finestra_salva, text="Correlazioni Grezzi", variable=self.salva_correlazioni)
+        self.salva_correlazioni_cb = tk.Checkbutton(
+                        self.finestra_salva, 
+                        text="Correlazioni Grezzi", 
+                        variable=self.salva_correlazioni)
         self.salva_correlazioni_cb.grid(row=6, column=0)
 
-        self.salva_correlazioni_filt_cb = tk.Checkbutton(self.finestra_salva, text="Correlazioni Filtrati", variable=self.salva_correlazioni_filt)
+        self.salva_correlazioni_filt_cb = tk.Checkbutton(
+                                self.finestra_salva,
+                                text="Correlazioni Filtrati", 
+                                variable=self.salva_correlazioni_filt)
         self.salva_correlazioni_filt_cb.grid(row=6, column=1)
 
         #empty row
@@ -87,7 +99,11 @@ class FinestraSalvataggio:
         self.empty.grid(row=8, column=0)
 
         #bottone per salvare
-        self.salva = tk.Button(self.finestra_salva, text="Salva", command=self.salva)
+        self.salva = tk.Button(self.finestra_salva,
+                                text="Salva", 
+                                font=("Helvetica", 14),
+                                bg="light grey",
+                                command=self.salva)
         self.salva.grid(row=9, column=0)
 
 
@@ -130,15 +146,22 @@ class FinestraSalvataggio:
                 else:
                     # df_corr è una lista con dentro due liste con dentro potenzialmente 3 dataframe il numero di dataframe lo posso vedere dalla lunghezza di preferenze
                     i=0
-                    for i in range(len(self.df_corr[0])-1):
+                    if len(self.df_corr[0]) == 0:
+                        messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
+                    for i in range(len(self.df_corr[0])):
                         if self.df_corr[0][i] is not None:
                             self.df_corr[0][i].to_excel(writer, sheet_name="Correlazioni Grezzi "+ self.preferenze[i])
             if self.salva_correlazioni_filt.get():
+                print("Salvataggio correlazioni filtrati")
                 if self.df_corr[1] is None:
                     messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
                 else:
-                    i=0
-                    for i in range(len(self.df_corr[1])-1):
-                        if self.df_corr[1][i] is not None:
-                            self.df_corr[1][i].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[i])
+                    j=0
+                    if len(self.df_corr[1]) == 0:
+                        messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
+                    print(len(self.df_corr[1]))
+                    for j in range(len(self.df_corr[1])):
+                        if not self.df_corr[1][j].empty:
+                            print("Salvataggio correlazioni filtrati 2")
+                            self.df_corr[1][j].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[j])
         messagebox.showinfo("Salvataggio", "Salvataggio completato")

@@ -28,10 +28,10 @@ class FinestraCorrelazioni:
 
         # SEZIONE CORRELAZIONI
         self.testoCorr = tk.Label(self.finestra_corr,
-                            text="Seleziona la tipologia di correlazione",
-                            font=("Helvetica", 14, "bold"),
-                            fg="red")
-        self.testoCorr.grid(row=0, column=0)
+                        text="Seleziona la tipologia di correlazione",
+                        font=("Helvetica", 14, "bold"),
+                        fg="red")
+        self.testoCorr.grid(row=0, column=0, columnspan=3)
 
         # CHECK BOX CORRELAZIONI
         try:
@@ -59,7 +59,7 @@ class FinestraCorrelazioni:
             self.Dati_grezzi_cb.grid(row=1, column=1)
             # DATI FILTRATI
             self.Dati_filtrati_cb = tk.Checkbutton(self.finestra_corr,
-                                        text="Datifiltrati",
+                                        text="Dati Filtrati",
                                         font=("Helvetica", 12),
                                         variable=self.Dati_filtrati_var)
             self.Dati_filtrati_cb.grid(row=2, column=1)
