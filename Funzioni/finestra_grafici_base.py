@@ -142,7 +142,7 @@ class FinestraGraficiBase:
     def Salva(self, entry, save_level):
         path = entry.get()
         fig.write_html(path + "/grafico.html")
-        tk.messagebox.showinfo("Salvataggio", "Grafico salvato correttamente")
+        messagebox.showinfo("Salvataggio", "Grafico salvato correttamente")
         entry.delete(0, tk.END)
         save_level.destroy()
 

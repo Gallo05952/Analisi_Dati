@@ -33,7 +33,7 @@ class Correlazione:
         # Trasformazione del DataFrame di correlazione in un formato lungo per il plotting
         corr_long = correlazioni.unstack().reset_index()
         corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
-
+        
         # Creazione del barplot con Plotly
         fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
         # Salva il grafico come file HTML

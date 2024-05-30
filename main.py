@@ -142,7 +142,7 @@ def Filtraggio(finestra_principale, tempo, bottone_filtro):
     filtro.FinestraFiltro()
     finestra_principale.wait_window(filtro.finestra_filtro)
     df_filtrato = filtro.DataFrame_filtrato()
-    if df_filtrato is not None:
+    if not df_filtrato.empty:
         bottone_filtro.config(bg="light green")
 
 def Statistiche(finestra_principale,df,df_filtrato,bottone_statistiche):
@@ -192,7 +192,7 @@ def Correlzioniamo(finestra_principale, df, df_filtrato, bottone_correlazione):
 
     df_correlazione = [df_corr_grezze, df_corr_filtrate]
 
-    if any(df is not None for df in df_correlazione):
+    if df_correlazione[0] is not None or df_correlazione[1] is not None:
         bottone_correlazione.config(bg="light green")
     # if corr_grezze is not None:
     #     df_corr_grezze=pd.DataFrame(corr_grezze)

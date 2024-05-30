@@ -20,7 +20,9 @@ class FinestraGraficiCorrelazioni:
         self.grafici_correlazioni.geometry("1000x400")
 
         self.dati_grezzi=tk.BooleanVar()
+        self.dati_grezzi.trace('w', self.update_checkboxes)
         self.dati_filtrati=tk.BooleanVar()
+        self.dati_filtrati.trace('w', self.update_checkboxes)
 
         # label
         self.testoGrafici = tk.Label(self.grafici_correlazioni,
@@ -150,6 +152,7 @@ class FinestraGraficiCorrelazioni:
     def CreaGrafico(self):
         import pandas as pd
         # prendi i dati inseriti nelle combobox
+        global fig
         try:
             x1 = self.variabile_x1.get()
             x2 = self.variabile_x2.get()
@@ -171,6 +174,32 @@ class FinestraGraficiCorrelazioni:
             # fai un instogramma con le x e le y selezionate
             try:  
                 import numpy as np
+        #         x_graf=[x1, x2, x3, x4, x5]
+        #         x_graf = [x for x in x_graf if x != ""]
+        #         y_graf=[y1, y2, y3, y4, y5]
+        #         y_graf = [y for y in y_graf if y != ""]
+        #         # trova l'indice corrispondente delle x in df_corr
+        #         indices_x = [self.variabili.index(x) for x in x_graf if x in self.variabili]
+        #         indices_y = [self.variabili.index(y) for y in y_graf if y in self.variabili]
+        #         df_graf = pd.DataFrame(np.squeeze(self.df_corr[0]))
+
+        #         righe_selezionate = df_graf.iloc[indices_x]
+        #         # Riassegna i nomi delle righe
+
+        #         colonne_selezionate = righe_selezionate.iloc[:,indices_y]
+        #         colonne_selezionate.index = x_graf
+
+        #         # Riassegna i nomi delle colonne
+        #         colonne_selezionate.columns = y_graf
+
+        #         corr_long = colonne_selezionate.unstack().reset_index()
+        #         corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
+                
+        # # Creazione del barplot con Plotly
+        #         fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
+        #         # crea il grafico
+        #         fig.show()
+        #         messagebox.showinfo("Grafico creato", "Il grafico è stato creato")                
                 x_graf=[x1, x2, x3, x4, x5]
                 x_graf = [x for x in x_graf if x != ""]
                 y_graf=[y1, y2, y3, y4, y5]
@@ -178,7 +207,12 @@ class FinestraGraficiCorrelazioni:
                 # trova l'indice corrispondente delle x in df_corr
                 indices_x = [self.variabili.index(x) for x in x_graf if x in self.variabili]
                 indices_y = [self.variabili.index(y) for y in y_graf if y in self.variabili]
-                df_graf = pd.DataFrame(np.squeeze(self.df_corr[0]))
+
+                # Check if self.df_corr[0] is a scalar or a 1D array
+                if np.isscalar(self.df_corr[0]):
+                    df_graf = pd.DataFrame([self.df_corr[0]])
+                else:
+                    df_graf = pd.DataFrame(self.df_corr[0])
 
                 righe_selezionate = df_graf.iloc[indices_x]
                 # Riassegna i nomi delle righe
@@ -191,12 +225,12 @@ class FinestraGraficiCorrelazioni:
 
                 corr_long = colonne_selezionate.unstack().reset_index()
                 corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
-        
-        # Creazione del barplot con Plotly
+
+                # Creazione del barplot con Plotly
                 fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
                 # crea il grafico
                 fig.show()
-                messagebox.showinfo("Grafico creato", "Il grafico è stato creato")                
+                messagebox.showinfo("Grafico creato", "Il grafico è stato creato")
             except AttributeError:
                 #visualizza il tipo di errore attraverso il print
                 print("Errore nella creazione del grafico:" + str(AttributeError))
@@ -226,7 +260,6 @@ class FinestraGraficiCorrelazioni:
 
                     corr_long = colonne_selezionate.unstack().reset_index()
                     corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
-            
             # Creazione del barplot con Plotly
                     fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
                     # crea il grafico
@@ -236,9 +269,48 @@ class FinestraGraficiCorrelazioni:
                     #visualizza il tipo di errore attraverso il print
                     print("Errore nella creazione del grafico:" + str(AttributeError))
 
-
-
-
-    def SalvaGrafico(self):
-        pass
                              
+    def SalvaGrafico(self):
+            # fig è una variabile globale
+            # apri una nuova finestra dove indicare percorso e nome del file
+            save_level=tk.Toplevel()
+            save_level.title("Salva Grafico")
+            save_level.geometry("400x200")
+
+            # label
+            label = tk.Label(save_level, text="Inserisci il nome del file")
+            label.grid(row=0, column=0)
+
+            # entry
+            entry = tk.Entry(save_level)
+            entry.grid(row=0, column=1)
+
+            # button sfoglia per indicare il percorso
+            button = tk.Button(save_level, text="Sfoglia", command=lambda: self.Sfoglia())
+            button.grid(row=1, column=0)
+
+            # button salva
+            button = tk.Button(save_level, text="Salva", command=lambda: self.Salva(entry, save_level))
+            button.grid(row=1, column=1)
+
+
+    def Sfoglia(self):
+        global path
+        path = filedialog.askdirectory()
+        
+
+    def Salva(self, entry, save_level):
+        nome=entry.get()
+        fig.write_html(path + nome + ".html")
+        messagebox.showinfo("Salvataggio", "Grafico salvato correttamente")
+        entry.delete(0, tk.END)
+        save_level.destroy()
+
+    def update_checkboxes(self, *args):
+        if self.dati_grezzi.get():
+            self.dati_filtrati_cb.config(state='disabled')
+        elif self.dati_filtrati.get():
+            self.dati_grezzi_cb.config(state='disabled')
+        else:
+            self.dati_grezzi_cb.config(state='normal')
+            self.dati_filtrati_cb.config(state='normal')
