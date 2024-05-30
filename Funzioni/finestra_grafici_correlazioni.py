@@ -26,9 +26,9 @@ class FinestraGraficiCorrelazioni:
 
         # label
         self.testoGrafici = tk.Label(self.grafici_correlazioni,
-                                    text="Seleziona i dati per il grafico delle correlazioni",
-                                    font=("Helvetica", 14),
-                                    fg="red")
+            text="Seleziona i dati per il grafico delle correlazioni",
+            font=("Helvetica", 14),
+            fg="red")
         self.testoGrafici.grid(row=0, column=0,columnspan=3)
 
         #empty label
@@ -36,10 +36,12 @@ class FinestraGraficiCorrelazioni:
         self.empty_label.grid(row=1, column=0)
 
         # selezione dei dati
-        self.dati_grezzi_cb=tk.Checkbutton(self.grafici_correlazioni, text="Dati grezzi", variable=self.dati_grezzi)
+        self.dati_grezzi_cb=tk.Checkbutton(self.grafici_correlazioni, 
+                                        text="Dati grezzi", variable=self.dati_grezzi)
         self.dati_grezzi_cb.grid(row=2, column=0)
 
-        self.dati_filtrati_cb=tk.Checkbutton(self.grafici_correlazioni, text="Dati filtrati", variable=self.dati_filtrati)
+        self.dati_filtrati_cb=tk.Checkbutton(self.grafici_correlazioni,
+                                            text="Dati filtrati", variable=self.dati_filtrati)
         self.dati_filtrati_cb.grid(row=2, column=1)
 
         # empty label
@@ -174,56 +176,11 @@ class FinestraGraficiCorrelazioni:
             # fai un instogramma con le x e le y selezionate
             try:  
                 import numpy as np
-        #         x_graf=[x1, x2, x3, x4, x5]
-        #         x_graf = [x for x in x_graf if x != ""]
-        #         y_graf=[y1, y2, y3, y4, y5]
-        #         y_graf = [y for y in y_graf if y != ""]
-        #         # trova l'indice corrispondente delle x in df_corr
-        #         indices_x = [self.variabili.index(x) for x in x_graf if x in self.variabili]
-        #         indices_y = [self.variabili.index(y) for y in y_graf if y in self.variabili]
-        #         df_graf = pd.DataFrame(np.squeeze(self.df_corr[0]))
-
-        #         righe_selezionate = df_graf.iloc[indices_x]
-        #         # Riassegna i nomi delle righe
-
-        #         colonne_selezionate = righe_selezionate.iloc[:,indices_y]
-        #         colonne_selezionate.index = x_graf
-
-        #         # Riassegna i nomi delle colonne
-        #         colonne_selezionate.columns = y_graf
-
-        #         corr_long = colonne_selezionate.unstack().reset_index()
-        #         corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
-                
-        # # Creazione del barplot con Plotly
-        #         fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
-        #         # crea il grafico
-        #         fig.show()
-        #         messagebox.showinfo("Grafico creato", "Il grafico è stato creato")                
                 x_graf=[x1, x2, x3, x4, x5]
                 x_graf = [x for x in x_graf if x != ""]
-                y_graf=[y1, y2, y3, y4, y5]
-                y_graf = [y for y in y_graf if y != ""]
-                # trova l'indice corrispondente delle x in df_corr
-                indices_x = [self.variabili.index(x) for x in x_graf if x in self.variabili]
-                indices_y = [self.variabili.index(y) for y in y_graf if y in self.variabili]
+                filtred_df_grezzo=self.df[x_graf]
 
-                # Check if self.df_corr[0] is a scalar or a 1D array
-                if np.isscalar(self.df_corr[0]):
-                    df_graf = pd.DataFrame([self.df_corr[0]])
-                else:
-                    df_graf = pd.DataFrame(self.df_corr[0])
-
-                righe_selezionate = df_graf.iloc[indices_x]
-                # Riassegna i nomi delle righe
-
-                colonne_selezionate = righe_selezionate.iloc[:,indices_y]
-                colonne_selezionate.index = x_graf
-
-                # Riassegna i nomi delle colonne
-                colonne_selezionate.columns = y_graf
-
-                corr_long = colonne_selezionate.unstack().reset_index()
+                corr_long = self.df.unstack().reset_index()
                 corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
 
                 # Creazione del barplot con Plotly

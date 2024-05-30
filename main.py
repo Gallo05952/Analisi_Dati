@@ -76,46 +76,46 @@ def App(finesta_principale):
                         text="")
     empty_row.grid(row=7, column=0)
 
-    # # BOTTONE CORRELAZIONE
-    # bottone_correlazione = tk.Button(finesta_principale,
-    #                                 text="Correlazione",
-    #                                 command=lambda: Correlzioniamo(finesta_principale, df, df_filtrato, bottone_correlazione),
-    #                                 bg="light grey",
-    #                                 font=("Arial", 12),
-    #                                 fg="black")
-    # bottone_correlazione.grid(row=8, column=0)
+    # BOTTONE CORRELAZIONE
+    bottone_correlazione = tk.Button(finesta_principale,
+                                    text="Correlazione",
+                                    command=lambda: Correlzioniamo(finesta_principale, df, df_filtrato, bottone_correlazione),
+                                    bg="light grey",
+                                    font=("Arial", 12),
+                                    fg="black")
+    bottone_correlazione.grid(row=8, column=0)
 
-    # # EMPTY ROW
-    # empty_row = tk.Label(finesta_principale,
-    #                     text="")
-    # empty_row.grid(row=9, column=0)
+    # EMPTY ROW
+    empty_row = tk.Label(finesta_principale,
+                        text="")
+    empty_row.grid(row=9, column=0)
 
-    # # BOTTONE GRAFICI VARIABILI
-    # bottone_grafici = tk.Button(finesta_principale,
-    #                         text="Grafici",
-    #                         command=lambda: Grafici_Variabili(),
-    #                         bg="light grey",
-    #                         font=("Arial", 12),
-    #                         fg="black")
-    # bottone_grafici.grid(row=4, column=2)
+    # BOTTONE GRAFICI VARIABILI
+    bottone_grafici = tk.Button(finesta_principale,
+                            text="Grafici",
+                            command=lambda: Grafici_Variabili(),
+                            bg="light grey",
+                            font=("Arial", 12),
+                            fg="black")
+    bottone_grafici.grid(row=4, column=2)
 
-    # # BOTTONE GRAFICI STATISTICA
-    # bottone_grafici_stat = tk.Button(finesta_principale,
-    #                             text="Grafici Statistica",
-    #                             command=lambda: Grafici_Statistica(),
-    #                             bg="light grey",
-    #                             font=("Arial", 12),
-    #                             fg="black")
-    # bottone_grafici_stat.grid(row=6, column=2)
+    # BOTTONE GRAFICI STATISTICA
+    bottone_grafici_stat = tk.Button(finesta_principale,
+                                text="Grafici Statistica",
+                                command=lambda: Grafici_Statistica(),
+                                bg="light grey",
+                                font=("Arial", 12),
+                                fg="black")
+    bottone_grafici_stat.grid(row=6, column=2)
 
-    # # BOTTONE GRAFICI CORRELAZIONE
-    # bottone_grafici_corr = tk.Button(finesta_principale,
-    #                             text="Grafici Correlazione",
-    #                             command=lambda: Grafici_Correlazione(),
-    #                             bg="light grey",
-    #                             font=("Arial", 12),
-    #                             fg="black")
-    # bottone_grafici_corr.grid(row=8, column=2)
+    # BOTTONE GRAFICI CORRELAZIONE
+    bottone_grafici_corr = tk.Button(finesta_principale,
+                                text="Grafici Correlazione",
+                                command=lambda: Grafici_Correlazione(),
+                                bg="light grey",
+                                font=("Arial", 12),
+                                fg="black")
+    bottone_grafici_corr.grid(row=8, column=2)
 
     # BOTTONE SALVA
     bottone_salva = tk.Button(finesta_principale,
@@ -231,102 +231,3 @@ try:
 except Exception as e:
     print("Errore generico")
 
-
-# ## FUNZIONI STATISTICHE
-# statistiche_dafare=[app.MediaS,
-#                     app.MedianaS,
-#                     app.ModaS,
-#                     app.DeviazioneS,
-#                     app.VarianzaS,
-#                     app.minimoS,
-#                     app.massimoS]
-# if (app.Dati_grezziS == True and
-#     app.Dati_filtratiS == False):
-#     statistiche_calcolate = Statistica(app.df,
-#                                     statistiche_dafare).DatiStatistici()
-# elif (app.Dati_grezziS == False and
-#     app.Dati_filtratiS == True): 
-#     if (app.FiltroIntervallo==True or
-#         app.Filtro2==True):
-#         statistiche_calcolate = Statistica(Df_filtrato,
-#                                         statistiche_dafare).DatiStatistici()
-#     else: print("Devi selezionare il filtro da applicare")
-# elif (app.Dati_grezziS == True and
-#     app.Dati_filtratiS == True):
-#     if (app.FiltroIntervallo==True or
-#         app.Filtro2==True):
-#         calcola_statistiche_grezze = Statistica(app.df,
-#                                         statistiche_dafare).DatiStatistici()
-#         calcola_statistiche = Statistica(Df_filtrato,
-#                                         statistiche_dafare).DatiStatistici()
-#         statistiche_calcolate = [calcola_statistiche_grezze,
-#                                 calcola_statistiche]
-#     print("Statistiche sui dati grezzi e filtrati")
-# else: print("Nessuna statistica selezionata")
-
-
-# ## FUNZIONI CORRELAZIONE
-# correlazione=[]
-# if (app.Dati_grezziCorrS == True and
-#     app.Dati_filtratiCorrS == False):
-#     print("Correlazione sui dati grezzi")
-#     if app.PearsonS == True:
-#         print("Pearson")
-#         corr = Correlazione(app.df).Pearson()
-#         if app.correlazione_graficabiliS == "Pearson":
-#             Correlazione(app.df).GraficoPearson(corr,app.file_name)
-#         correlazione.append(corr)
-#     if app.SpearmanS == True:
-#         correlazione.append(Correlazione(app.df).Spearman())
-#         print("Spearman")
-#     if app.KendallS == True:
-#         print("Kendall")
-#         correlazione.append(Correlazione(app.df).Kendall())
-# elif (app.Dati_grezziCorrS == False and app.Dati_filtratiCorrS == True):
-#     if app.PearsonS == True:
-#         print("Pearson")
-#         corr=Correlazione(Df_filtrato).Pearson()
-#         if app.correlazione_graficabiliS == "Pearson":
-#             Correlazione(Df_filtrato).GraficoPearson(corr,app.file_name)
-#         correlazione.append(corr)
-#     if app.SpearmanS == True:
-#         print("Spearman")
-#         correlazione.append(Correlazione(Df_filtrato).Spearman())
-#     if app.KendallS == True:
-#         print("Kendall")
-#         correlazione.append(Correlazione(Df_filtrato).Kendall())
-# elif (app.Dati_grezziCorrS == True and app.Dati_filtratiCorrS == True):
-#     print("Correlazione sui dati grezzi e filtrati")
-#     if app.PearsonS == True:
-#         print("Pearson")
-#         correlazione_grezzi = Correlazione(app.df).Pearson()
-#         correlazione_filtrati = Correlazione(Df_filtrato).Pearson()
-#         if app.correlazione_graficabiliS == "Pearson":
-#             file_name_grezzi = app.file_name + "_Grezzi"
-#             Correlazione(app.df).GraficoPearson(correlazione_grezzi,file_name_grezzi)
-#             file_name_filtrati = app.file_name + "_Filtrati"
-#             Correlazione(Df_filtrato).GraficoPearson(correlazione_filtrati,file_name_filtrati)
-#         correlazione.append([correlazione_grezzi,correlazione_filtrati])
-#     if app.SpearmanS == True:
-#         print("Spearman")
-#         correlazione_grezzi = Correlazione(app.df).Spearman()
-#         correlazione_filtrati = Correlazione(Df_filtrato).Spearman()
-#         correlazione.append([correlazione_grezzi,correlazione_filtrati])
-#     if app.KendallS == True:
-#         print("Kendall")
-#         correlazione_grezzi = Correlazione(app.df).Kendall()
-#         correlazione_filtrati = Correlazione(Df_filtrato).Kendall()
-#         correlazione.append([correlazione_grezzi,correlazione_filtrati])
-# else: print("Nessuna correlazione selezionata")
-
-
-# # SCRITTURA DEI DATI SU FILE EXCEL
-# correlazioni_da_fare=[app.PearsonS,app.SpearmanS,app.KendallS]
-# if (app.OpzSalvaS == True):
-#     ScritturaExcel(app.savename).Scrittura(app.df,
-#                                         Df_filtrato,statistiche_calcolate,
-#                                         statistiche_dafare,
-#                                         correlazione,
-#                                         correlazioni_da_fare)
-# # if app.Filtro2 == True or app.FiltroIntervallo == True: Filtro = True
-# # Preferenze = [Filtro, app.Dati_grezziS, app.Dati_filtratiS]
