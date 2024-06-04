@@ -101,8 +101,8 @@ def App(finesta_principale):
 
     # BOTTONE GRAFICI STATISTICA
     bottone_grafici_stat = tk.Button(finesta_principale,
-                                text="Grafici Statistica",
-                                command=lambda: Grafici_Statistica(),
+                                text="Grafici Probabilità",
+                                command=lambda: Grafici_Probabilità(),
                                 bg="light grey",
                                 font=("Arial", 12),
                                 fg="black")
@@ -211,8 +211,8 @@ def Salva():
 def Grafici_Variabili():
     FinestraGraficiBase(root, df, df_filtrato).Finestra()
 
-def Grafici_Statistica():
-    pass
+def Grafici_Probabilità():
+    FinestraGraficiProbabilita(root, df, df_filtrato).Finestra()
 
 def Grafici_Correlazione():
     FinestraGraficiCorrelazioni(root, df, df_filtrato, df_correlazione, preferenze_corr).Finestra()
