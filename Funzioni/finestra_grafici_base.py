@@ -58,15 +58,15 @@ class FinestraGraficiBase:
 
         label_variabili=tk.Label(self.grafici_base,
                                 text="Variabile x:",
-                                font=("Helvetica", 12),
+                                font=("Helvetica", 12, "bold"),
                                 fg="green")
         label_variabili.grid(row=4, column=0)
 
         label_variabili=tk.Label(self.grafici_base,
                                 text="Variabili y:",
-                                font=("Helvetica", 12),
+                                font=("Helvetica", 12, "bold"),
                                 fg="blue")
-        label_variabili.grid(row=4, column=1, columnspan=5)
+        label_variabili.grid(row=4, column=1)
 
         try:
             # print(self.df_filter.columns)
@@ -113,12 +113,14 @@ class FinestraGraficiBase:
         # empty label
         self.empty_label = tk.Label(self.grafici_base, text="")
         self.empty_label.grid(row=6, column=0)
+
         # button
         self.button = tk.Button(self.grafici_base,
                                 text="Crea Grafico",
                                 command=self.CreaGrafico,
                                 font=("Helvetica", 12))
         self.button.grid(row=7, column=2)
+
         # bottone salva grafico
         self.button = tk.Button(self.grafici_base,
                                 text="Salva Grafico",
@@ -215,8 +217,6 @@ class FinestraGraficiBase:
         messagebox.showinfo("Salvataggio", "Grafico salvato correttamente")
         entry.delete(0, tk.END)
         save_level.destroy()
-
-
 
     def update_checkboxes(self, *args):
         if self.dati_grezzi.get():

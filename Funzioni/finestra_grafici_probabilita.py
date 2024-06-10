@@ -27,7 +27,7 @@ class FinestraGraficiProbabilita:
                                     text="Seleziona la variabili per il grafico",
                                     font=("Helvetica", 14),
                                     fg="red")
-        self.testoGrafici.grid(row=0, column=0)
+        self.testoGrafici.grid(row=0, column=0, columnspan=2)
 
         #empty label
         self.empty_label = tk.Label(self.grafici_probabilita, text="")
@@ -107,7 +107,6 @@ class FinestraGraficiProbabilita:
                     messagebox.showinfo("Grafico", "Grafico filtrato creato correttamente")
                 except:
                     messagebox.showerror("Errore", "Errore nella creazione del grafico filtrato")
-
 
     def update_checkboxes(self, *args):
         if self.dati_grezzi.get():

@@ -150,7 +150,6 @@ def App(finesta_principale):
     except Exception as e:
         print("Errore nel caricamento del logo: ", e)
 
-
 def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,bottone_correlazione, bottone_grafici, bottone_grafici_stat, bottone_grafici_corr, bottone_salva):
     global df, tempo  # Riferimento alle variabili globali
     path, df, tempo = CaricaFile().file_input_sfoglia()
@@ -170,8 +169,6 @@ def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_stat
         bottone_grafici_corr.config(state=tk.NORMAL)
         bottone_salva.config(bg="light blue")
         bottone_salva.config(state=tk.NORMAL)
-
-
 
 def Filtraggio(finestra_principale, tempo, bottone_filtro):
     global df_filtrato

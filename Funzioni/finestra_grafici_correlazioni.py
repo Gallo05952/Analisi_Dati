@@ -18,7 +18,7 @@ class FinestraGraficiCorrelazioni:
     def Finestra(self):
         self.grafici_correlazioni = tk.Toplevel(self.root)
         self.grafici_correlazioni.title("Finestra Grafici Correlazioni")
-        self.grafici_correlazioni.geometry("1000x400")
+        self.grafici_correlazioni.geometry("1000x300")
 
         self.dati_grezzi=tk.BooleanVar()
         self.dati_grezzi.trace('w', self.update_checkboxes)
@@ -30,7 +30,7 @@ class FinestraGraficiCorrelazioni:
             text="Seleziona i dati per il grafico delle correlazioni",
             font=("Helvetica", 14),
             fg="red")
-        self.testoGrafici.grid(row=0, column=0,columnspan=3)
+        self.testoGrafici.grid(row=0, column=0,columnspan=5)
 
         #empty label
         self.empty_label = tk.Label(self.grafici_correlazioni, text="")
@@ -68,78 +68,98 @@ class FinestraGraficiCorrelazioni:
             print("Errore nella creazione delle variabili")
 
         # seleziona la correlazione da visualizzare
-        self.testoCorrelazioni = ttk.Label(self.grafici_correlazioni, text="Seleziona la correlazione da visualizzare")
-        self.testoCorrelazioni.grid(row=4, column=0, columnspan=2)
+        self.testoCorrelazioni = ttk.Label(
+            self.grafici_correlazioni,
+            text="Seleziona la correlazione da visualizzare",
+            font=("Helvetica", 14))
+        self.testoCorrelazioni.grid(row=4, column=0, columnspan=3)
 
         self.x=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.corr_graficata,
-                            values=self.preferenze)
-        self.x.grid(row=4, column=2)
+                            values=self.preferenze,
+                            state="readonly")
+        self.x.grid(row=4, column=3)
 
         # empty label
         self.empty_label = tk.Label(self.grafici_correlazioni, text="")
         self.empty_label.grid(row=5, column=0)
 
-        self.label_x = ttk.Label(self.grafici_correlazioni, text="Variabili x")
+        self.label_x = ttk.Label(
+            self.grafici_correlazioni,          
+            text="Variabili x",
+            font=("Helvetica", 14))
         self.label_x.grid(row=6, column=0)
 
         # variabile di cui si vuole visualizzare la correlazione
         self.x1=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_x1,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.x1.grid(row=6, column=1)
 
         self.x2=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_x2,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.x2.grid(row=6, column=2)
 
         self.x3=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_x3,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.x3.grid(row=6, column=3)
 
         self.x4=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_x4,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.x4.grid(row=6, column=4)
 
         self.x5=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_x5,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.x5.grid(row=6, column=5)
 
         # empty label
         self.empty_label = tk.Label(self.grafici_correlazioni, text="")
         self.empty_label.grid(row=7, column=0)
 
-        self.label_y = tk.Label(self.grafici_correlazioni, text="Variabili y")
+        self.label_y = tk.Label(
+            self.grafici_correlazioni, 
+            text="Variabili y",
+            font=("Helvetica", 14))
         self.label_y.grid(row=8, column=0)
 
         # variabile y con cui si vuole visualizzare la correlazione
         self.y1=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_y1,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.y1.grid(row=8, column=1)
 
         self.y2=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_y2,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.y2.grid(row=8, column=2)
 
         self.y3=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_y3,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.y3.grid(row=8, column=3)
 
         self.y4=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_y4,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.y4.grid(row=8, column=4)
 
         self.y5=ttk.Combobox(self.grafici_correlazioni,
                             textvariable=self.variabile_y5,
-                            values=self.variabili)
+                            values=self.variabili,
+                            state="readonly")
         self.y5.grid(row=8, column=5)
 
         # empty label
@@ -147,12 +167,20 @@ class FinestraGraficiCorrelazioni:
         self.empty_label.grid(row=9, column=0)
 
         # bottone per visualizzare il grafico
-        self.button = tk.Button(self.grafici_correlazioni, text="Crea Grafico", command=self.CreaGrafico)
+        self.button = tk.Button(
+            self.grafici_correlazioni,
+            text="Crea Grafico",
+            command=self.CreaGrafico,
+            font=("Helvetica", 12))
         self.button.grid(row=10, column=2)
 
         # bottone per salvare il grafico
-        self.button = tk.Button(self.grafici_correlazioni, text="Salva Grafico", command=self.SalvaGrafico)
-        self.button.grid(row=10, column=3)
+        self.button_save = tk.Button(
+            self.grafici_correlazioni,
+            text="Salva Grafico",
+            command=self.SalvaGrafico,
+            font=("Helvetica", 12))
+        self.button_save.grid(row=10, column=3)
 
     def CreaGrafico(self):
         import pandas as pd
@@ -228,40 +256,85 @@ class FinestraGraficiCorrelazioni:
                 except AttributeError:
                     #visualizza il tipo di errore attraverso il print
                     print("Errore nella creazione del grafico:" + str(AttributeError))
+                    
+    # def SalvaGrafico(self):
+    #     # fig è una variabile globale
+    #     # apri una nuova finestra dove indicare percorso e nome del file
+    #     save_level=tk.Toplevel()
+    #     save_level.title("Salva Grafico")
+    #     save_level.geometry("400x200")
 
-                             
+    #     # label
+    #     label = tk.Label(save_level, text="Inserisci il nome del file")
+    #     label.grid(row=0, column=0)
+
+    #     # entry
+    #     entry = tk.Entry(save_level)
+    #     entry.grid(row=0, column=1)
+
+    #     # button sfoglia per indicare il percorso
+    #     button = tk.Button(save_level, text="Sfoglia", command=lambda: self.Sfoglia())
+    #     button.grid(row=1, column=0)
+
+    #     # button salva
+    #     button = tk.Button(save_level, text="Salva", command=lambda: self.Salva(entry, save_level))
+    #     button.grid(row=1, column=1)
     def SalvaGrafico(self):
-            # fig è una variabile globale
-            # apri una nuova finestra dove indicare percorso e nome del file
-            save_level=tk.Toplevel()
-            save_level.title("Salva Grafico")
-            save_level.geometry("400x200")
+        # fig è una variabile globale
+        # apri una nuova finestra dove indicare percorso e nome del file
+        save_level=tk.Toplevel()
+        save_level.title("Salva Grafico")
+        save_level.geometry("600x200")
 
-            # label
-            label = tk.Label(save_level, text="Inserisci il nome del file")
-            label.grid(row=0, column=0)
+        # label
+        label = tk.Label(save_level, 
+                        text="Inserisci il nome del file",
+                        font=("Helvetica", 14))
+        label.grid(row=0, column=0)
 
-            # entry
-            entry = tk.Entry(save_level)
-            entry.grid(row=0, column=1)
+        # entry
+        entry = tk.Entry(save_level)
+        entry.grid(row=0, column=1)
 
-            # button sfoglia per indicare il percorso
-            button = tk.Button(save_level, text="Sfoglia", command=lambda: self.Sfoglia())
-            button.grid(row=1, column=0)
-
-            # button salva
-            button = tk.Button(save_level, text="Salva", command=lambda: self.Salva(entry, save_level))
-            button.grid(row=1, column=1)
+        #empty label
+        empty_label = tk.Label(save_level, text="")
+        empty_label.grid(row=1, column=0)
 
 
-    def Sfoglia(self):
-        global path
-        path = filedialog.askdirectory()
+        # button sfoglia per indicare il percorso
+        button = tk.Button(save_level,
+                        text="Sfoglia",
+                        command=lambda: self.Sfoglia(entry),
+                        font=("Arial", 12))
+        button.grid(row=2, column=0)
+
+        #label percorso
+        self.label_out = tk.Label(save_level,
+                                text="Percorso:",
+                                font=("Arial", 12))
+        self.label_out.grid(row=2, column=1)
+
+        # button salva
+        button = tk.Button(save_level,
+                        text="Salva",
+                        command=lambda: self.Salva(entry, save_level),
+                        font=("Arial", 12))
+        button.grid(row=3, column=1)
+
+    def Sfoglia(self, entry):
+        self.path_out = filedialog.askdirectory()
+        path = self.path_out.split("/")[-1]  # No need to call copy() on a string
+        self.label_out.config(text=path)
         
-
+    # def Salva(self, entry, save_level):
+    #     nome=entry.get()
+    #     fig.write_html(path + nome + ".html")
+    #     messagebox.showinfo("Salvataggio", "Grafico salvato correttamente")
+    #     entry.delete(0, tk.END)
+    #     save_level.destroy()
     def Salva(self, entry, save_level):
-        nome=entry.get()
-        fig.write_html(path + nome + ".html")
+        nome_file = entry.get()
+        fig.write_html(self.path_out + "\\" + nome_file + ".html")
         messagebox.showinfo("Salvataggio", "Grafico salvato correttamente")
         entry.delete(0, tk.END)
         save_level.destroy()

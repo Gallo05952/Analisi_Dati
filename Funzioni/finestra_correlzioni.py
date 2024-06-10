@@ -16,7 +16,7 @@ class FinestraCorrelazioni:
     def Finestra(self):
         self.finestra_corr = tk.Toplevel(self.root)
         self.finestra_corr.title("Finestra Correlazioni")
-        self.finestra_corr.geometry("1000x400")
+        self.finestra_corr.geometry("350x200")
 
         # CREAZIONE DELLE VARIABILI PER I CHECKBUTTON
         try:
@@ -57,17 +57,21 @@ class FinestraCorrelazioni:
             #                         text="Kendall",
             #                         variable=self.Kendall_var)
             # self.Kendall_cb.grid(row=3, column=0)
+
             # DATI GREZZI
-            self.Dati_grezzi_cb = tk.Checkbutton(self.finestra_corr,
-                                        text="Dati grezzi",
-                                        variable=self.Dati_grezzi_var,
-                                        font=("Helvetica", 12))
+            self.Dati_grezzi_cb = tk.Checkbutton(
+                                self.finestra_corr,
+                                text="Dati grezzi",
+                                variable=self.Dati_grezzi_var,
+                                font=("Helvetica", 12))
             self.Dati_grezzi_cb.grid(row=2, column=1)
+
             # DATI FILTRATI
-            self.Dati_filtrati_cb = tk.Checkbutton(self.finestra_corr,
-                                        text="Dati Filtrati",
-                                        variable=self.Dati_filtrati_var,
-                                        font=("Helvetica", 12))
+            self.Dati_filtrati_cb = tk.Checkbutton(
+                                self.finestra_corr,
+                                text="Dati Filtrati",
+                                variable=self.Dati_filtrati_var,
+                                font=("Helvetica", 12))
             self.Dati_filtrati_cb.grid(row=3, column=1)
             
             #empty label
@@ -75,12 +79,13 @@ class FinestraCorrelazioni:
             empty_label.grid(row=4, column=0)
             
                         # BOTTONE CONFERMA
-            self.bottone_conferma = tk.Button(self.finestra_corr,
-                                        text="Conferma",
-                                        command=lambda: self.Conferma(),
-                                        bg="light grey",
-                                        font=("Helvetica", 12),
-                                        fg="black")
+            self.bottone_conferma = tk.Button(
+                        self.finestra_corr,
+                        text="Conferma",
+                        command=lambda: self.Conferma(),
+                        bg="light grey",
+                        font=("Helvetica", 12),
+                        fg="black")
             self.bottone_conferma.grid(row=6, column=0)
         except AttributeError:
             print("Errore nella creazione dei checkbutton")
