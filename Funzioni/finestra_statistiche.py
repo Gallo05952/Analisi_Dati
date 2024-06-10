@@ -2,6 +2,7 @@ import tkinter as tk
 import numpy as np
 from tkinter import messagebox
 from Funzioni import *
+import tkinter.ttk as ttk
 
 class FinestraStatistiche:
 
@@ -13,7 +14,7 @@ class FinestraStatistiche:
     def Finestra(self):
         self.finestra_stat = tk.Toplevel(self.root)
         self.finestra_stat.title("Finestra Statistiche")
-        self.finestra_stat.geometry("1000x400")
+        self.finestra_stat.geometry("800x350")
 
         # CREAZIONE DELLE VARIABILI PER I CHECKBUTTON
         try:
@@ -42,7 +43,8 @@ class FinestraStatistiche:
             self.Media_cb = tk.Checkbutton(self.finestra_stat, 
                                         text="Media", 
                                         font=("Helvetica", 12),
-                                        variable=self.Media_var)
+                                        variable=self.Media_var
+                                        )
             self.Media_cb.grid(row=1, column=0)
             # STATISTICA: MEDIANA
             self.Mediana_cb = tk.Checkbutton(self.finestra_stat,
@@ -89,7 +91,7 @@ class FinestraStatistiche:
             self.SelezionaDati = tk.Label(self.finestra_stat, 
                         text="Seleziona i dati su cui fare le statistiche",
                         font=("Helvetica", 14, "bold"),
-                        fg="red")          
+                        fg="green")          
             self.SelezionaDati.grid(row=0, column=3)
 
             self.Dati_grezzi = tk.Checkbutton(self.finestra_stat, 

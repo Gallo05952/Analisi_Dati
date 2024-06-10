@@ -4,6 +4,7 @@ import tkinter as tk
 import tkinter.ttk as ttk 
 from tkinter import messagebox
 from tkinter import filedialog   
+from .styles import Styles
 
 class FinestraGraficiCorrelazioni:
 
@@ -36,12 +37,14 @@ class FinestraGraficiCorrelazioni:
         self.empty_label.grid(row=1, column=0)
 
         # selezione dei dati
-        self.dati_grezzi_cb=tk.Checkbutton(self.grafici_correlazioni, 
-                                        text="Dati grezzi", variable=self.dati_grezzi)
+        self.dati_grezzi_cb=ttk.Checkbutton(self.grafici_correlazioni, 
+                                        text="Dati grezzi", variable=self.dati_grezzi,
+                                        style="Style1.TButton")
         self.dati_grezzi_cb.grid(row=2, column=0)
 
-        self.dati_filtrati_cb=tk.Checkbutton(self.grafici_correlazioni,
-                                            text="Dati filtrati", variable=self.dati_filtrati)
+        self.dati_filtrati_cb=ttk.Checkbutton(self.grafici_correlazioni,
+                                            text="Dati filtrati", variable=self.dati_filtrati,
+                                            style="Style1.TButton")
         self.dati_filtrati_cb.grid(row=2, column=1)
 
         # empty label
@@ -65,7 +68,7 @@ class FinestraGraficiCorrelazioni:
             print("Errore nella creazione delle variabili")
 
         # seleziona la correlazione da visualizzare
-        self.testoCorrelazioni = tk.Label(self.grafici_correlazioni, text="Seleziona la correlazione da visualizzare")
+        self.testoCorrelazioni = ttk.Label(self.grafici_correlazioni, text="Seleziona la correlazione da visualizzare")
         self.testoCorrelazioni.grid(row=4, column=0, columnspan=2)
 
         self.x=ttk.Combobox(self.grafici_correlazioni,
@@ -77,7 +80,7 @@ class FinestraGraficiCorrelazioni:
         self.empty_label = tk.Label(self.grafici_correlazioni, text="")
         self.empty_label.grid(row=5, column=0)
 
-        self.label_x = tk.Label(self.grafici_correlazioni, text="Variabili x")
+        self.label_x = ttk.Label(self.grafici_correlazioni, text="Variabili x")
         self.label_x.grid(row=6, column=0)
 
         # variabile di cui si vuole visualizzare la correlazione

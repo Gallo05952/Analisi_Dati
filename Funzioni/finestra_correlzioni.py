@@ -3,6 +3,8 @@ import pandas as pd
 import numpy as np
 import tkinter as tk
 from tkinter import messagebox
+import tkinter.ttk as ttk
+from .styles import Styles
 
 class FinestraCorrelazioni:
 
@@ -33,14 +35,18 @@ class FinestraCorrelazioni:
                         fg="red")
         self.testoCorr.grid(row=0, column=0, columnspan=3)
 
+        # EMPTY LABEL
+        empty_label = tk.Label(self.finestra_corr, text="")
+        empty_label.grid(row=1, column=0)
+
         # CHECK BOX CORRELAZIONI
         try:
         # CORRELAZIONE: PEARSON
             self.Pearson_cb = tk.Checkbutton(self.finestra_corr, 
                                         text="Pearson", 
-                                        font=("Helvetica", 12),
-                                        variable=self.Pearson_var)
-            self.Pearson_cb.grid(row=1, column=0)
+                                        variable=self.Pearson_var,
+                                        font=("Helvetica", 12))
+            self.Pearson_cb.grid(row=2, column=0)
             # CORRELAZIONE: SPEARMAN
             # self.Spearman_cb = tk.Checkbutton(self.finestra_corr,
             #                             text="Spearman", 
@@ -54,16 +60,21 @@ class FinestraCorrelazioni:
             # DATI GREZZI
             self.Dati_grezzi_cb = tk.Checkbutton(self.finestra_corr,
                                         text="Dati grezzi",
-                                        font=("Helvetica", 12),
-                                        variable=self.Dati_grezzi_var)
-            self.Dati_grezzi_cb.grid(row=1, column=1)
+                                        variable=self.Dati_grezzi_var,
+                                        font=("Helvetica", 12))
+            self.Dati_grezzi_cb.grid(row=2, column=1)
             # DATI FILTRATI
             self.Dati_filtrati_cb = tk.Checkbutton(self.finestra_corr,
                                         text="Dati Filtrati",
-                                        font=("Helvetica", 12),
-                                        variable=self.Dati_filtrati_var)
-            self.Dati_filtrati_cb.grid(row=2, column=1)
-            # BOTTONE CONFERMA
+                                        variable=self.Dati_filtrati_var,
+                                        font=("Helvetica", 12))
+            self.Dati_filtrati_cb.grid(row=3, column=1)
+            
+            #empty label
+            empty_label = tk.Label(self.finestra_corr, text="")
+            empty_label.grid(row=4, column=0)
+            
+                        # BOTTONE CONFERMA
             self.bottone_conferma = tk.Button(self.finestra_corr,
                                         text="Conferma",
                                         command=lambda: self.Conferma(),

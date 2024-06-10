@@ -2,12 +2,14 @@ import tkinter as tk
 from Funzioni import *
 import numpy as np
 import pandas as pd
+from tkinter import messagebox
+from PIL import Image, ImageTk
 
 def App(finesta_principale):
     finesta_principale.title("Analisi Dati")
-    finesta_principale.geometry("1000x500")
-    finesta_principale.configure(bg="white")
-    finesta_principale.resizable(False,False)
+    finesta_principale.geometry("400x350")
+    # finesta_principale.configure(bg="white")
+    # finesta_principale.resizable(False,False)
 
     # Imposta il weight della colonna a 0 per evitare che si espanda -> NON FUNZIONA
     #finesta_principale.grid_columnconfigure(1, weight=0)
@@ -15,10 +17,9 @@ def App(finesta_principale):
     # LABEL
     label= tk.Label(finesta_principale,
                     text="Analisi Dati",
-                    font=("Arial", 20), 
-                    fg="red",
-                    bg="white")
-    label.grid(row=0, column=0, columnspan=2)
+                    font=("Arial", 24, "bold"), 
+                    fg="green")
+    label.grid(row=0, column=0, columnspan=3)
 
     #EMPTY ROW
     empty_row = tk.Label(finesta_principale, 
@@ -28,16 +29,15 @@ def App(finesta_principale):
     # LABEL FILE IN
     label_file_in = tk.Label(finesta_principale,
                             text="File in: ",
-                            font=("Arial", 12),
-                            bg="white")
+                            font=("Arial", 12))
     label_file_in.grid(row=2, column=1)
     
     # BOTTONE CARICA FILE
     bottone_carica_file = tk.Button(finesta_principale,
                             text="Carica File", 
                             command=lambda: Caricamento(label_file_in,
-                                                    bottone_carica_file,bottone_filtro, bottone_statistiche,
-                                                    bottone_correlazione),
+                                        bottone_carica_file,bottone_filtro, bottone_statistiche,
+                                        bottone_correlazione, bottone_grafici, bottone_grafici_stat, bottone_grafici_corr, bottone_salva),
                             bg="light grey",
                             font=("Arial", 12),
                             fg="bLACK")
@@ -55,6 +55,7 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
+    bottone_filtro.config(state=tk.DISABLED)
     bottone_filtro.grid(row=4, column=0)
 
     #€ EMPTY ROW
@@ -69,6 +70,7 @@ def App(finesta_principale):
                                     font=("Arial", 12),
                                     bg="light grey",
                                     fg="black")
+    bottone_statistiche.config(state=tk.DISABLED)
     bottone_statistiche.grid(row=6, column=0)
 
     # EMPTY ROW
@@ -83,6 +85,7 @@ def App(finesta_principale):
                                     bg="light grey",
                                     font=("Arial", 12),
                                     fg="black")
+    bottone_correlazione.config(state=tk.DISABLED)
     bottone_correlazione.grid(row=8, column=0)
 
     # EMPTY ROW
@@ -97,15 +100,17 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
+    bottone_grafici.config(state=tk.DISABLED)
     bottone_grafici.grid(row=4, column=2)
 
-    # BOTTONE GRAFICI STATISTICA
+    # BOTTONE GRAFICI DENSITà DI PROBABILITà
     bottone_grafici_stat = tk.Button(finesta_principale,
                                 text="Grafici Probabilità",
                                 command=lambda: Grafici_Probabilità(),
                                 bg="light grey",
                                 font=("Arial", 12),
                                 fg="black")
+    bottone_grafici_stat.config(state=tk.DISABLED)
     bottone_grafici_stat.grid(row=6, column=2)
 
     # BOTTONE GRAFICI CORRELAZIONE
@@ -115,6 +120,7 @@ def App(finesta_principale):
                                 bg="light grey",
                                 font=("Arial", 12),
                                 fg="black")
+    bottone_grafici_corr.config(state=tk.DISABLED)
     bottone_grafici_corr.grid(row=8, column=2)
 
     # BOTTONE SALVA
@@ -124,26 +130,62 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
+    bottone_salva.config(state=tk.DISABLED)
     bottone_salva.grid(row=10, column=1)
 
+    try:
+            # Load the image file
+        img = Image.open(r"C:\Users\galloni\OneDrive - unibs.it\Corsi\Python\Analisi_Dati\MG.png")
 
-def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,bottone_correlazione):
+            # Resize the image
+        img = img.resize((50, 50), Image.LANCZOS)  # Use Image.LANCZOS instead of Image.ANTIALIAS
+
+            # Convert the image to a Tkinter-compatible photo image
+        tk_img = ImageTk.PhotoImage(img)
+
+            # Create a label and add the image to it
+        logo_label = tk.Label(finesta_principale, image=tk_img)
+        logo_label.image = tk_img  # keep a reference to the image to prevent it from being garbage collected
+        logo_label.grid(row=10, column=2)
+    except Exception as e:
+        print("Errore nel caricamento del logo: ", e)
+
+
+def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,bottone_correlazione, bottone_grafici, bottone_grafici_stat, bottone_grafici_corr, bottone_salva):
     global df, tempo  # Riferimento alle variabili globali
     path, df, tempo = CaricaFile().file_input_sfoglia()
     label_file_in.config(text=path)
     if df is not None:
         bottone_filtro.config(bg="light blue")
+        bottone_filtro.config(state=tk.NORMAL)
         bottone_statistiche.config(bg="light blue")
+        bottone_statistiche.config(state=tk.NORMAL)
         bottone_correlazione.config(bg="light blue")
+        bottone_correlazione.config(state=tk.NORMAL)
+        bottone_grafici.config(bg="light blue")
+        bottone_grafici.config(state=tk.NORMAL)
+        bottone_grafici_stat.config(bg="light blue")
+        bottone_grafici_stat.config(state=tk.NORMAL)
+        bottone_grafici_corr.config(bg="light blue")
+        bottone_grafici_corr.config(state=tk.NORMAL)
+        bottone_salva.config(bg="light blue")
+        bottone_salva.config(state=tk.NORMAL)
+
+
 
 def Filtraggio(finestra_principale, tempo, bottone_filtro):
     global df_filtrato
-    filtro = Filtro(finestra_principale, tempo, df)
-    filtro.FinestraFiltro()
-    finestra_principale.wait_window(filtro.finestra_filtro)
-    df_filtrato = filtro.DataFrame_filtrato()
-    if not df_filtrato.empty:
-        bottone_filtro.config(bg="light green")
+    try:
+        filtro = Filtro(finestra_principale, tempo, df)
+        filtro.FinestraFiltro()
+        finestra_principale.wait_window(filtro.finestra_filtro)
+        df_filtrato = filtro.DataFrame_filtrato()
+        if not df_filtrato.empty:
+            bottone_filtro.config(bg="light green")
+        else:
+            df_filtrato = None
+    except Exception as e:
+        messagebox.showerror("Errore", "Nessun filtro applicato")
 
 def Statistiche(finestra_principale,df,df_filtrato,bottone_statistiche):
     global df_statistiche

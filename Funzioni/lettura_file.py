@@ -2,7 +2,7 @@
 import os
 import pandas as pd
 import numpy as np
-
+from tkinter import messagebox
 class AperturaFile:
 
     def __init__(self,path):
@@ -13,7 +13,7 @@ class AperturaFile:
         if file_extension == '.csv':
             df=self.open_csv()
         elif file_extension == '.xlsx':
-            df=self.open_xlsx()
+            messagebox.showerror("Errore", "L'import da .xlsx non è ancora supportato")
         else:
             print(f"Unsupported file extension: {file_extension}")
         return df

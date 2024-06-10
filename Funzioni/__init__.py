@@ -12,3 +12,4 @@ from .finestra_salvataggio import FinestraSalvataggio
 from .finestra_grafici_base import FinestraGraficiBase
 from .finestra_grafici_correlazioni import FinestraGraficiCorrelazioni
 from .finestra_grafici_probabilita import FinestraGraficiProbabilita
+from .styles import Styles

@@ -12,7 +12,7 @@ class Filtro:
     def FinestraFiltro(self ):
         self.finestra_filtro = tk.Toplevel(self.root)
         self.finestra_filtro.title("Finestra Filtro")
-        self.finestra_filtro.geometry("1000x200")
+        self.finestra_filtro.geometry("500x200")
         # Creazione delle variabili per i Checkbutton
         self.IntervalloT = tk.BooleanVar()
         self.IntervalloT.trace('w', self.update_checkboxes)
@@ -26,69 +26,82 @@ class Filtro:
                             fg="red")
         self.testoFiltro.grid(row=0, column=0, columnspan=3)
 
+        #empty label
+        self.empty_label = tk.Label(self.finestra_filtro, text="")
+        self.empty_label.grid(row=1, column=0)
+
         # FILTRO INTERVALLO DI TEMPO
         # TEMPO INIZIO
         self.checkFiltro1 = tk.Checkbutton(self.finestra_filtro, 
                                         text="Intervallo di tempo", 
                                         font=("Helvetica", 12, "bold"),
                                         variable=self.IntervalloT)
-        self.checkFiltro1.grid(row=1, column=0)
+        self.checkFiltro1.grid(row=2, column=0)
 
         self.TempoInizio = tk.Label(self.finestra_filtro,
                                     text="Tempo di inizio",
                                     font=("Helvetica", 12))
-        self.TempoInizio.grid(row=1, column=1)
+        self.TempoInizio.grid(row=2, column=1)
 
         self.tempoIN = tk.StringVar()
         self.Tin = ttk.Combobox(self.finestra_filtro,
                                 textvariable=self.tempoIN,
-                                values=self.tempo)  # Usa ttk.Combobox invece di tk.OptionMenu
+                                values=self.tempo,
+                                state='disabled')  # Usa ttk.Combobox invece di tk.OptionMenu
         # self.Tin['values'] = self.tempo  # Imposta i valori del Combobox
-        self.Tin.grid(row=1, column=2)
+        self.Tin.grid(row=2, column=2)
         # TEMPO FINE
         self.TempoFine = tk.Label(self.finestra_filtro,
                                 text="Tempo di fine",
                                 font=("Helvetica", 12))
-        self.TempoFine.grid(row=1, column=3)
+        self.TempoFine.grid(row=3, column=1)
 
         self.tempoFIN = tk.StringVar()
         self.Tfin = ttk.Combobox(self.finestra_filtro, 
                                 textvariable=self.tempoFIN,
-                                values=self.tempo)
+                                values=self.tempo,
+                                state='disabled')
         # self.Tfin['values'] = self.tempo
-        self.Tfin.grid(row=1, column=4)
+        self.Tfin.grid(row=3, column=2)
 
         # FILTRO SCARTO INIZIALE TEMPORALE
         self.Filtro2 = tk.Checkbutton(self.finestra_filtro,
                                     text="Scarto Iniziale", 
                                     font=("Helvetica", 12, "bold"),
                                     variable=self.DaTempo)
-        self.Filtro2.grid(row=3, column=0)
+        self.Filtro2.grid(row=5, column=0)
 
         self.TempoDa = tk.Label(self.finestra_filtro,
                                 text="Tempo d'inizio",
                                 font=("Helvetica", 12))
-        self.TempoDa.grid(row=3, column=1)
+        self.TempoDa.grid(row=5, column=1)
 
         self.tempoDa=tk.StringVar()
         self.TDa=ttk.Combobox(self.finestra_filtro,
                             textvariable=self.tempoDa,
-                            values=self.tempo)
+                            values=self.tempo,
+                            state='disabled')
 #        self.TDa['values']=self.tempo
-        self.TDa.grid(row=3, column=2)
+        self.TDa.grid(row=5, column=2)
 
         #BOTTONE OK E CHIUSURA
         self.ok_button = tk.Button(self.finestra_filtro,
                                     text="OK",
                                     font=("Helvetica", 12),
                                     command=self.SalvataggioFiltro)
-        self.ok_button.grid(row=4, column=2, padx=10, pady=10)
+        self.ok_button.grid(row=6, column=2, padx=10, pady=10)
 
     def update_checkboxes(self, *args):
         if self.IntervalloT.get():
+            self.Tfin.config(state='normal')
+            self.Tin.config(state='normal')
             self.Filtro2.config(state='disabled')
+            self.TDa.config(state='disabled')
         elif self.DaTempo.get():
+            self.TDa.config(state='normal')
             self.checkFiltro1.config(state='disabled')
+            self.Tin.config(state='disabled')
+            self.Tfin.config(state='disabled')
         else:
             self.checkFiltro1.config(state='normal')
             self.Filtro2.config(state='normal')
@@ -143,6 +156,6 @@ class Filtro:
             df_filtrato=FiltroTempo(self.df).FineTransitorio(self.TempoDa)
         else:
             # finestra di errore
-            messagebox.showerror("Errore", "Nessun filtro selezionato")
+            # messagebox.showerror("Errore", "Nessun filtro selezionato")
             df_filtrato=[]
         return df_filtrato
