@@ -8,11 +8,6 @@ from PIL import Image, ImageTk
 def App(finesta_principale):
     finesta_principale.title("Analisi Dati")
     finesta_principale.geometry("400x350")
-    # finesta_principale.configure(bg="white")
-    # finesta_principale.resizable(False,False)
-
-    # Imposta il weight della colonna a 0 per evitare che si espanda -> NON FUNZIONA
-    #finesta_principale.grid_columnconfigure(1, weight=0)
     
     # LABEL
     label= tk.Label(finesta_principale,
@@ -58,7 +53,7 @@ def App(finesta_principale):
     bottone_filtro.config(state=tk.DISABLED)
     bottone_filtro.grid(row=4, column=0)
 
-    #€ EMPTY ROW
+    # EMPTY ROW
     empty_row = tk.Label(finesta_principale,
                         text="")
     empty_row.grid(row=5, column=0)
@@ -179,6 +174,7 @@ def Filtraggio(finestra_principale, tempo, bottone_filtro):
         df_filtrato = filtro.DataFrame_filtrato()
         if not df_filtrato.empty:
             bottone_filtro.config(bg="light green")
+            
         else:
             df_filtrato = None
     except Exception as e:

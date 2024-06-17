@@ -111,16 +111,13 @@ class Filtro:
             # checkbox filtro intervallo di tempo
             self.FiltroIntervallo=self.IntervalloT.get() 
             # checkbox filtro scarto iniziale
-            self.Filtro2=self.DaTempo.get()
-            
+            self.Filtro2=self.DaTempo.get()           
             if (self.IntervalloT.get()==True and
                 self.Tin.get() and
                 self.Tfin.get()):
                 # se sono in intervallo e i menu sono compilati
                 self.TempoIniziale=self.Tin.get()
-                # print(self.TempoIniziale)
                 self.TempoFinale=self.tempoFIN.get()
-                # print(self.TempoFinale)
             elif (self.Filtro2==True and self.TDa.get()):
                 self.TempoDa=self.TDa.get() 
         except AttributeError:

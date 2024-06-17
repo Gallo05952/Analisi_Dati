@@ -5,6 +5,8 @@ import tkinter.ttk as ttk
 from tkinter import messagebox
 from tkinter import filedialog   
 from .styles import Styles
+import threading
+import sys
 
 class FinestraGraficiCorrelazioni:
 
@@ -183,49 +185,36 @@ class FinestraGraficiCorrelazioni:
         self.button_save.grid(row=10, column=3)
 
     def CreaGrafico(self):
-        import pandas as pd
-        # prendi i dati inseriti nelle combobox
-        global fig
+        def timeout():
+            print("Tempo scaduto: l'esecuzione della funzione ha superato i 15 secondi")
+            sys.exit("Errore: tempo scaduto")
+
+        # Imposta il timer
+        timer = threading.Timer(25.0, timeout)
+        timer.start()
         try:
-            x1 = self.variabile_x1.get()
-            x2 = self.variabile_x2.get()
-            x3 = self.variabile_x3.get()
-            x4 = self.variabile_x4.get()
-            x5 = self.variabile_x5.get()
-            y1 = self.variabile_y1.get()
-            y2 = self.variabile_y2.get()
-            y3 = self.variabile_y3.get()
-            y4 = self.variabile_y4.get()
-            y5 = self.variabile_y5.get()
-            corr_graficata = self.corr_graficata.get()
-        except AttributeError:
-            print("Errore nella creazione delle variabili")
-
-        # controlla se i dati grezzi sono stati selezionati
-        if self.dati_grezzi.get() == True:
-            print("Dati grezzi selezionati")
-            # fai un instogramma con le x e le y selezionate
-            try:  
-                import numpy as np
-                x_graf=[x1, x2, x3, x4, x5]
-                x_graf = [x for x in x_graf if x != ""]
-                filtred_df_grezzo=self.df[x_graf]
-
-                corr_long = self.df.unstack().reset_index()
-                corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
-
-                # Creazione del barplot con Plotly
-                fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
-                # crea il grafico
-                fig.show()
-                messagebox.showinfo("Grafico creato", "Il grafico è stato creato")
+            import pandas as pd
+            # prendi i dati inseriti nelle combobox
+            global fig
+            try:
+                x1 = self.variabile_x1.get()
+                x2 = self.variabile_x2.get()
+                x3 = self.variabile_x3.get()
+                x4 = self.variabile_x4.get()
+                x5 = self.variabile_x5.get()
+                y1 = self.variabile_y1.get()
+                y2 = self.variabile_y2.get()
+                y3 = self.variabile_y3.get()
+                y4 = self.variabile_y4.get()
+                y5 = self.variabile_y5.get()
+                corr_graficata = self.corr_graficata.get()
             except AttributeError:
-                #visualizza il tipo di errore attraverso il print
-                print("Errore nella creazione del grafico:" + str(AttributeError))
-        if self.dati_filtrati.get() == True:
-            if self.df_corr[1] == None:
-                messagebox.showinfo("Errore", "Non ci sono dati filtrati")
-            else:
+                print("Errore nella creazione delle variabili")
+
+            # controlla se i dati grezzi sono stati selezionati
+            if self.dati_grezzi.get() == True:
+                print("Dati grezzi selezionati")
+                # fai un instogramma con le x e le y selezionate
                 try:  
                     import numpy as np
                     x_graf=[x1, x2, x3, x4, x5]
@@ -235,7 +224,7 @@ class FinestraGraficiCorrelazioni:
                     # trova l'indice corrispondente delle x in df_corr
                     indices_x = [self.variabili.index(x) for x in x_graf if x in self.variabili]
                     indices_y = [self.variabili.index(y) for y in y_graf if y in self.variabili]
-                    df_graf = pd.DataFrame(np.squeeze(self.df_corr[1]))
+                    df_graf = pd.DataFrame(np.squeeze(self.df_corr[0]))
 
                     righe_selezionate = df_graf.iloc[indices_x]
                     # Riassegna i nomi delle righe
@@ -248,37 +237,55 @@ class FinestraGraficiCorrelazioni:
 
                     corr_long = colonne_selezionate.unstack().reset_index()
                     corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
-            # Creazione del barplot con Plotly
-                    fig = px.bar(corr_long, x='Variable 1', y='Correlation', color='Variable 2', barmode='group')
+
+                    # Creazione del barplot con Plotly
+                    fig = px.bar(corr_long, x='Variable 2', y='Correlation', color='Variable 1', barmode='group')
+                        # crea il grafico
+                    fig.show()
                     # crea il grafico
                     fig.show()
-                    messagebox.showinfo("Grafico creato", "Il grafico è stato creato")                
-                except AttributeError:
+                    messagebox.showinfo("Grafico creato", "Il grafico è stato creato")
+                except AttributeError as e:
                     #visualizza il tipo di errore attraverso il print
-                    print("Errore nella creazione del grafico:" + str(AttributeError))
-                    
-    # def SalvaGrafico(self):
-    #     # fig è una variabile globale
-    #     # apri una nuova finestra dove indicare percorso e nome del file
-    #     save_level=tk.Toplevel()
-    #     save_level.title("Salva Grafico")
-    #     save_level.geometry("400x200")
+                    print(f"Errore nella creazione del grafico: {e}" )
+            if self.dati_filtrati.get() == True:
+                if self.df_corr[1] == None:
+                    messagebox.showinfo("Errore", "Non ci sono dati filtrati")
+                else:
+                    try:  
+                        import numpy as np
+                        x_graf=[x1, x2, x3, x4, x5]
+                        x_graf = [x for x in x_graf if x != ""]
+                        y_graf=[y1, y2, y3, y4, y5]
+                        y_graf = [y for y in y_graf if y != ""]
+                        # trova l'indice corrispondente delle x in df_corr
+                        indices_x = [self.variabili.index(x) for x in x_graf if x in self.variabili]
+                        indices_y = [self.variabili.index(y) for y in y_graf if y in self.variabili]
+                        df_graf = pd.DataFrame(np.squeeze(self.df_corr[1]))
 
-    #     # label
-    #     label = tk.Label(save_level, text="Inserisci il nome del file")
-    #     label.grid(row=0, column=0)
+                        righe_selezionate = df_graf.iloc[indices_x]
+                        # Riassegna i nomi delle righe
 
-    #     # entry
-    #     entry = tk.Entry(save_level)
-    #     entry.grid(row=0, column=1)
+                        colonne_selezionate = righe_selezionate.iloc[:,indices_y]
+                        colonne_selezionate.index = x_graf
 
-    #     # button sfoglia per indicare il percorso
-    #     button = tk.Button(save_level, text="Sfoglia", command=lambda: self.Sfoglia())
-    #     button.grid(row=1, column=0)
+                        # Riassegna i nomi delle colonne
+                        colonne_selezionate.columns = y_graf
 
-    #     # button salva
-    #     button = tk.Button(save_level, text="Salva", command=lambda: self.Salva(entry, save_level))
-    #     button.grid(row=1, column=1)
+                        corr_long = colonne_selezionate.unstack().reset_index()
+                        corr_long.columns = ['Variable 1', 'Variable 2', 'Correlation']
+                # Creazione del barplot con Plotly
+                        fig = px.bar(corr_long, x='Variable 2', y='Correlation', color='Variable 1', barmode='group')
+                        # crea il grafico
+                        fig.show()
+                        messagebox.showinfo("Grafico creato", "Il grafico è stato creato")                
+                    except AttributeError:
+                        #visualizza il tipo di errore attraverso il print
+                        print("Errore nella creazione del grafico:" + str(AttributeError))
+            timer.cancel()
+        except Exception as e:
+            print(f"Si è verificato un errore: {e}")
+            timer.cancel()  # Assicurati di cancellare il timer anche in caso di errore            
     def SalvaGrafico(self):
         # fig è una variabile globale
         # apri una nuova finestra dove indicare percorso e nome del file
@@ -326,12 +333,6 @@ class FinestraGraficiCorrelazioni:
         path = self.path_out.split("/")[-1]  # No need to call copy() on a string
         self.label_out.config(text=path)
         
-    # def Salva(self, entry, save_level):
-    #     nome=entry.get()
-    #     fig.write_html(path + nome + ".html")
-    #     messagebox.showinfo("Salvataggio", "Grafico salvato correttamente")
-    #     entry.delete(0, tk.END)
-    #     save_level.destroy()
     def Salva(self, entry, save_level):
         nome_file = entry.get()
         fig.write_html(self.path_out + "\\" + nome_file + ".html")

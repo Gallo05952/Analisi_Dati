@@ -134,13 +134,13 @@ class FinestraStatistiche:
     def get_Stat(self):
         # STATISTICHE SUI DATI GREZZI
         if self.Dati_grezzi_var.get():
-            stat_grezze=self.StatisticheGrezzi()
+            stat_grezze=self.StatisticheGrezzi(self.df)
         else:
             stat_grezze=None
         # STATISTICHE SUI DATI FILTRATI
         if self.Dati_filtrati_var.get():
             if self.df_filtrato is not None:
-                stat_filtrati=self.StatisticheFiltrati()
+                stat_filtrati=self.StatisticheFiltrati(self.df_filtrato)
             else:
                 messagebox.showerror("Errore", "Non hai selezionato ancora nessun filtro")
         else:
@@ -148,37 +148,37 @@ class FinestraStatistiche:
         self.finestra_stat.destroy()
         return stat_grezze, stat_filtrati
 
-    def Media(self, col):
+    def Media(self, col,dataframe):
         try:
-            media = self.df[col].mean()
+            media = dataframe[col].mean()
         except:
             media = np.nan
         return media
     
-    def Mediana(self, col):
+    def Mediana(self, col,dataframe):
         try:
-            mediana = self.df[col].median()
+            mediana = dataframe[col].median()
         except:
             mediana = np.nan
         return mediana
     
-    def Varianza(self, col):
+    def Varianza(self, col,dataframe):
         try:
-            varianza = self.df[col].var()
+            varianza = dataframe[col].var()
         except:
             varianza = np.nan
         return varianza
     
-    def DeviazioneStandard(self, col):
+    def DeviazioneStandard(self, col,dataframe):
         try:
-            deviazione_standard = self.df[col].std()
+            deviazione_standard = dataframe[col].std()
         except:
             deviazione_standard = np.nan
         return deviazione_standard
 
-    def Moda(self, col):
+    def Moda(self, col,dataframe):
         try:
-            moda_df = self.df[col].mode(dropna=True)
+            moda_df = dataframe[col].mode(dropna=True)
             if not moda_df.empty:
                 moda = moda_df.iloc[0]
             else:
@@ -187,46 +187,46 @@ class FinestraStatistiche:
             moda = np.nan
         return moda
 
-    def Minimo(self, col):
+    def Minimo(self, col,dataframe):
         try:
-            minimo = self.df[col].min()
+            minimo = dataframe[col].min()
         except:
             minimo = np.nan
         return minimo
 
-    def Massimo(self, col):
+    def Massimo(self, col,dataframe):
         try:
-            massimo = self.df[col].max()
+            massimo = dataframe[col].max()
         except:
             massimo = np.nan
         return massimo
     
-    def StatisticheGrezzi(self):
+    def StatisticheGrezzi(self, dataframe):
         statistiche_grezzi = {}
         for col in self.df.columns:
-            statistiche_grezzi[col] = self.calcola_statistiche(col)
+            statistiche_grezzi[col] = self.calcola_statistiche(col,dataframe)
         return statistiche_grezzi
     
-    def StatisticheFiltrati(self):
+    def StatisticheFiltrati(self,dataframe):
         statistiche_filtrati = {}
         for col in self.df_filtrato.columns:
-            statistiche_filtrati[col] = self.calcola_statistiche(col)
+            statistiche_filtrati[col] = self.calcola_statistiche(col,dataframe)
         return statistiche_filtrati
     
-    def calcola_statistiche(self, col):
+    def calcola_statistiche(self, col, dataframe):
         statistiche = {}
         if self.Media_var.get():
-            statistiche["Media"] = self.Media(col)
+            statistiche["Media"] = self.Media(col,dataframe)
         if self.Mediana_var.get():
-            statistiche["Mediana"] = self.Mediana(col)
+            statistiche["Mediana"] = self.Mediana(col,dataframe)
         if self.Varianza_var.get():
-            statistiche["Varianza"] = self.Varianza(col)
+            statistiche["Varianza"] = self.Varianza(col,dataframe)
         if self.Deviazione_var.get():
-            statistiche["Deviazione Standard"] = self.DeviazioneStandard(col)
+            statistiche["Deviazione Standard"] = self.DeviazioneStandard(col,dataframe)
         if self.Moda_var.get():
-            statistiche["Moda"] = self.Moda(col)
+            statistiche["Moda"] = self.Moda(col,dataframe)
         if self.minimo_var.get():
-            statistiche["Minimo"] = self.Minimo(col)
+            statistiche["Minimo"] = self.Minimo(col,dataframe)
         if self.massimo_var.get():
-            statistiche["Massimo"] = self.Massimo(col)
+            statistiche["Massimo"] = self.Massimo(col,dataframe)
         return statistiche

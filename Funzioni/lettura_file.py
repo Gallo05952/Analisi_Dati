@@ -1,4 +1,6 @@
-
+'''
+IMPORT DEL DATAFRAME DA FILE CSV O XLSX
+'''
 import os
 import pandas as pd
 import numpy as np
@@ -13,7 +15,7 @@ class AperturaFile:
         if file_extension == '.csv':
             df=self.open_csv()
         elif file_extension == '.xlsx':
-            messagebox.showerror("Errore", "L'import da .xlsx non è ancora supportato")
+            df=self.open_xlsx()
         else:
             print(f"Unsupported file extension: {file_extension}")
         return df
@@ -39,16 +41,17 @@ class AperturaFile:
         # Convert data_rows into a DataFrame using column_names as column headers
         df = pd.DataFrame(data_rows, columns=column_names)
         # Convert all string values to float, replacing commas with periods
-        #df.iloc[1:, 2:] = df.iloc[1:, 2:].applymap(lambda x: pd.to_numeric(x.replace(',', '.'), errors='coerce') if isinstance(x, str) else x)
         df.iloc[0:, 1:] = df.iloc[0:, 1:].apply(lambda series: series.map(lambda x: pd.to_numeric(x.replace(',', '.'), errors='coerce') if isinstance(x, str) else x))
         df=df.replace('', np.nan)
-        #df['Data'] = pd.to_datetime(df['Data'], format='%d/%m/%Y %H:%M')
         try:
             df['Data'] = pd.to_datetime(df['Data'], format='%d/%m/%Y %H:%M:%S')
         except ValueError:
             df['Data'] = pd.to_datetime(df['Data'], format='%d/%m/%Y %H:%M')
-        df['Data'] = df['Data'].dt.strftime('%H:%M')
+        df['Data'] = df['Data'].dt.strftime('%d/%m_%H:%M')
         return df
 
     def open_xlsx(self):
-        print("Opening XLSX file")
+        # OPEN XLSX FILE on the self.path and import the data inside the sheet "Dati Filtrati" as a dataframe
+        df = pd.read_excel(self.path, sheet_name='Dati filtrati')
+        return df
+
