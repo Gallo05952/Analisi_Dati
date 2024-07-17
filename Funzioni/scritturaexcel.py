@@ -56,52 +56,67 @@ class ScritturaExcel:
             df_stat.to_excel(self.writer, sheet_name='Statistiche')
 
 
-    def ScritturaCorrelazioni(self,
-                            correlazioni,
-                            correlazioni_da_fare):
-        NomiCorr_gen=['Pearson','Spearman','Kendall']
-        NomiCorr=[NomiCorr_gen[i] 
-                for i in range(len(correlazioni_da_fare))
-                if correlazioni_da_fare[i]]
+    # def ScritturaCorrelazioni(self,
+    #                         correlazioni,
+    #                         correlazioni_da_fare):
+    #     NomiCorr_gen=['Pearson','Spearman','Kendall']
+    #     NomiCorr=[NomiCorr_gen[i] 
+    #             for i in range(len(correlazioni_da_fare))
+    #             if correlazioni_da_fare[i]]
+    #     if all(isinstance(item, list) for item in correlazioni):
+    #         NomiFogli=['Correlazioni dei grezzi',
+    #                 'Correlazioni dei filtrati']
+    #         for i in range(len(correlazioni)):
+    #             if NomiCorr[i] == "Pearson":
+    #                 correlazioni[i][0].to_excel(self.writer, sheet_name='Pearson_grezzi')
+    #                 correlazioni[i][1].to_excel(self.writer, sheet_name='Pearson_filtrati')
+    #             elif NomiCorr[i] == "Spearman":
+    #                 correlazioni[i][0].to_excel(self.writer, sheet_name='Spearman_grezzi')
+    #                 correlazioni[i][1].to_excel(self.writer, sheet_name='Spearman_filtrati')
+    #             elif NomiCorr[i] == "Kendall":
+    #                 correlazioni[i][0].to_excel(self.writer, sheet_name='Kendall_grezzi')
+    #                 correlazioni[i][1].to_excel(self.writer, sheet_name='Kendall_filtrati')
+    #     else:
+    #         for i in range(len(correlazioni)):
+    #             if NomiCorr[i] == "Pearson":
+    #                 correlazioni[i].to_excel(self.writer, sheet_name='Pearson')
+    #             elif NomiCorr[i] == "Spearman":
+    #                 correlazioni[i].to_excel(self.writer, sheet_name='Spearman')
+    #             elif NomiCorr[i] == "Kendall":
+    #                 correlazioni[i].to_excel(self.writer, sheet_name='Kendall')
+    def ScritturaCorrelazioni(self, correlazioni, correlazioni_da_fare):
+        NomiCorr_gen = ['Pearson', 'Spearman', 'Kendall']
+        NomiCorr = [NomiCorr_gen[i] for i in range(len(correlazioni_da_fare)) if correlazioni_da_fare[i]]
         if all(isinstance(item, list) for item in correlazioni):
-            NomiFogli=['Correlazioni dei grezzi',
-                    'Correlazioni dei filtrati']
             for i in range(len(correlazioni)):
-                if NomiCorr[i] == "Pearson":
-                    correlazioni[i][0].to_excel(self.writer, sheet_name='Pearson_grezzi')
-                    correlazioni[i][1].to_excel(self.writer, sheet_name='Pearson_filtrati')
-                elif NomiCorr[i] == "Spearman":
-                    correlazioni[i][0].to_excel(self.writer, sheet_name='Spearman_grezzi')
-                    correlazioni[i][1].to_excel(self.writer, sheet_name='Spearman_filtrati')
-                elif NomiCorr[i] == "Kendall":
-                    correlazioni[i][0].to_excel(self.writer, sheet_name='Kendall_grezzi')
-                    correlazioni[i][1].to_excel(self.writer, sheet_name='Kendall_filtrati')
+                sheet_name = f'{NomiCorr[i]}_grezzi'
+                correlazioni[i][0].to_excel(self.writer, sheet_name=sheet_name)
+                worksheet = self.writer.sheets[sheet_name]
+                self.format_cells(worksheet)
+                
+                sheet_name = f'{NomiCorr[i]}_filtrati'
+                correlazioni[i][1].to_excel(self.writer, sheet_name=sheet_name)
+                worksheet = self.writer.sheets[sheet_name]
+                self.format_cells(worksheet)
         else:
             for i in range(len(correlazioni)):
-                if NomiCorr[i] == "Pearson":
-                    correlazioni[i].to_excel(self.writer, sheet_name='Pearson')
-                elif NomiCorr[i] == "Spearman":
-                    correlazioni[i].to_excel(self.writer, sheet_name='Spearman')
-                elif NomiCorr[i] == "Kendall":
-                    correlazioni[i].to_excel(self.writer, sheet_name='Kendall')
-        # if len(correlazioni[0])==1:
-        #     for i in range(len(correlazioni)):
-        #         if NomiCorr[i] == "Pearson":
-        #             correlazioni[i].to_excel(self.writer, sheet_name='Pearson')
-        #         elif NomiCorr[i] == "Spearman":
-        #             correlazioni[i].to_excel(self.writer, sheet_name='Spearman')
-        #         elif NomiCorr[i] == "Kendall":
-        #             correlazioni[i].to_excel(self.writer, sheet_name='Kendall')
-        # else:
-        #     NomiFogli=['Correlazioni dei grezzi',
-        #             'Correlazioni dei filtrati']
-        #     for i in range(len(correlazioni)):
-        #         if NomiCorr[i] == "Pearson":
-        #             correlazioni[i][0].to_excel(self.writer, sheet_name='Pearson_grezzi')
-        #             correlazioni[i][1].to_excel(self.writer, sheet_name='Pearson_filtrati')
-        #         elif NomiCorr[i] == "Spearman":
-        #             correlazioni[i][0].to_excel(self.writer, sheet_name='Spearman_grezzi')
-        #             correlazioni[i][1].to_excel(self.writer, sheet_name='Spearman_filtrati')
-        #         elif NomiCorr[i] == "Kendall":
-        #             correlazioni[i][0].to_excel(self.writer, sheet_name='Kendall_grezzi')
-        #             correlazioni[i][1].to_excel(self.writer, sheet_name='Kendall_filtrati')
+                sheet_name = NomiCorr[i]
+                correlazioni[i].to_excel(self.writer, sheet_name=sheet_name)
+                worksheet = self.writer.sheets[sheet_name]
+                self.format_cells(worksheet)
+
+def format_cells(self, worksheet):
+    # Definire i formati per le celle
+    red_format = self.writer.book.add_format({'bg_color': '#FFC7CE'})
+    green_format = self.writer.book.add_format({'bg_color': '#C6EFCE'})
+
+    # Applicare la formattazione condizionale
+    worksheet.conditional_format('A1:Z1000', {'type': 'cell',
+                                               'criteria': '<',
+                                               'value': -0.5,
+                                               'format': red_format})
+    worksheet.conditional_format('A1:Z1000', {'type': 'cell',
+                                               'criteria': 'between',
+                                               'minimum': 0.5,
+                                               'maximum': 0.99,
+                                               'format': green_format})

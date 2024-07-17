@@ -119,7 +119,7 @@ class FinestraSalvataggio:
         nomefile = self.nomefile_entry.get()
         percorso = self.percorso_path.cget("text")
         # in base ai checkbox crea gli sheet e salva in xlsx file sulo stesso file
-        with pd.ExcelWriter(percorso+"/"+nomefile+".xlsx") as writer:
+        with pd.ExcelWriter(percorso+"/"+nomefile+".xlsx",engine='xlsxwriter') as writer:
             if self.salva_grezzi.get():
                 if self.df is None:
                     messagebox.showinfo("Attenzione", "Non ci sono dati grezzi da salvare")
@@ -150,7 +150,12 @@ class FinestraSalvataggio:
                         messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
                     for i in range(len(self.df_corr[0])):
                         if self.df_corr[0][i] is not None:
-                            self.df_corr[0][i].to_excel(writer, sheet_name="Correlazioni Grezzi "+ self.preferenze[i])
+                            sheet_name = "Correlazioni Grezzi " + self.preferenze[i]
+                            # worksheet = writer.sheets[sheet_name]
+                            self.df_corr[0][i].to_excel(writer, sheet_name=sheet_name)
+                            worksheet = writer.sheets[sheet_name]
+                            self.format_cells(worksheet,writer)
+                            # self.df_corr[0][i].to_excel(writer, sheet_name="Correlazioni Grezzi "+ self.preferenze[i])
             if self.salva_correlazioni_filt.get():
                 print("Salvataggio correlazioni filtrati")
                 if self.df_corr[1] is None:
@@ -162,6 +167,25 @@ class FinestraSalvataggio:
                     print(len(self.df_corr[1]))
                     for j in range(len(self.df_corr[1])):
                         if not self.df_corr[1][j].empty:
-                            print("Salvataggio correlazioni filtrati 2")
-                            self.df_corr[1][j].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[j])
+                            sheet_name = "Correlazioni Filtrati " + self.preferenze[j]
+                            self.df_corr[1][j].to_excel(writer, sheet_name=sheet_name)
+                            worksheet = writer.sheets[sheet_name]
+                            self.format_cells(worksheet,writer)
+                        # if not self.df_corr[1][j].empty:
+                        #     print("Salvataggio correlazioni filtrati 2")
+                        #     self.df_corr[1][j].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[j])
         messagebox.showinfo("Salvataggio", "Salvataggio completato")
+
+
+    def format_cells(self,worksheet,writer):
+        red_format = writer.book.add_format({'bg_color': '#FFC7CE'})
+        green_format = writer.book.add_format({'bg_color': '#C6EFCE'})
+        worksheet.conditional_format('A1:Z1000', {'type': 'cell',
+                                                    'criteria': '<',
+                                                    'value': -0.5,
+                                                    'format': red_format})
+        worksheet.conditional_format('A1:Z1000', {'type': 'cell',
+                                                    'criteria': 'between',
+                                                    'minimum': 0.5,
+                                                    'maximum': 0.99,
+                                                    'format': green_format})
