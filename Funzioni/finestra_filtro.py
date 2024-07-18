@@ -68,7 +68,9 @@ class Filtro:
         self.Filtro2 = tk.Checkbutton(self.finestra_filtro,
                                     text="Scarto Iniziale", 
                                     font=("Helvetica", 12, "bold"),
-                                    variable=self.DaTempo)
+                                    variable=self.DaTempo,
+                                    state='disabled')
+        
         self.Filtro2.grid(row=5, column=0)
 
         self.TempoDa = tk.Label(self.finestra_filtro,

@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 
 def App(finesta_principale):
     finesta_principale.title("Analisi Dati")
-    finesta_principale.geometry("800x350")
+    finesta_principale.geometry("800x450")
     global df_DaUnire, df_MRU, df_MRU_Unito, df_Unito, df_mTp
     df_DaUnire = []
     df_MRU = []
@@ -35,10 +35,10 @@ def App(finesta_principale):
     
     #* BOTTONE CARICA FILE
     bottone_carica_file = tk.Button(finesta_principale,
-                            text="mTp", 
+                            text="CSV 1", 
                             command=lambda: Caricamento(label_file_in,
                                         bottone_carica_file,bottone_filtro, bottone_statistiche,
-                                        bottone_correlazione, bottone_grafici, bottone_grafici_stat, bottone_grafici_corr, bottone_salva),
+                                        bottone_correlazione, bottone_salva),
                             bg="light grey",
                             font=("Arial", 12),
                             fg="bLACK")
@@ -52,13 +52,13 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    bottone_carica_file2.grid(row=2, column=1)
+    bottone_carica_file2.grid(row=2, column=2)
 
     # LABEL FILE IN
     label_file2_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
-    label_file2_in.grid(row=3, column=1)
+    label_file2_in.grid(row=3, column=2)
 
     #* BOTTONE CARICA FILE
     bottone_carica_file3 = tk.Button(finesta_principale,
@@ -68,13 +68,13 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    bottone_carica_file3.grid(row=2, column=2)
+    bottone_carica_file3.grid(row=2, column=3)
 
     # LABEL FILE IN
     label_file3_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
-    label_file3_in.grid(row=3, column=2)
+    label_file3_in.grid(row=3, column=3)
 
     #* BOTTONE CARICA FILE
     bottone_carica_file4 = tk.Button(finesta_principale,
@@ -84,13 +84,13 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    bottone_carica_file4.grid(row=2, column=3)
+    bottone_carica_file4.grid(row=2, column=4)
 
     # LABEL FILE IN
     label_file4_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
-    label_file4_in.grid(row=3, column=3)
+    label_file4_in.grid(row=3, column=4)
 
     #* BOTTONE CARICA FILE
     bottone_carica_file5 = tk.Button(finesta_principale,
@@ -100,13 +100,13 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    bottone_carica_file5.grid(row=2, column=4)
+    bottone_carica_file5.grid(row=2, column=5)
 
     # LABEL FILE IN
     label_file5_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
-    label_file5_in.grid(row=3, column=4)
+    label_file5_in.grid(row=3, column=5)
 
     #* BOTTONE CARICA FILE
     bottone_carica_file6 = tk.Button(finesta_principale,
@@ -116,27 +116,27 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    bottone_carica_file6.grid(row=2, column=5)
+    bottone_carica_file6.grid(row=2, column=6)
 
     label_file6_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
-    label_file6_in.grid(row=3, column=5)
+    label_file6_in.grid(row=3, column=6)
 
     #* BOTTONE CARICA FILE
     bottone_carica_file7 = tk.Button(finesta_principale,
-                            text="Consumi",
+                            text="CSV 2",
                             command=lambda: Caricamento2(label_file7_in,
                                         bottone_carica_file7),
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    bottone_carica_file7.grid(row=2, column=6)
+    bottone_carica_file7.grid(row=2, column=1)
 
     label_file7_in = tk.Label(finesta_principale,   
                             text="File in: ",
                             font=("Arial", 12))
-    label_file7_in.grid(row=3, column=6)
+    label_file7_in.grid(row=3, column=1)
 
     #* BOTTONE unisci file
     bottone_unisci = tk.Button(finesta_principale,
@@ -150,7 +150,7 @@ def App(finesta_principale):
     # EMPRY ROW
     empty_row = tk.Label(finesta_principale,
                         text="")
-    empty_row.grid(row=3, column=0)
+    empty_row.grid(row=5, column=0)
 
     #* BOTTONE FILTRO
     bottone_filtro = tk.Button(finesta_principale,
@@ -159,13 +159,13 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    bottone_filtro.config(state=tk.DISABLED)
-    bottone_filtro.grid(row=4, column=0)
+    # bottone_filtro.config(state=tk.DISABLED)
+    bottone_filtro.grid(row=6, column=0)
 
     # EMPTY ROW
     empty_row = tk.Label(finesta_principale,
                         text="")
-    empty_row.grid(row=5, column=0)
+    empty_row.grid(row=7, column=0)
 
     #* BOTTONE STATISTICHE
     bottone_statistiche = tk.Button(finesta_principale,
@@ -174,13 +174,13 @@ def App(finesta_principale):
                                     font=("Arial", 12),
                                     bg="light grey",
                                     fg="black")
-    bottone_statistiche.config(state=tk.DISABLED)
-    bottone_statistiche.grid(row=6, column=0)
+    # bottone_statistiche.config(state=tk.DISABLED)
+    bottone_statistiche.grid(row=8, column=0)
 
     # EMPTY ROW
     empty_row = tk.Label(finesta_principale,
                         text="")
-    empty_row.grid(row=7, column=0)
+    empty_row.grid(row=9, column=0)
 
     #* BOTTONE CORRELAZIONE
     bottone_correlazione = tk.Button(finesta_principale,
@@ -189,43 +189,43 @@ def App(finesta_principale):
                                     bg="light grey",
                                     font=("Arial", 12),
                                     fg="black")
-    bottone_correlazione.config(state=tk.DISABLED)
-    bottone_correlazione.grid(row=8, column=0)
+    # bottone_correlazione.config(state=tk.DISABLED)
+    bottone_correlazione.grid(row=10, column=0)
 
     # EMPTY ROW
     empty_row = tk.Label(finesta_principale,
                         text="")
-    empty_row.grid(row=9, column=0)
+    empty_row.grid(row=11, column=0)
 
-    # BOTTONE GRAFICI VARIABILI
-    bottone_grafici = tk.Button(finesta_principale,
-                            text="Grafici",
-                            command=lambda: Grafici_Variabili(),
-                            bg="light grey",
-                            font=("Arial", 12),
-                            fg="black")
-    bottone_grafici.config(state=tk.DISABLED)
-    bottone_grafici.grid(row=4, column=2)
+    # # BOTTONE GRAFICI VARIABILI
+    # bottone_grafici = tk.Button(finesta_principale,
+    #                         text="Grafici",
+    #                         command=lambda: Grafici_Variabili(),
+    #                         bg="light grey",
+    #                         font=("Arial", 12),
+    #                         fg="black")
+    # bottone_grafici.config(state=tk.DISABLED)
+    # bottone_grafici.grid(row=6, column=2)
 
-    # BOTTONE GRAFICI DENSITà DI PROBABILITà
-    bottone_grafici_stat = tk.Button(finesta_principale,
-                                text="Grafici Probabilità",
-                                command=lambda: Grafici_Probabilità(),
-                                bg="light grey",
-                                font=("Arial", 12),
-                                fg="black")
-    bottone_grafici_stat.config(state=tk.DISABLED)
-    bottone_grafici_stat.grid(row=6, column=2)
+    # # BOTTONE GRAFICI DENSITà DI PROBABILITà
+    # bottone_grafici_stat = tk.Button(finesta_principale,
+    #                             text="Grafici Probabilità",
+    #                             command=lambda: Grafici_Probabilità(),
+    #                             bg="light grey",
+    #                             font=("Arial", 12),
+    #                             fg="black")
+    # bottone_grafici_stat.config(state=tk.DISABLED)
+    # bottone_grafici_stat.grid(row=8, column=2)
 
-    # BOTTONE GRAFICI CORRELAZIONE
-    bottone_grafici_corr = tk.Button(finesta_principale,
-                                text="Grafici Correlazione",
-                                command=lambda: Grafici_Correlazione(),
-                                bg="light grey",
-                                font=("Arial", 12),
-                                fg="black")
-    bottone_grafici_corr.config(state=tk.DISABLED)
-    bottone_grafici_corr.grid(row=8, column=2)
+    # # BOTTONE GRAFICI CORRELAZIONE
+    # bottone_grafici_corr = tk.Button(finesta_principale,
+    #                             text="Grafici Correlazione",
+    #                             command=lambda: Grafici_Correlazione(),
+    #                             bg="light grey",
+    #                             font=("Arial", 12),
+    #                             fg="black")
+    # bottone_grafici_corr.config(state=tk.DISABLED)
+    # bottone_grafici_corr.grid(row=10, column=2)
 
     # BOTTONE SALVA
     bottone_salva = tk.Button(finesta_principale,
@@ -234,8 +234,8 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    bottone_salva.config(state=tk.DISABLED)
-    bottone_salva.grid(row=10, column=1)
+    # bottone_salva.config(state=tk.DISABLED)
+    bottone_salva.grid(row=12, column=1)
 
     try:
             # Load the image file
@@ -250,31 +250,32 @@ def App(finesta_principale):
             # Create a label and add the image to it
         logo_label = tk.Label(finesta_principale, image=tk_img)
         logo_label.image = tk_img  # keep a reference to the image to prevent it from being garbage collected
-        logo_label.grid(row=10, column=2)
+        logo_label.grid(row=12, column=3)
     except Exception as e:
         print("Errore nel caricamento del logo: ", e)
 
-def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,bottone_correlazione, bottone_grafici, bottone_grafici_stat, bottone_grafici_corr, bottone_salva):
+def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,bottone_correlazione, bottone_salva):
     # Riferimento alle variabili globali
     path, df_mTp = CaricaFile().file_input_sfoglia()
     label_file_in.config(text=path)
     if df_mTp is not None:
         df_DaUnire.append(df_mTp)
         print("Caricamento completato mTp")
-        bottone_filtro.config(bg="light blue")
-        bottone_filtro.config(state=tk.NORMAL)
-        bottone_statistiche.config(bg="light blue")
-        bottone_statistiche.config(state=tk.NORMAL)
-        bottone_correlazione.config(bg="light blue")
-        bottone_correlazione.config(state=tk.NORMAL)
-        bottone_grafici.config(bg="light blue")
-        bottone_grafici.config(state=tk.NORMAL)
-        bottone_grafici_stat.config(bg="light blue")
-        bottone_grafici_stat.config(state=tk.NORMAL)
-        bottone_grafici_corr.config(bg="light blue")
-        bottone_grafici_corr.config(state=tk.NORMAL)
-        bottone_salva.config(bg="light blue")
-        bottone_salva.config(state=tk.NORMAL)
+        # bottone_filtro.config(bg="light blue")
+        # bottone_filtro.config(state=tk.NORMAL)
+        bottone_carica_file.config(bg="light blue")
+        # bottone_statistiche.config(bg="light blue")
+        # bottone_statistiche.config(state=tk.NORMAL)
+        # bottone_correlazione.config(bg="light blue")
+        # bottone_correlazione.config(state=tk.NORMAL)
+        # # bottone_grafici.config(bg="light blue")
+        # # bottone_grafici.config(state=tk.NORMAL)
+        # # bottone_grafici_stat.config(bg="light blue")
+        # # bottone_grafici_stat.config(state=tk.NORMAL)
+        # # bottone_grafici_corr.config(bg="light blue")
+        # # bottone_grafici_corr.config(state=tk.NORMAL)
+        # bottone_salva.config(bg="light blue")
+        # bottone_salva.config(state=tk.NORMAL)
 
 def Caricamento2(label_file_in, bottone_carica_file):
     # Utilizza la lista globale dfs_mRu per aggiungere nuovi DataFrame
@@ -304,18 +305,12 @@ def VerificaCH4(df):
     # Verifica se la colonna CH4 è presente nel dataframe
     if 'CH4' and not 'CH4PPM' in df.columns:
         #prendi i valori in CH4 e crea una nuova colonna CH4PPM dividendo i valori per 10^5
-        df['CH4PPM'] = df['CH4'] / 100000
+        df['CH4PPM'] = df['CH4'] * 100000
     elif 'CH4PPM' and not 'CH4' in df.columns:
-        df['CH4'] = df['CH4PPM'] * 100000
-        # # Se la colonna CH4 è presente, verifica se ci sono valori mancanti
-        # if df['CH4'].isnull().all():
-        #     # Se tutti i valori sono mancanti, rimuovi la colonna
-        #     df.drop(columns='CH4', inplace=True)
+        df['CH4'] = df['CH4PPM'] / 100000
     return df
 
 def RiordinaMRU(df):
-    # Ordina le colonne del DataFrame in base al nome
-    #l'ordine deve essere CO2 CH4 CH4PPM O2 N2 H2S, non è detto che ci siano sempre tutti
     colonne = ['Data','CO2', 'CH4', 'CH4PPM', 'O2', 'N2', 'H2S']
     colonne_presenti = [col for col in colonne if col in df.columns]
     #ordina le colonne presenti in funzione a colonne
@@ -323,40 +318,36 @@ def RiordinaMRU(df):
     return df
 
 def PulisciMRU(df):
-    # Rimuovi le righe con valori mancanti se esiste un valore precedente usa quello, altrimenti riempilo con con NaN
-    # df.fillna(method='ffill', inplace=True)
     df.ffill(inplace=True)
-    # df.ffill(inplace=True).infer_objects(copy=False)
     return df
 
 def UnisciFile():
     global df_Unito
     df_MRU_Unito = UnisciMRU()
-    # Assume df_DaUnire is a list of DataFrames to be merged
-    df_Unito = df_DaUnire[0].copy()  # Start with a copy of the first DataFrame to avoid modifying the original
+    if df_DaUnire:  # Check if df_DaUnire is empty
+        df_Unito = df_DaUnire[0].copy()  # Start with a copy of the first DataFrame to avoid modifying the original
 
-    for i in range(1, len(df_DaUnire)):
-        # Merge without renaming columns
-        df_Unito = pd.merge(df_Unito, df_DaUnire[i], on='Data', how='outer', suffixes=('', f'_DaUnire{i}'))
-        
-        # No need for manual renaming after using suffixes in merge
+        for i in range(1, len(df_DaUnire)):
+            # Merge without renaming columns
+            df_Unito = pd.merge(df_Unito, df_DaUnire[i], on='Data', how='outer', suffixes=('', f'_DaUnire{i}'))
+            
+            # No need for manual renaming after using suffixes in merge
 
-    # Merge with df_MRU_Unito if it's not None and contains data
-    if df_MRU_Unito is not None and not df_MRU_Unito.empty:
-        # Trova le date comuni tra df_Unito e df_MRU_Unito
+        # Merge with df_MRU_Unito if it's not None and contains data
+        if df_MRU_Unito is not None and not df_MRU_Unito.empty:
+            # Trova le date comuni tra df_Unito e df_MRU_Unito
 
-        # Using a suffix to differentiate columns from df_MRU_Unito
-        df_Unito = pd.merge(df_Unito, df_MRU_Unito, on='Data', how='outer', suffixes=('', '_MRU'))
+            # Using a suffix to differentiate columns from df_MRU_Unito
+            df_Unito = pd.merge(df_Unito, df_MRU_Unito, on='Data', how='outer', suffixes=('', '_MRU'))
 
+        # Drop rows where all elements are NaN
+        df_Unito.dropna(how='all', inplace=True)
 
-
-    # Drop rows where all elements are NaN
-    df_Unito.dropna(how='all', inplace=True)
-
-    print("Unione completata")
-    print(len(df_Unito))
-    colonne = list(df_Unito.columns)
-    print(colonne)
+        print("Unione completata")
+        colonne = list(df_Unito.columns)
+        print(colonne)
+    else:
+        df_Unito = df_MRU_Unito.copy()
 
 def UnisciMRU():
     global df_MRU_Unito
@@ -401,14 +392,22 @@ def UnisciMRU():
 
 def Filtraggio(finestra_principale, bottone_filtro):
     global df_filtrato, df_Unito  # Aggiungi df_Unito alla dichiarazione globale
-    if df_Unito is None:
-        df_Unito = df_mTp  # Questa linea ora funzionerà come previsto
-        print("df_Unito è stato assegnato a df_mTp")
+    if df_Unito.columns.empty:
+        df_Unito = df_DaUnire[0] # Questa linea ora funzionerà come previsto
+        print("Filtro su un solo Dataframe")
     try:
         #estrapola una lista dal dalla colonna del dataframe Data che parta dalla prima riga in cui almeno uno dei valori con pedice _MRU non è NaN
-        date_comuni = set(df_Unito['Data']).intersection(set(df_MRU_Unito['Data']))
+        colonne=df_MRU_Unito.columns
+        if not colonne.empty:
+            date_comuni = set(df_Unito['Data']).intersection(set(df_MRU_Unito['Data']))
         # Crea una lista tempo che contiene solo le date presenti in entrambi i dataframe
-        tempo = list(df_Unito.loc[df_Unito['Data'].isin(date_comuni), 'Data'])
+            tempo = list(df_Unito.loc[df_Unito['Data'].isin(date_comuni), 'Data'])
+        else:
+            if isinstance(df_Unito, pd.DataFrame):
+                tempo = list(df_Unito['Data'])
+            else:
+                print("df_Unito is not a DataFrame")
+            # tempo = list(df_Unito['Data'])
         filtro = Filtro(finestra_principale, tempo, df_Unito)
         filtro.FinestraFiltro()
         finestra_principale.wait_window(filtro.finestra_filtro)
@@ -420,6 +419,7 @@ def Filtraggio(finestra_principale, bottone_filtro):
             df_filtrato = None
     except Exception as e:
         messagebox.showerror("Errore", "Nessun filtro applicato")
+        print("Errore: ", e)
 
 def Statistiche(finestra_principale,df_Unito,df_filtrato,bottone_statistiche):
     global df_statistiche
