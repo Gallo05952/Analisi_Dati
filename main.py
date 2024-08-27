@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 
 def App(finesta_principale):
     finesta_principale.title("Analisi Dati")
-    finesta_principale.geometry("800x450")
+    finesta_principale.geometry("1000x450")
     global df_DaUnire, df_MRU, df_MRU_Unito, df_Unito, df_mTp
     df_DaUnire = []
     df_MRU = []
