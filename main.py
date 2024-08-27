@@ -7,7 +7,7 @@ from PIL import Image, ImageTk
 
 def App(finesta_principale):
     finesta_principale.title("Analisi Dati")
-    finesta_principale.geometry("800x450")
+    finesta_principale.geometry("1000x450")
     global df_DaUnire, df_MRU, df_MRU_Unito, df_Unito, df_mTp
     df_DaUnire = []
     df_MRU = []
@@ -152,6 +152,16 @@ def App(finesta_principale):
                         text="")
     empty_row.grid(row=5, column=0)
 
+    #* BOTTONE COP
+    bottone_cop = tk.Button(finesta_principale,
+                        text="COP",
+                        command=lambda: CalcoloCOP(bottone_cop),
+                        bg="light grey",
+                        font=("Arial", 12),
+                        fg="black")
+    bottone_cop.grid(row=4, column=3)
+
+
     #* BOTTONE FILTRO
     bottone_filtro = tk.Button(finesta_principale,
                             text="Filtro",
@@ -196,36 +206,6 @@ def App(finesta_principale):
     empty_row = tk.Label(finesta_principale,
                         text="")
     empty_row.grid(row=11, column=0)
-
-    # # BOTTONE GRAFICI VARIABILI
-    # bottone_grafici = tk.Button(finesta_principale,
-    #                         text="Grafici",
-    #                         command=lambda: Grafici_Variabili(),
-    #                         bg="light grey",
-    #                         font=("Arial", 12),
-    #                         fg="black")
-    # bottone_grafici.config(state=tk.DISABLED)
-    # bottone_grafici.grid(row=6, column=2)
-
-    # # BOTTONE GRAFICI DENSITà DI PROBABILITà
-    # bottone_grafici_stat = tk.Button(finesta_principale,
-    #                             text="Grafici Probabilità",
-    #                             command=lambda: Grafici_Probabilità(),
-    #                             bg="light grey",
-    #                             font=("Arial", 12),
-    #                             fg="black")
-    # bottone_grafici_stat.config(state=tk.DISABLED)
-    # bottone_grafici_stat.grid(row=8, column=2)
-
-    # # BOTTONE GRAFICI CORRELAZIONE
-    # bottone_grafici_corr = tk.Button(finesta_principale,
-    #                             text="Grafici Correlazione",
-    #                             command=lambda: Grafici_Correlazione(),
-    #                             bg="light grey",
-    #                             font=("Arial", 12),
-    #                             fg="black")
-    # bottone_grafici_corr.config(state=tk.DISABLED)
-    # bottone_grafici_corr.grid(row=10, column=2)
 
     # BOTTONE SALVA
     bottone_salva = tk.Button(finesta_principale,
@@ -319,6 +299,13 @@ def RiordinaMRU(df):
 
 def PulisciMRU(df):
     df.ffill(inplace=True)
+    # controlla che ci siano queste colonne, se non ci sono inseriscile con valori = 0
+    colonne = ['Data','CO2', 'CH4','CH4PPM', 'O2', 'N2', 'H2S']
+    colonne_presenti = [col for col in colonne if col in df.columns]
+    colonne_da_inserire = [col for col in colonne if col not in df.columns]
+    for col in colonne_da_inserire:
+        df[col] = 0
+
     return df
 
 def UnisciFile():
@@ -344,10 +331,14 @@ def UnisciFile():
         df_Unito.dropna(how='all', inplace=True)
 
         print("Unione completata")
-        colonne = list(df_Unito.columns)
-        print(colonne)
     else:
         df_Unito = df_MRU_Unito.copy()
+    colonne = list(df_Unito.columns)
+    # aggiungi che se all'interno delle colonne c'è una colonna con il nome "Potenza generale QCO2" deve fare alcune operazioni
+    if 'Potenza generale QCO2' in colonne:
+        df_Unito['Potenza Totale'] = df_Unito['Potenza generale QCO2'] + df_Unito['Potenza compressore CO2 V110'] + df_Unito['Potenza chiller H2O F400']
+    colonne = list(df_Unito.columns)
+    print(colonne)
 
 def UnisciMRU():
     global df_MRU_Unito
@@ -492,6 +483,30 @@ def Grafici_Probabilità():
 
 def Grafici_Correlazione():
     FinestraGraficiCorrelazioni(root, df, df_filtrato, df_correlazione, preferenze_corr).Finestra()
+
+def CalcoloCOP(bottone_cop):
+    global df_Unito, df_MRU_Unito
+    if df_MRU_Unito is None:
+        messagebox.showerror("Errore", "Nessun file MRU caricato")
+        return
+    if df_Unito is None:
+        messagebox.showerror("Errore", "Nessun file CSV caricato")
+        return 
+    if df_MRU_Unito.empty:
+        messagebox.showerror("Errore", "File MRU vuoto")
+        return
+    if df_Unito.empty:
+        messagebox.showerror("Errore", "File CSV vuoto")
+        return
+    if len(df_MRU_Unito.columns) < 31:
+        messagebox.showerror("Attnezione", "Non hai inserito tutti gli MRU, questo causa un errore nel calcolo del COP")
+    # if len(df_MRU_Unito.columns) > 26:
+    #     messagebox.showerror("Attenzione", "A qunto pare alcuni MRU hanno misurato N2")
+        
+    print(len(df_MRU_Unito.columns))
+    # Calcola il COP
+    df_Unito=ScambioTermico(df_Unito).Calcolo()
+
 
 #MAIN RUN
 try:
