@@ -207,36 +207,6 @@ def App(finesta_principale):
                         text="")
     empty_row.grid(row=11, column=0)
 
-    # # BOTTONE GRAFICI VARIABILI
-    # bottone_grafici = tk.Button(finesta_principale,
-    #                         text="Grafici",
-    #                         command=lambda: Grafici_Variabili(),
-    #                         bg="light grey",
-    #                         font=("Arial", 12),
-    #                         fg="black")
-    # bottone_grafici.config(state=tk.DISABLED)
-    # bottone_grafici.grid(row=6, column=2)
-
-    # # BOTTONE GRAFICI DENSITà DI PROBABILITà
-    # bottone_grafici_stat = tk.Button(finesta_principale,
-    #                             text="Grafici Probabilità",
-    #                             command=lambda: Grafici_Probabilità(),
-    #                             bg="light grey",
-    #                             font=("Arial", 12),
-    #                             fg="black")
-    # bottone_grafici_stat.config(state=tk.DISABLED)
-    # bottone_grafici_stat.grid(row=8, column=2)
-
-    # # BOTTONE GRAFICI CORRELAZIONE
-    # bottone_grafici_corr = tk.Button(finesta_principale,
-    #                             text="Grafici Correlazione",
-    #                             command=lambda: Grafici_Correlazione(),
-    #                             bg="light grey",
-    #                             font=("Arial", 12),
-    #                             fg="black")
-    # bottone_grafici_corr.config(state=tk.DISABLED)
-    # bottone_grafici_corr.grid(row=10, column=2)
-
     # BOTTONE SALVA
     bottone_salva = tk.Button(finesta_principale,
                             text="Excel Salva",
@@ -361,10 +331,14 @@ def UnisciFile():
         df_Unito.dropna(how='all', inplace=True)
 
         print("Unione completata")
-        colonne = list(df_Unito.columns)
-        print(colonne)
     else:
         df_Unito = df_MRU_Unito.copy()
+    colonne = list(df_Unito.columns)
+    # aggiungi che se all'interno delle colonne c'è una colonna con il nome "Potenza generale QCO2" deve fare alcune operazioni
+    if 'Potenza generale QCO2' in colonne:
+        df_Unito['Potenza Totale'] = df_Unito['Potenza generale QCO2'] + df_Unito['Potenza compressore CO2 V110'] + df_Unito['Potenza chiller H2O F400']
+    colonne = list(df_Unito.columns)
+    print(colonne)
 
 def UnisciMRU():
     global df_MRU_Unito
