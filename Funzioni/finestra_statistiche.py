@@ -27,6 +27,9 @@ class FinestraStatistiche:
             self.massimo_var = tk.BooleanVar()
             self.Dati_grezzi_var = tk.BooleanVar()
             self.Dati_filtrati_var = tk.BooleanVar()
+            self.Skewness_var = tk.BooleanVar()
+            self.Kurtosis_var = tk.BooleanVar()
+            self.Tutte_var = tk.BooleanVar()
         except AttributeError:
             print("Errore nella creazione delle variabili per i checkbutton")
 
@@ -82,6 +85,25 @@ class FinestraStatistiche:
                                         font=("Helvetica", 12),
                                         variable=self.massimo_var)
             self.Massimo_cb.grid(row=7, column=0)
+            # SKEWNESS
+            self.Skewness_cb = tk.Checkbutton(self.finestra_stat,
+                                        text="Skewness",
+                                        font=("Helvetica", 12),
+                                        variable=self.Skewness_var)
+            self.Skewness_cb.grid(row=8, column=0)
+            # KURTOSIS
+            self.Kurtosis_cb = tk.Checkbutton(self.finestra_stat,
+                                        text="Kurtosis",
+                                        font=("Helvetica", 12),
+                                        variable=self.Kurtosis_var)
+            self.Kurtosis_cb.grid(row=9, column=0)
+            #Tutte le statistiche
+            self.Tutte_cb = tk.Checkbutton(self.finestra_stat,
+                                        text="Tutte",
+                                        font=("Helvetica", 12),
+                                        command=self.Tutte,
+                                        variable=self.Tutte_var)
+            self.Tutte_cb.grid(row=10, column=0)
         except AttributeError:
             print("Errore nel checkbox delle statistiche")
 
@@ -113,7 +135,32 @@ class FinestraStatistiche:
                                         text="OK", 
                                         font=("Helvetica", 12),
                                         command=self.SalvataggioStat)
-        self.ok_button_stat.grid(row=8, column=2, padx=10, pady=10)
+        self.ok_button_stat.grid(row=11, column=2, padx=10, pady=10)
+
+    def Tutte(self):
+        # controlla se il checkbutton Tutte è selezionato
+        if self.Tutte_var.get():
+            #se è attivo seleziona tutti i checkbutton
+            self.Media_var.set(True)
+            self.Mediana_var.set(True)
+            self.Moda_var.set(True)
+            self.Deviazione_var.set(True)
+            self.Varianza_var.set(True)
+            self.minimo_var.set(True)
+            self.massimo_var.set(True)
+            self.Skewness_var.set(True)
+            self.Kurtosis_var.set(True)
+        else:
+            #se non è attivo deseleziona tutti i checkbutton
+            self.Media_var.set(False)
+            self.Mediana_var.set(False)
+            self.Moda_var.set(False)
+            self.Deviazione_var.set(False)
+            self.Varianza_var.set(False)
+            self.minimo_var.set(False)
+            self.massimo_var.set(False)
+            self.Skewness_var.set(False)
+            self.Kurtosis_var.set(False)
 
     def SalvataggioStat(self):
         try:
@@ -126,6 +173,8 @@ class FinestraStatistiche:
             self.massimoS=self.massimo_var.get()
             self.Dati_grezziS=self.Dati_grezzi_var.get()
             self.Dati_filtratiS=self.Dati_filtrati_var.get()
+            self.SweeneyS=self.Skewness_var.get()
+            self.KurtosisS=self.Kurtosis_var.get()
         except AttributeError:
             print("Errore")
         finally:
