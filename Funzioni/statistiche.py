@@ -63,6 +63,10 @@ class Statistica:
         statistiche = {}
         for col in self.df.columns:
             statistiche[col] = self.calcola_statistiche(col)
+        skewness = self.df.skew()
+        kurtosis = self.df.kurtosis()
+        statistiche['Skewness'] = skewness
+        statistiche['Kurtosis'] = kurtosis
         return statistiche
     
     def calcola_statistiche(self, col):

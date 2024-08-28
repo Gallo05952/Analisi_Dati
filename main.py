@@ -207,6 +207,15 @@ def App(finesta_principale):
                         text="")
     empty_row.grid(row=11, column=0)
 
+    #* BOTTONE DISTRIBUZIONI
+    bottone_distribuzioni = tk.Button(finesta_principale,
+                                    text="Distribuzioni",
+                                    command=lambda: Distribuzioni(finesta_principale,df,df_filtrato,bottone_distribuzioni),
+                                    bg="light grey",
+                                    font=("Arial", 12),
+                                    fg="black")
+    bottone_distribuzioni.grid(row=6, column=3)
+
     # BOTTONE SALVA
     bottone_salva = tk.Button(finesta_principale,
                             text="Excel Salva",
@@ -459,17 +468,6 @@ def Correlzioniamo(finestra_principale, df_unione, df_filtrato, bottone_correlaz
 
     if df_correlazione[0] is not None or df_correlazione[1] is not None:
         bottone_correlazione.config(bg="light green")
-    # if corr_grezze is not None:
-    #     df_corr_grezze=pd.DataFrame(corr_grezze)
-    # else:
-    #     df_corr_grezze=None
-    # if corr_filtrate is not None:
-    #     df_corr_filtrate=pd.DataFrame(corr_filtrate)
-    # else:
-    #     df_corr_filtrate=None
-    # df_correlazione=[df_corr_grezze,df_corr_filtrate]
-    # if df_correlazione[0] or df_correlazione[1] or df_correlazione[2]:
-    #     bottone_correlazione.config(bg="light green")
 
 def Salva():
     fines_salva=FinestraSalvataggio(root, df_Unito, df_filtrato, df_statistiche, df_correlazione, preferenze_corr)
@@ -506,6 +504,12 @@ def CalcoloCOP(bottone_cop):
     print(len(df_MRU_Unito.columns))
     # Calcola il COP
     df_Unito=ScambioTermico(df_Unito).Calcolo()
+
+def Distribuzioni(fine,df,df_filtrato,bottone_distribuzioni):
+    global df_distr
+    finestra_distr = FinestraDistribuzioni(root, df, df_filtrato)
+    finestra_distr.Finestra()
+    fine.wait_window(finestra_distr.finestra_distr)
 
 
 #MAIN RUN
