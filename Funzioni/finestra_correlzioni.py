@@ -48,15 +48,15 @@ class FinestraCorrelazioni:
                                         font=("Helvetica", 12))
             self.Pearson_cb.grid(row=2, column=0)
             # CORRELAZIONE: SPEARMAN
-            # self.Spearman_cb = tk.Checkbutton(self.finestra_corr,
-            #                             text="Spearman", 
-            #                             variable=self.Spearman_var)
-            # self.Spearman_cb.grid(row=2, column=0)
+            self.Spearman_cb = tk.Checkbutton(self.finestra_corr,
+                                        text="Spearman", 
+                                        variable=self.Spearman_var)
+            self.Spearman_cb.grid(row=3, column=0)
             # CORRELAZIONE: KENDALL
-            # self.Kendall_cb = tk.Checkbutton(self.finestra_corr,
-            #                         text="Kendall",
-            #                         variable=self.Kendall_var)
-            # self.Kendall_cb.grid(row=3, column=0)
+            self.Kendall_cb = tk.Checkbutton(self.finestra_corr,
+                                    text="Kendall",
+                                    variable=self.Kendall_var)
+            self.Kendall_cb.grid(row=4, column=0)
 
             # DATI GREZZI
             self.Dati_grezzi_cb = tk.Checkbutton(
@@ -76,7 +76,7 @@ class FinestraCorrelazioni:
             
             #empty label
             empty_label = tk.Label(self.finestra_corr, text="")
-            empty_label.grid(row=4, column=0)
+            empty_label.grid(row=5, column=0)
             
                         # BOTTONE CONFERMA
             self.bottone_conferma = tk.Button(
@@ -144,10 +144,13 @@ class FinestraCorrelazioni:
         else: correlazioni_filtrate = None
         if self.Pearson_var.get()==True:
             preferenze.append("Pearson")
+            print(preferenze)
         if self.Spearman_var.get()==True:
             preferenze.append("Spearman")
-        if self.Kendall_var==True:
+            print(preferenze)
+        if self.Kendall_var.get()==True:
             preferenze.append("Kendall")
+            print(preferenze)
         return correlazioni_grezze, correlazioni_filtrate, preferenze
                 
             

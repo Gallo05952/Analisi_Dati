@@ -184,12 +184,15 @@ class FinestraSalvataggio:
         # Posizionamento del Combobox nella griglia
         self.gestione_scaldiglia.grid(row=5, column=8)
         #bottone per salvare
+        #empty row
+        self.empty = tk.Label(self.finestra_salva, text="")
+        self.empty.grid(row=12, column=0)
         self.salva = tk.Button(self.finestra_salva,
                                 text="Salva", 
                                 font=("Helvetica", 14),
                                 bg="light grey",
                                 command=self.salva)
-        self.salva.grid(row=12, column=0)
+        self.salva.grid(row=13, column=0)
 
 
     def scegli_percorso(self):
@@ -309,15 +312,19 @@ CORRELAZIONI:
                     else:
                         # df_corr è una lista con dentro due liste con dentro potenzialmente 3 dataframe il numero di dataframe lo posso vedere dalla lunghezza di preferenze
                         i=0
+                        print("lunghezza df_corr",len(self.df_corr[0]))
+                        print("lunghezza preferenze",len(self.preferenze))
                         if len(self.df_corr[0]) == 0:
                             messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
                         for i in range(len(self.df_corr[0])):
                             if self.df_corr[0][i] is not None:
+                                print(i)
                                 sheet_name = "Correlazioni Grezzi " + self.preferenze[i]
                                 # worksheet = writer.sheets[sheet_name]
                                 self.df_corr[0][i].to_excel(writer, sheet_name=sheet_name)
-                                worksheet = writer.sheets[sheet_name]
-                                self.format_cells(worksheet,writer)
+                                if self.preferenze[j] == "Pearson":
+                                    worksheet = writer.sheets[sheet_name]
+                                    self.format_cells(worksheet,writer)
                                 # self.df_corr[0][i].to_excel(writer, sheet_name="Correlazioni Grezzi "+ self.preferenze[i])
                 if self.salva_correlazioni_filt.get():
                     print("Salvataggio correlazioni filtrati")
@@ -332,8 +339,10 @@ CORRELAZIONI:
                             if not self.df_corr[1][j].empty:
                                 sheet_name = "Correlazioni Filtrati " + self.preferenze[j]
                                 self.df_corr[1][j].to_excel(writer, sheet_name=sheet_name)
-                                worksheet = writer.sheets[sheet_name]
-                                self.format_cells(worksheet,writer)
+                                if self.preferenze[j] == "Pearson":
+                                    worksheet = writer.sheets[sheet_name]
+                                    self.format_cells(worksheet,writer)
+
                             # if not self.df_corr[1][j].empty:
                             #     print("Salvataggio correlazioni filtrati 2")
                             #     self.df_corr[1][j].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[j])

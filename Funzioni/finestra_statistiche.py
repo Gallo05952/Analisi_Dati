@@ -15,7 +15,7 @@ class FinestraStatistiche:
     def Finestra(self):
         self.finestra_stat = tk.Toplevel(self.root)
         self.finestra_stat.title("Finestra Statistiche")
-        self.finestra_stat.geometry("800x350")
+        self.finestra_stat.geometry("1000x350")
 
         # CREAZIONE DELLE VARIABILI PER I CHECKBUTTON
         try:
