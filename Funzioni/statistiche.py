@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import tkinter as tk
 
 class Statistica:
     def __init__(self,df,daFare):
@@ -63,10 +64,24 @@ class Statistica:
         statistiche = {}
         for col in self.df.columns:
             statistiche[col] = self.calcola_statistiche(col)
-        skewness = self.df.skew()
-        kurtosis = self.df.kurtosis()
-        statistiche['Skewness'] = skewness
-        statistiche['Kurtosis'] = kurtosis
+        if self.daFare[7]:
+            try:
+                statistiche['Skewness'] = self.df.skew()
+                print(self.df.skew())
+            except Exception as e:
+                tk.messagebox.showinfo("Errore", f"Errore nel calcolo della skewness: {e}")
+        else:
+            tk.messagebox.showinfo("Errore", "Errore nel calcolo della skewness")
+        
+        if self.daFare[8]:
+            try:
+                statistiche['Kurtosis'] = self.df.kurtosis()
+                print(self.df.kurtosis())
+            except Exception as e:
+                tk.messagebox.showinfo("Errore", f"Errore nel calcolo della kurtosis: {e}")
+        else:
+            tk.messagebox.showinfo("Errore", "Errore nel calcolo della kurtosis")
+        
         return statistiche
     
     def calcola_statistiche(self, col):

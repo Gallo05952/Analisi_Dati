@@ -455,6 +455,8 @@ def Correlzioniamo(finestra_principale, df_unione, df_filtrato, bottone_correlaz
             df_corr_grezze.append(pd.DataFrame(corr_grezze[i]))
     else:
         df_corr_grezze = None
+    print("Correlazioni grezze")
+    print(df_corr_grezze)
     if corr_filtrate is not None:
         df_corr_filtrate=[]
         for i in range(len(corr_filtrate)):
@@ -463,14 +465,51 @@ def Correlzioniamo(finestra_principale, df_unione, df_filtrato, bottone_correlaz
         print(df_corr_filtrate)
     else:
         df_corr_filtrate = ""
-
+    print("Correlazioni filtrate")
+    print(preferenze_corr)
     df_correlazione = [df_corr_grezze, df_corr_filtrate]
 
     if df_correlazione[0] is not None or df_correlazione[1] is not None:
         bottone_correlazione.config(bg="light green")
 
+def Distribuzioni(fine, df_u, df_filtrato, bottone_distribuzioni):
+    global df_distr, preferenze_dist
+    finestra_distr = FinestraDistribuzioni(root, df_Unito, df_filtrato)
+    finestra_distr.Finestra()
+    fine.wait_window(finestra_distr.finestra_dist)
+    distr_grezze, distr_filtrate, preferenze_dist = finestra_distr.get_distr()
+    print("Distribuzioni grezze0")
+    print(distr_grezze)
+    if distr_grezze is not None or distr_filtrate is not None:
+        bottone_distribuzioni.config(bg="light green")
+    
+    if distr_grezze is not None:
+        df_distr_grezze = []
+        for key in distr_grezze.keys():
+            print(key)
+            df_distr_grezze.append(pd.DataFrame(distr_grezze[key], index=[0]))
+
+    else:
+        df_distr_grezze = None
+    
+    if distr_filtrate is not None:
+        df_distr_filtrate = []
+        for key in distr_filtrate.keys():
+            df_distr_filtrate.append(pd.DataFrame(distr_filtrate[key], index=[0]))
+
+        print("Distribuzioni filtrate")
+        print(df_distr_filtrate)
+    else:
+        df_distr_filtrate = None
+    print("Distribuzioni grezze")
+    print(df_distr_grezze)
+
+    df_distr = [df_distr_grezze, df_distr_filtrate]
+    print(type(df_distr[0]))
+
+
 def Salva():
-    fines_salva=FinestraSalvataggio(root, df_Unito, df_filtrato, df_statistiche, df_correlazione, preferenze_corr)
+    fines_salva=FinestraSalvataggio(root, df_Unito, df_filtrato, df_statistiche, df_correlazione, preferenze_corr, df_distr, preferenze_dist)
     fines_salva.Finestra()
 
 def Grafici_Variabili():
@@ -505,13 +544,6 @@ def CalcoloCOP(bottone_cop):
     # Calcola il COP
     df_Unito=ScambioTermico(df_Unito).Calcolo()
 
-def Distribuzioni(fine,df,df_filtrato,bottone_distribuzioni):
-    global df_distr
-    finestra_distr = FinestraDistribuzioni(root, df, df_filtrato)
-    finestra_distr.Finestra()
-    fine.wait_window(finestra_distr.finestra_distr)
-
-
 #MAIN RUN
 try:
     df = None
@@ -520,6 +552,8 @@ try:
     df_statistiche = None
     df_correlazione = None
     preferenze_corr = None
+    df_distr = None
+    preferenze_dist = None
     root = tk.Tk()
     app=App(root)
     root.mainloop()

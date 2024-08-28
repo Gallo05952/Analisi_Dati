@@ -1,16 +1,19 @@
 import tkinter as tk
 from tkinter import messagebox,filedialog,ttk
 import os
+import numpy as np
 
 class FinestraSalvataggio:
 
-    def __init__(self, root, df, df_filtrato, df_statistiche,df_corr, preferenze):
+    def __init__(self, root, df, df_filtrato, df_statistiche,df_corr, preferenze,df_distribuzioni,pref_distribuzioni):
         self.root = root
         self.df = df
         self.df_filtrato = df_filtrato
         self.df_statistiche = df_statistiche
         self.df_corr = df_corr
         self.preferenze = preferenze
+        self.df_distribuzioni = df_distribuzioni
+        self.pref_distribuzioni = pref_distribuzioni
         self.percorso_path = None
         self.nomefile_entry = None
         self.lim_valvolaSfiato_var = None
@@ -23,11 +26,12 @@ class FinestraSalvataggio:
         self.Valv_max_A = None
         self.val_mass = None
         self.val_pot = None
+        self.percorso = None
     
     def Finestra(self):
         self.finestra_salva = tk.Toplevel(self.root)
         self.finestra_salva.title("Finestra Salvataggio")
-        self.finestra_salva.geometry("1500x400")
+        self.finestra_salva.geometry("1500x600")
         
         # SEZIONE SALVATAGGIO
         testoSalva = tk.Label(self.finestra_salva,
@@ -78,6 +82,8 @@ class FinestraSalvataggio:
         self.salva_correlazioni_filt = tk.BooleanVar()
         self.lim_valvolaSfiato_var = tk.BooleanVar()
         self.limite_ASKI_var = tk.BooleanVar()
+        self.salva_disrtibuzioni = tk.BooleanVar()
+        self.salva_disrtibuzioni_filt = tk.BooleanVar()
 
         self.salva_grezzi_cb = tk.Checkbutton(self.finestra_salva, 
                                             text="Dati grezzi", 
@@ -115,6 +121,20 @@ class FinestraSalvataggio:
                                 variable=self.salva_correlazioni_filt,
                                 font=("Helvetica", 12))
         self.salva_correlazioni_filt_cb.grid(row=6, column=1)
+
+        self.salva_distribuzioni_cb = tk.Checkbutton(
+                                self.finestra_salva,
+                                text="Distribuzioni", 
+                                variable=self.salva_disrtibuzioni,
+                                font=("Helvetica", 12))
+        self.salva_distribuzioni_cb.grid(row=7, column=0)
+
+        self.salva_distribuzioni_filt_cb = tk.Checkbutton(
+                                self.finestra_salva,
+                                text="Distribuzioni Filtrati", 
+                                variable=self.salva_disrtibuzioni_filt,
+                                font=("Helvetica", 12)) 
+        self.salva_distribuzioni_filt_cb.grid(row=7, column=1)
 
         #empty row
         self.empty = tk.Label(self.finestra_salva, text="")
@@ -157,16 +177,22 @@ class FinestraSalvataggio:
 
         # Collegamento dell'evento <<ComboboxSelected>> alla funzione gestioneS
         self.gestione_scaldiglia.bind("<<ComboboxSelected>>", self.gestioneS)
-
+        note_label = tk.Label(self.finestra_salva, text="Inserisci eventuali note:", font=("Helvetica", 14), fg="red")
+        note_label.grid(row=10, column=0, columnspan=2)
+        self.note_textbox = tk.Text(self.finestra_salva, height=5, width=50)
+        self.note_textbox.grid(row=11, column=0, columnspan=3)
         # Posizionamento del Combobox nella griglia
         self.gestione_scaldiglia.grid(row=5, column=8)
         #bottone per salvare
+        #empty row
+        self.empty = tk.Label(self.finestra_salva, text="")
+        self.empty.grid(row=12, column=0)
         self.salva = tk.Button(self.finestra_salva,
                                 text="Salva", 
                                 font=("Helvetica", 14),
                                 bg="light grey",
                                 command=self.salva)
-        self.salva.grid(row=9, column=0)
+        self.salva.grid(row=13, column=0)
 
 
     def scegli_percorso(self):
@@ -221,63 +247,235 @@ class FinestraSalvataggio:
             data["Scaldiglia libera"] = [""]
         # Creazione del DataFrame
         df_condizioni = pd.DataFrame(data)
-        with pd.ExcelWriter(self.percorso+"/"+nomefile+".xlsx",engine='xlsxwriter') as writer:
-            df_condizioni.to_excel(writer, sheet_name="Condizioni di prova")
-            if self.salva_grezzi.get():
-                if self.df is None:
-                    messagebox.showinfo("Attenzione", "Non ci sono dati grezzi da salvare")
+        testo = """
+INTERPRETAZIONE DEI RISULTATI:
+STATISTICHE DESCRITTIVE:
+- Skewness = 0: distribuzione simmetrica (potenzialmente normale)
+- Skewness > 0: coda destra più lunga (distribuzione asimmetrica positiva)
+- Skewness < 0: coda sinistra più lunga (distribuzione asimmetrica negativa)
+
+- Kurtosis = 3: distribuzione simile a quella normale
+- Kurtosis > 3: distribuzione più "appuntita" (più picchiata)
+- Kurtosis < 3: distribuzione più "piatta" (meno picchiata)
+
+DISTRIBUZIONE NORMALE TEST:
+- Shapiro-Wilk: se il p-value è minore di 0.05, la distribuzione NON è normale
+- Kolmogorov-Smirnov: se il p-value è minore di 0.05, la distribuzione NON è normale
+- Jarque-Bera: se il p-value è minore di 0.05, la distribuzione NON è normale
+
+CORRELAZIONI:
+- Pearson: correlazione lineare e presuppone una distribuzione normale
+(Valori di riferimento: 0.1 < r < 0.3 debole, 0.3 < r < 0.5 moderata, r > 0.5 forte)
+- Spearman: correlazione non lineare e non presuppone una distribuzione normale (La correlazione di Spearman misura la forza di associazione tra due variabili ordinali o continue. Si basa sui ranghi delle osservazioni.)
+- Kendall: correlazione non lineare e non presuppone una distribuzione normale (La correlazione di Kendall misura la forza di associazione tra due variabili ordinali. Si basa sulle concordanze e discordanze nei ranghi delle osservazioni.)
+""" 
+        if self.percorso is not None:       
+            with pd.ExcelWriter(self.percorso+"/"+nomefile+".xlsx",engine='xlsxwriter') as writer:
+                df_condizioni.to_excel(writer, sheet_name="Condizioni di prova")
+                workbook = writer.book
+                worksheet = writer.sheets["Condizioni di prova"]
+                
+                # Calcolo della posizione per la casella di testo (sotto il DataFrame)
+                if self.note_textbox:
+                    start_row_note = len(df_condizioni) + 2  # Aggiungi 2 righe di spazio
+                    worksheet.insert_textbox(start_row_note, 0, self.note_textbox.get("1.0", "end"))
+                    start_row = len(df_condizioni) + 2  # Aggiungi 2 righe di spazio
+                    start_col = 4
                 else:
-                    self.df.to_excel(writer, sheet_name="Dati grezzi")
-            if self.salva_filtrati.get():
-                if self.df_filtrato is None:
-                    messagebox.showinfo("Attenzione", "Non ci sono dati filtrati da salvare")
-                else:
-                    self.df_filtrato.to_excel(writer, sheet_name="Dati filtrati")
-            if self.salva_statistiche.get():
-                if self.df_statistiche is None:
-                    messagebox.showinfo("Attenzione", "Non ci sono statistiche da salvare")
-                else:
-                    self.df_statistiche[0].to_excel(writer, sheet_name="Statistiche Grezzi")
-            if self.salva_statistiche_filt.get():
-                if self.df_statistiche is None:
-                    messagebox.showinfo("Attenzione", "Non ci sono statistiche da salvare")
-                else:
-                    self.df_statistiche[1].to_excel(writer, sheet_name="Statistiche Filtrati")
-            if self.salva_correlazioni.get():
-                if self.df_corr[0] is None:
-                    messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
-                else:
-                    # df_corr è una lista con dentro due liste con dentro potenzialmente 3 dataframe il numero di dataframe lo posso vedere dalla lunghezza di preferenze
-                    i=0
-                    if len(self.df_corr[0]) == 0:
+                    start_row = len(df_condizioni) + 2
+                
+                # Aggiunta della casella di testo nel worksheet
+                worksheet.insert_textbox(start_row, start_col, testo, {'width': 1000, 'height': 1000})
+                if self.salva_grezzi.get():
+                    if self.df is None:
+                        messagebox.showinfo("Attenzione", "Non ci sono dati grezzi da salvare")
+                    else:
+                        self.df.to_excel(writer, sheet_name="Dati grezzi")
+                if self.salva_filtrati.get():
+                    if self.df_filtrato is None:
+                        messagebox.showinfo("Attenzione", "Non ci sono dati filtrati da salvare")
+                    else:
+                        self.df_filtrato.to_excel(writer, sheet_name="Dati filtrati")
+                if self.salva_statistiche.get():
+                    if self.df_statistiche is None:
+                        messagebox.showinfo("Attenzione", "Non ci sono statistiche da salvare")
+                    else:
+                        self.df_statistiche[0].to_excel(writer, sheet_name="Statistiche Grezzi")
+                if self.salva_statistiche_filt.get():
+                    if self.df_statistiche is None:
+                        messagebox.showinfo("Attenzione", "Non ci sono statistiche da salvare")
+                    else:
+                        self.df_statistiche[1].to_excel(writer, sheet_name="Statistiche Filtrati")
+                if self.salva_correlazioni.get():
+                    if self.df_corr[0] is None:
                         messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
-                    for i in range(len(self.df_corr[0])):
-                        if self.df_corr[0][i] is not None:
-                            sheet_name = "Correlazioni Grezzi " + self.preferenze[i]
-                            # worksheet = writer.sheets[sheet_name]
-                            self.df_corr[0][i].to_excel(writer, sheet_name=sheet_name)
-                            worksheet = writer.sheets[sheet_name]
-                            self.format_cells(worksheet,writer)
-                            # self.df_corr[0][i].to_excel(writer, sheet_name="Correlazioni Grezzi "+ self.preferenze[i])
-            if self.salva_correlazioni_filt.get():
-                print("Salvataggio correlazioni filtrati")
-                if self.df_corr[1] is None:
-                    messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
-                else:
-                    j=0
-                    if len(self.df_corr[1]) == 0:
+                    else:
+                        # df_corr è una lista con dentro due liste con dentro potenzialmente 3 dataframe il numero di dataframe lo posso vedere dalla lunghezza di preferenze
+                        i=0
+                        print("lunghezza df_corr",len(self.df_corr[0]))
+                        print("lunghezza preferenze",len(self.preferenze))
+                        if len(self.df_corr[0]) == 0:
+                            messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
+                        for i in range(len(self.df_corr[0])):
+                            if self.df_corr[0][i] is not None:
+                                print(i)
+                                sheet_name = "Correlazioni Grezzi " + self.preferenze[i]
+                                # worksheet = writer.sheets[sheet_name]
+                                self.df_corr[0][i].to_excel(writer, sheet_name=sheet_name)
+                                if self.preferenze[j] == "Pearson":
+                                    worksheet = writer.sheets[sheet_name]
+                                    self.format_cells(worksheet,writer)
+                                # self.df_corr[0][i].to_excel(writer, sheet_name="Correlazioni Grezzi "+ self.preferenze[i])
+                if self.salva_correlazioni_filt.get():
+                    print("Salvataggio correlazioni filtrati")
+                    if self.df_corr[1] is None:
                         messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
-                    print(len(self.df_corr[1]))
-                    for j in range(len(self.df_corr[1])):
-                        if not self.df_corr[1][j].empty:
-                            sheet_name = "Correlazioni Filtrati " + self.preferenze[j]
-                            self.df_corr[1][j].to_excel(writer, sheet_name=sheet_name)
-                            worksheet = writer.sheets[sheet_name]
-                            self.format_cells(worksheet,writer)
-                        # if not self.df_corr[1][j].empty:
-                        #     print("Salvataggio correlazioni filtrati 2")
-                        #     self.df_corr[1][j].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[j])
-        messagebox.showinfo("Salvataggio", "Salvataggio completato")
+                    else:
+                        j=0
+                        if len(self.df_corr[1]) == 0:
+                            messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
+                        print(len(self.df_corr[1]))
+                        for j in range(len(self.df_corr[1])):
+                            if not self.df_corr[1][j].empty:
+                                sheet_name = "Correlazioni Filtrati " + self.preferenze[j]
+                                self.df_corr[1][j].to_excel(writer, sheet_name=sheet_name)
+                                if self.preferenze[j] == "Pearson":
+                                    worksheet = writer.sheets[sheet_name]
+                                    self.format_cells(worksheet,writer)
+
+                            # if not self.df_corr[1][j].empty:
+                            #     print("Salvataggio correlazioni filtrati 2")
+                            #     self.df_corr[1][j].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[j])
+                if self.salva_disrtibuzioni.get():
+                    print("Salvataggio distribuzione grezzi iniziato")
+                    if self.df_distribuzioni[0] is None:
+                        messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
+                    else:
+                        if len(self.df_distribuzioni[0]) == 0:
+                            messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
+                        else:
+                            # Creiamo un dizionario per raccogliere i dati per ogni test
+                            test_data = {
+                                "Shapiro-Wilk": [],
+                                "Kolmogorov-Smirnov": [],
+                                "Jarque-Bera": []
+                            }
+                            data_as_lists_SW = []
+                            data_as_lists_KS = []
+                            data_as_lists_JB = []
+                            # Iteriamo attraverso i DataFrame e raccogliamo i dati per ogni test
+                            for df in self.df_distribuzioni[0]:
+                                if df is not None:
+                                    if "Shapiro-Wilk" in df.columns:
+                                        test_data["Shapiro-Wilk"].append(df["Shapiro-Wilk"])
+                                        data_as_lists_SW = [serie.tolist() for serie in test_data["Shapiro-Wilk"]]
+                                    if "Kolmogorov-Smirnov" in df.columns:
+                                        test_data["Kolmogorov-Smirnov"].append(df["Kolmogorov-Smirnov"])
+                                        data_as_lists_KS = [serie.tolist() for serie in test_data["Kolmogorov-Smirnov"]]
+                                    if "Jarque-Bera" in df.columns:
+                                        test_data["Jarque-Bera"].append(df["Jarque-Bera"])
+                                        data_as_lists_JB = [serie.tolist() for serie in test_data["Jarque-Bera"]]
+
+                            # Scriviamo i dati raccolti in fogli di lavoro separati
+                            nomi_colonne = list(self.df.columns[1:])
+                            print("nomi colonne", nomi_colonne)  # 
+                            max_length = max(len(data_as_lists_SW), len(data_as_lists_KS), len(data_as_lists_JB),len(nomi_colonne))
+
+# Aggiungi NaN alle liste più corte fino a raggiungere la lunghezza massima
+                            data_as_lists_SW.extend([np.nan] * (max_length - len(data_as_lists_SW)))
+                            data_as_lists_KS.extend([np.nan] * (max_length - len(data_as_lists_KS)))
+                            data_as_lists_JB.extend([np.nan] * (max_length - len(data_as_lists_JB)))
+                            nomi_colonne.extend([np.nan] * (max_length - len(nomi_colonne)))
+                            # Crea un dizionario con i dati
+                            data_dict = {
+                                'Variabili': nomi_colonne,
+                                'Shapiro-Wilk': data_as_lists_SW,
+                                'Kolmogorov-Smirnov': data_as_lists_KS,
+                                'Jarque-Bera': data_as_lists_JB
+                            }
+
+                            # Crea il DataFrame utilizzando il dizionario
+                            df_prova = pd.DataFrame(data_dict)
+                            print("df_prova", df_prova)
+                            # Converti i valori delle colonne in numerici
+                            df_prova['Shapiro-Wilk'] = df_prova['Shapiro-Wilk'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
+                            df_prova['Kolmogorov-Smirnov'] = df_prova['Kolmogorov-Smirnov'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
+                            df_prova['Jarque-Bera'] = df_prova['Jarque-Bera'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
+
+                            # Assicurati che i valori siano di tipo numerico
+                            df_prova['Shapiro-Wilk'] = pd.to_numeric(df_prova['Shapiro-Wilk'], errors='coerce')
+                            df_prova['Kolmogorov-Smirnov'] = pd.to_numeric(df_prova['Kolmogorov-Smirnov'], errors='coerce')
+                            df_prova['Jarque-Bera'] = pd.to_numeric(df_prova['Jarque-Bera'], errors='coerce')
+
+                            print("df_prova", df_prova)
+                            df_prova.to_excel(writer, sheet_name="Distribuzione grezzi")
+                if self.salva_disrtibuzioni_filt.get():
+                    print("Salvataggio correlazioni filtrati")
+                    if self.df_distribuzioni[1] is None:
+                        messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
+                    else:
+                        if len(self.df_distribuzioni[1]) == 0:
+                            messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
+                        else:
+                            # Creiamo un dizionario per raccogliere i dati per ogni test
+                            test_data = {
+                                "Shapiro-Wilk": [],
+                                "Kolmogorov-Smirnov": [],
+                                "Jarque-Bera": []
+                            }
+                            data_as_lists_SW = []
+                            data_as_lists_KS = []
+                            data_as_lists_JB = []
+                            # Iteriamo attraverso i DataFrame e raccogliamo i dati per ogni test
+                            for df in self.df_distribuzioni[1]:
+                                if df is not None:
+                                    if "Shapiro-Wilk" in df.columns:
+                                        test_data["Shapiro-Wilk"].append(df["Shapiro-Wilk"])
+                                        data_as_lists_SW = [serie.tolist() for serie in test_data["Shapiro-Wilk"]]
+                                    if "Kolmogorov-Smirnov" in df.columns:
+                                        test_data["Kolmogorov-Smirnov"].append(df["Kolmogorov-Smirnov"])
+                                        data_as_lists_KS = [serie.tolist() for serie in test_data["Kolmogorov-Smirnov"]]
+                                    if "Jarque-Bera" in df.columns:
+                                        test_data["Jarque-Bera"].append(df["Jarque-Bera"])
+                                        data_as_lists_JB = [serie.tolist() for serie in test_data["Jarque-Bera"]]
+
+                            # Scriviamo i dati raccolti in fogli di lavoro separati
+                            nomi_colonne = list(self.df.columns[1:])
+                            print("nomi colonne", nomi_colonne)
+                            max_length = max(len(data_as_lists_SW), len(data_as_lists_KS), len(data_as_lists_JB), len(nomi_colonne))
+
+                            # Aggiungi NaN alle liste più corte fino a raggiungere la lunghezza massima
+                            data_as_lists_SW.extend([np.nan] * (max_length - len(data_as_lists_SW)))
+                            data_as_lists_KS.extend([np.nan] * (max_length - len(data_as_lists_KS)))
+                            data_as_lists_JB.extend([np.nan] * (max_length - len(data_as_lists_JB)))
+                            nomi_colonne.extend([np.nan] * (max_length - len(nomi_colonne)))
+
+                            # Crea un dizionario con i dati
+                            data_dict = {
+                                'Variabili': nomi_colonne,
+                                'Shapiro-Wilk': data_as_lists_SW,
+                                'Kolmogorov-Smirnov': data_as_lists_KS,
+                                'Jarque-Bera': data_as_lists_JB
+                            }
+
+                            # Crea il DataFrame utilizzando il dizionario
+                            df_prova = pd.DataFrame(data_dict)
+                            print("df_prova", df_prova)
+                            # Converti i valori delle colonne in numerici
+                            df_prova['Shapiro-Wilk'] = df_prova['Shapiro-Wilk'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
+                            df_prova['Kolmogorov-Smirnov'] = df_prova['Kolmogorov-Smirnov'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
+                            df_prova['Jarque-Bera'] = df_prova['Jarque-Bera'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
+
+                            # Assicurati che i valori siano di tipo numerico
+                            df_prova['Shapiro-Wilk'] = pd.to_numeric(df_prova['Shapiro-Wilk'], errors='coerce')
+                            df_prova['Kolmogorov-Smirnov'] = pd.to_numeric(df_prova['Kolmogorov-Smirnov'], errors='coerce')
+                            df_prova['Jarque-Bera'] = pd.to_numeric(df_prova['Jarque-Bera'], errors='coerce')
+
+                            print("df_prova", df_prova)
+                            df_prova.to_excel(writer, sheet_name="Distribuzione filtrati")
+            messagebox.showinfo("Salvataggio", "Salvataggio completato")
+        else:
+            messagebox.showinfo("Attenzione", "Selezionare un percorso")
 
     def format_cells(self,worksheet,writer):
         red_format = writer.book.add_format({'bg_color': '#FFC7CE'})
