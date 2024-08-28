@@ -3,6 +3,7 @@ import numpy as np
 from tkinter import messagebox
 from Funzioni import *
 import tkinter.ttk as ttk
+import pandas as pd
 
 class FinestraStatistiche:
 
@@ -281,13 +282,29 @@ class FinestraStatistiche:
         if self.massimo_var.get():
             statistiche["Massimo"] = self.Massimo(col,dataframe)
         if self.Skewness_var.get():
-            if dataframe[col].dtype is not 'datetime64':
+            if pd.api.types.is_datetime64_any_dtype(dataframe[col]):
+                # Passa oltre se è un datetime
+                pass
+            else:
+                # Converte i valori in numerici e applica skewness
+                dataframe[col] = pd.to_numeric(dataframe[col], errors='coerce')
                 statistiche['Skewness'] = dataframe[col].skew()
-            else:
-                tk.messagebox.showinfo("Errore", f"I dati della colonna {col} non sono di tipo numerico e non possono essere elaborati per la skewness.")
         if self.Kurtosis_var.get():
-            if dataframe[col].dtype in ['int64', 'float64']:
-                statistiche['Kurtosis'] = dataframe[col].kurtosis()
+            if pd.api.types.is_datetime64_any_dtype(dataframe[col]):
+                # Passa oltre se è un datetime
+                pass
             else:
-                tk.messagebox.showinfo("Errore", f"I dati della colonna {col} non sono di tipo numerico e non possono essere elaborati per la kurtosis.")
+                # Converte i valori in numerici e applica kurtosis
+                dataframe[col] = pd.to_numeric(dataframe[col], errors='coerce')
+                statistiche['Kurtosis'] = dataframe[col].kurtosis()
+        # if self.Skewness_var.get():
+        #     if dataframe[col].dtype is not 'datetime64':
+        #         statistiche['Skewness'] = dataframe[col].skew()
+        #     else:
+        #         tk.messagebox.showinfo("Errore", f"I dati della colonna {col} non sono di tipo numerico e non possono essere elaborati per la skewness.")
+        # if self.Kurtosis_var.get():
+        #     if dataframe[col].dtype in ['int64', 'float64']:
+        #         statistiche['Kurtosis'] = dataframe[col].kurtosis()
+        #     else:
+        #         tk.messagebox.showinfo("Errore", f"I dati della colonna {col} non sono di tipo numerico e non possono essere elaborati per la kurtosis.")
         return statistiche

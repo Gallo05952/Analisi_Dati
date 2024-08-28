@@ -246,7 +246,7 @@ class FinestraSalvataggio:
         df_condizioni = pd.DataFrame(data)
         testo = """
 INTERPRETAZIONE DEI RISULTATI:
-
+STATISTICHE DESCRITTIVE:
 - Skewness = 0: distribuzione simmetrica (potenzialmente normale)
 - Skewness > 0: coda destra più lunga (distribuzione asimmetrica positiva)
 - Skewness < 0: coda sinistra più lunga (distribuzione asimmetrica negativa)
@@ -254,6 +254,17 @@ INTERPRETAZIONE DEI RISULTATI:
 - Kurtosis = 3: distribuzione simile a quella normale
 - Kurtosis > 3: distribuzione più "appuntita" (più picchiata)
 - Kurtosis < 3: distribuzione più "piatta" (meno picchiata)
+
+DISTRIBUZIONE NORMALE TEST:
+- Shapiro-Wilk: se il p-value è minore di 0.05, la distribuzione NON è normale
+- Kolmogorov-Smirnov: se il p-value è minore di 0.05, la distribuzione NON è normale
+- Jarque-Bera: se il p-value è minore di 0.05, la distribuzione NON è normale
+
+CORRELAZIONI:
+- Pearson: correlazione lineare e presuppone una distribuzione normale
+(Valori di riferimento: 0.1 < r < 0.3 debole, 0.3 < r < 0.5 moderata, r > 0.5 forte)
+- Spearman: correlazione non lineare e non presuppone una distribuzione normale (La correlazione di Spearman misura la forza di associazione tra due variabili ordinali o continue. Si basa sui ranghi delle osservazioni.)
+- Kendall: correlazione non lineare e non presuppone una distribuzione normale (La correlazione di Kendall misura la forza di associazione tra due variabili ordinali. Si basa sulle concordanze e discordanze nei ranghi delle osservazioni.)
 """ 
         if self.percorso is not None:       
             with pd.ExcelWriter(self.percorso+"/"+nomefile+".xlsx",engine='xlsxwriter') as writer:
@@ -271,7 +282,7 @@ INTERPRETAZIONE DEI RISULTATI:
                     start_row = len(df_condizioni) + 2
                 
                 # Aggiunta della casella di testo nel worksheet
-                worksheet.insert_textbox(start_row, start_col, testo, {'width': 400, 'height': 100})
+                worksheet.insert_textbox(start_row, start_col, testo, {'width': 1000, 'height': 1000})
                 if self.salva_grezzi.get():
                     if self.df is None:
                         messagebox.showinfo("Attenzione", "Non ci sono dati grezzi da salvare")
@@ -389,9 +400,6 @@ INTERPRETAZIONE DEI RISULTATI:
 
                             print("df_prova", df_prova)
                             df_prova.to_excel(writer, sheet_name="Distribuzione grezzi")
-
-
-
                 if self.salva_disrtibuzioni_filt.get():
                     print("Salvataggio correlazioni filtrati")
                     if self.df_distribuzioni[1] is None:
