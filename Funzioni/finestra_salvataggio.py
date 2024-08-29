@@ -290,12 +290,12 @@ CORRELAZIONI:
                     if self.df is None:
                         messagebox.showinfo("Attenzione", "Non ci sono dati grezzi da salvare")
                     else:
-                        self.df.to_excel(writer, sheet_name="Dati grezzi")
+                        self.df.to_excel(writer, sheet_name="Dati Grezzi")
                 if self.salva_filtrati.get():
                     if self.df_filtrato is None:
                         messagebox.showinfo("Attenzione", "Non ci sono dati filtrati da salvare")
                     else:
-                        self.df_filtrato.to_excel(writer, sheet_name="Dati filtrati")
+                        self.df_filtrato.to_excel(writer, sheet_name="Dati Filtrati")
                 if self.salva_statistiche.get():
                     if self.df_statistiche is None:
                         messagebox.showinfo("Attenzione", "Non ci sono statistiche da salvare")
@@ -408,7 +408,7 @@ CORRELAZIONI:
                             df_prova['Jarque-Bera'] = pd.to_numeric(df_prova['Jarque-Bera'], errors='coerce')
 
                             print("df_prova", df_prova)
-                            df_prova.to_excel(writer, sheet_name="Distribuzione grezzi")
+                            df_prova.to_excel(writer, sheet_name="Distribuzione Grezzi")
                 if self.salva_disrtibuzioni_filt.get():
                     print("Salvataggio correlazioni filtrati")
                     if self.df_distribuzioni[1] is None:
@@ -472,7 +472,7 @@ CORRELAZIONI:
                             df_prova['Jarque-Bera'] = pd.to_numeric(df_prova['Jarque-Bera'], errors='coerce')
 
                             print("df_prova", df_prova)
-                            df_prova.to_excel(writer, sheet_name="Distribuzione filtrati")
+                            df_prova.to_excel(writer, sheet_name="Distribuzione Filtrati")
             messagebox.showinfo("Salvataggio", "Salvataggio completato")
         else:
             messagebox.showinfo("Attenzione", "Selezionare un percorso")
