@@ -5,7 +5,7 @@ import numpy as np
 
 class FinestraSalvataggio:
 
-    def __init__(self, root, df, df_filtrato, df_statistiche,df_corr, preferenze,df_distribuzioni,pref_distribuzioni):
+    def __init__(self, root, df, df_filtrato, df_statistiche,df_corr, preferenze,df_distribuzioni,pref_distribuzioni,distribution,distribution_filt):
         self.root = root
         self.df = df
         self.df_filtrato = df_filtrato
@@ -27,6 +27,8 @@ class FinestraSalvataggio:
         self.val_mass = None
         self.val_pot = None
         self.percorso = None
+        self.distribution = distribution
+        self.distribution_filt = distribution_filt
     
     def Finestra(self):
         self.finestra_salva = tk.Toplevel(self.root)
@@ -322,7 +324,7 @@ CORRELAZIONI:
                                 sheet_name = "Correlazioni Grezzi " + self.preferenze[i]
                                 # worksheet = writer.sheets[sheet_name]
                                 self.df_corr[0][i].to_excel(writer, sheet_name=sheet_name)
-                                if self.preferenze[j] == "Pearson":
+                                if self.preferenze[i] == "Pearson":
                                     worksheet = writer.sheets[sheet_name]
                                     self.format_cells(worksheet,writer)
                                 # self.df_corr[0][i].to_excel(writer, sheet_name="Correlazioni Grezzi "+ self.preferenze[i])
@@ -348,8 +350,16 @@ CORRELAZIONI:
                             #     self.df_corr[1][j].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[j])
                 if self.salva_disrtibuzioni.get():
                     print("Salvataggio distribuzione grezzi iniziato")
-                    if self.df_distribuzioni[0] is None:
+                    if self.df_distribuzioni[0] is None and not self.distribution:
                         messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
+                    elif self.distribution and self.df_distribuzioni[0] is None:   
+                        print(self.distribution) 
+                        df_all_distributions = pd.DataFrame()                   
+                        for col, dist in self.distribution:
+                                df_dist = dist.reset_index()
+                                df_dist.columns = [f'{col}_intervallo', 'conteggio']
+                                df_all_distributions = pd.concat([df_all_distributions, df_dist], axis=1)
+                        df_all_distributions.to_excel(writer, sheet_name='Distribuzioni Grezzi', index=False)
                     else:
                         if len(self.df_distribuzioni[0]) == 0:
                             messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
@@ -411,8 +421,15 @@ CORRELAZIONI:
                             df_prova.to_excel(writer, sheet_name="Distribuzione Grezzi")
                 if self.salva_disrtibuzioni_filt.get():
                     print("Salvataggio correlazioni filtrati")
-                    if self.df_distribuzioni[1] is None:
+                    if self.df_distribuzioni[1] is None and not self.distribution_filt:
                         messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
+                    elif self.distribution_filt and self.df_distribuzioni[1] is None:   
+                        df_all_distributions_filt = pd.DataFrame()                   
+                        for col, dist in self.distribution_filt:
+                                df_dist_f = dist.reset_index()
+                                df_dist_f.columns = [f'{col}_intervallo', 'conteggio']
+                                df_all_distributions_filt = pd.concat([df_all_distributions_filt, df_dist_f], axis=1)
+                        df_all_distributions_filt.to_excel(writer, sheet_name='Distribuzioni Filtrati', index=False)
                     else:
                         if len(self.df_distribuzioni[1]) == 0:
                             messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
@@ -472,7 +489,7 @@ CORRELAZIONI:
                             df_prova['Jarque-Bera'] = pd.to_numeric(df_prova['Jarque-Bera'], errors='coerce')
 
                             print("df_prova", df_prova)
-                            df_prova.to_excel(writer, sheet_name="Distribuzione Filtrati")
+                            df_prova.to_excel(writer, sheet_name="Distribuzione Filtrati")                       
             messagebox.showinfo("Salvataggio", "Salvataggio completato")
         else:
             messagebox.showinfo("Attenzione", "Selezionare un percorso")

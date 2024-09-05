@@ -473,10 +473,77 @@ def Correlzioniamo(finestra_principale, df_unione, df_filtrato, bottone_correlaz
         bottone_correlazione.config(bg="light green")
 
 def Distribuzioni(fine, df_u, df_filtrato, bottone_distribuzioni):
-    global df_distr, preferenze_dist
+    global df_distr, preferenze_dist, result_dist_grezzi, distribution,distribution_filt
+    distribution = []
+    if not df_Unito.empty:
+        df_Unito2 = df_Unito.copy().drop(columns=['Data','Riferimento'])
+        df_Unito2 = df_Unito2.apply(pd.to_numeric, errors='coerce')
+        print("Colonne di df_Unito2:", df_Unito2.columns)
+        for col in df_Unito2.columns:
+            if col != 'Data':
+                mean_value = df_Unito2[col].mean()
+                interval_size = 0.01 * mean_value  # Intervallo basato sulla media della colonna
+                print(col)
+                # Verifica se la colonna contiene solo valori numerici
+                if pd.api.types.is_numeric_dtype(df_Unito2[col]):
+                    # Creare intervalli proporzionali alla media
+                    df_Unito2[f'{col}_intervallo'] = pd.cut(df_Unito2[col], 
+                                        bins=pd.interval_range(start=df_Unito2[col].min(),
+                                        end=df_Unito2[col].max(), 
+                                        freq=interval_size))
+
+                    # Contare i valori per ogni intervallo
+                    dist = df_Unito2[f'{col}_intervallo'].value_counts().sort_index()
+                    interval_means = [(interval.left + interval.right) / 2 for interval in dist.index]
+
+            # Replace the intervals with their mean values
+                    dist.index = interval_means
+                    distribution.append((col, dist)) 
+                    print(f"Distribuzione di {col}:", dist.values)
+                else:
+                    print(f"Colonna {col} non è numerica e verrà saltata.")
+            print(distribution)
+            print(type(distribution))
+
+    if not df_filtrato.empty:
+        distribution_filt=[]
+        df_filtrato2 = df_filtrato.copy().drop(columns=['Data','Riferimento'])
+        df_filtrato2 = df_filtrato2.apply(pd.to_numeric, errors='coerce')
+        print("Colonne di df_filtrato2:", df_filtrato2.columns)
+        for col in df_filtrato2.columns:
+            if col != 'Data':
+                mean_value = df_filtrato2[col].mean()
+                interval_size = 0.01 * mean_value  # Intervallo basato sulla media della colonna
+                if pd.api.types.is_numeric_dtype(df_filtrato2[col]):
+                    start = df_filtrato2[col].min()
+                    end = df_filtrato2[col].max()
+                    
+                    # Verifica che interval_size sia positivo e che start ed end siano validi
+                    if interval_size > 0 and start < end:
+                        try:
+                            # Creare intervalli proporzionali alla media
+                            df_filtrato2[f'{col}_intervallo'] = pd.cut(df_filtrato2[col], 
+                                                bins=pd.interval_range(start=start, end=end, freq=interval_size))
+
+                            # Contare i valori per ogni intervallo
+                            dist = df_filtrato2[f'{col}_intervallo'].value_counts().sort_index()
+                            interval_means = [(interval.left + interval.right) / 2 for interval in dist.index]
+
+                            # Sostituire gli intervalli con i loro valori medi
+                            dist.index = interval_means 
+                            distribution_filt.append((col, dist))
+                            print(f"Distribuzione di {col}:", dist.values)
+                        except ValueError as e:
+                            print(f"Errore nella creazione degli intervalli per la colonna {col}: {e}")
+                else:
+                    print(f"Colonna {col} non è numerica e verrà saltata.")
+    
     finestra_distr = FinestraDistribuzioni(root, df_Unito, df_filtrato)
     finestra_distr.Finestra()
     fine.wait_window(finestra_distr.finestra_dist)
+    distr_grezze=None
+    distr_filtrate=None
+    preferenze_dist=None
     distr_grezze, distr_filtrate, preferenze_dist = finestra_distr.get_distr()
     print("Distribuzioni grezze0")
     print(distr_grezze)
@@ -484,6 +551,7 @@ def Distribuzioni(fine, df_u, df_filtrato, bottone_distribuzioni):
         bottone_distribuzioni.config(bg="light green")
     
     if distr_grezze is not None:
+
         df_distr_grezze = []
         for key in distr_grezze.keys():
             print(key)
@@ -491,6 +559,7 @@ def Distribuzioni(fine, df_u, df_filtrato, bottone_distribuzioni):
 
     else:
         df_distr_grezze = None
+        print("Beppe")
     
     if distr_filtrate is not None:
         df_distr_filtrate = []
@@ -501,15 +570,15 @@ def Distribuzioni(fine, df_u, df_filtrato, bottone_distribuzioni):
         print(df_distr_filtrate)
     else:
         df_distr_filtrate = None
+        print("Beppe2")
     print("Distribuzioni grezze")
     print(df_distr_grezze)
 
     df_distr = [df_distr_grezze, df_distr_filtrate]
-    print(type(df_distr[0]))
 
 
 def Salva():
-    fines_salva=FinestraSalvataggio(root, df_Unito, df_filtrato, df_statistiche, df_correlazione, preferenze_corr, df_distr, preferenze_dist)
+    fines_salva=FinestraSalvataggio(root, df_Unito, df_filtrato, df_statistiche, df_correlazione, preferenze_corr, df_distr, preferenze_dist,distribution,distribution_filt)
     fines_salva.Finestra()
 
 def Grafici_Variabili():
