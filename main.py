@@ -4,7 +4,11 @@ import numpy as np
 import pandas as pd
 from tkinter import messagebox
 from PIL import Image, ImageTk
+from scipy.stats import shapiro, kstest, jarque_bera
 
+'''
+Finestra di principale da cui è possibile caricare i file e fare le diverse operazioni
+'''
 def App(finesta_principale):
     finesta_principale.title("Analisi Dati")
     finesta_principale.geometry("1000x450")
@@ -15,7 +19,7 @@ def App(finesta_principale):
     df_Unito=pd.DataFrame()
     df_mTp=pd.DataFrame()
 
-    # LABEL
+    # Titolo della finestra
     label= tk.Label(finesta_principale,
                     text="Analisi Dati",
                     font=("Arial", 24, "bold"), 
@@ -27,7 +31,7 @@ def App(finesta_principale):
                         text="")
     empty_row.grid(row=1, column=0)
 
-    # LABEL FILE IN
+    #* LABEL FILE IN
     label_file_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
@@ -54,7 +58,7 @@ def App(finesta_principale):
                             fg="black")
     bottone_carica_file2.grid(row=2, column=2)
 
-    # LABEL FILE IN
+    #* LABEL FILE IN
     label_file2_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
@@ -70,7 +74,7 @@ def App(finesta_principale):
                             fg="black")
     bottone_carica_file3.grid(row=2, column=3)
 
-    # LABEL FILE IN
+    #* LABEL FILE IN
     label_file3_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
@@ -86,7 +90,7 @@ def App(finesta_principale):
                             fg="black")
     bottone_carica_file4.grid(row=2, column=4)
 
-    # LABEL FILE IN
+    #* LABEL FILE IN
     label_file4_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
@@ -102,7 +106,7 @@ def App(finesta_principale):
                             fg="black")
     bottone_carica_file5.grid(row=2, column=5)
 
-    # LABEL FILE IN
+    #* LABEL FILE IN
     label_file5_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
@@ -118,6 +122,7 @@ def App(finesta_principale):
                             fg="black")
     bottone_carica_file6.grid(row=2, column=6)
 
+    #* LABEL FILE IN
     label_file6_in = tk.Label(finesta_principale,
                             text="File in: ",
                             font=("Arial", 12))
@@ -133,6 +138,7 @@ def App(finesta_principale):
                             fg="black")
     bottone_carica_file7.grid(row=2, column=1)
 
+    #* LABEL FILE IN
     label_file7_in = tk.Label(finesta_principale,   
                             text="File in: ",
                             font=("Arial", 12))
@@ -141,7 +147,7 @@ def App(finesta_principale):
     #* BOTTONE unisci file
     bottone_unisci = tk.Button(finesta_principale,
                             text="Unisci",
-                            command=lambda: UnisciFile(),
+                            command=lambda: UnisciFile(bottone_cop,bottone_filtro,bottone_statistiche,bottone_correlazione,bottone_salva,bottone_distribuzioni,bottone_unisci),
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
@@ -160,7 +166,7 @@ def App(finesta_principale):
                         font=("Arial", 12),
                         fg="black")
     bottone_cop.grid(row=4, column=3)
-
+    bottone_cop.config(state=tk.DISABLED)
 
     #* BOTTONE FILTRO
     bottone_filtro = tk.Button(finesta_principale,
@@ -169,7 +175,7 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    # bottone_filtro.config(state=tk.DISABLED)
+    bottone_filtro.config(state=tk.DISABLED)
     bottone_filtro.grid(row=6, column=0)
 
     # EMPTY ROW
@@ -184,7 +190,7 @@ def App(finesta_principale):
                                     font=("Arial", 12),
                                     bg="light grey",
                                     fg="black")
-    # bottone_statistiche.config(state=tk.DISABLED)
+    bottone_statistiche.config(state=tk.DISABLED)
     bottone_statistiche.grid(row=8, column=0)
 
     # EMPTY ROW
@@ -199,7 +205,7 @@ def App(finesta_principale):
                                     bg="light grey",
                                     font=("Arial", 12),
                                     fg="black")
-    # bottone_correlazione.config(state=tk.DISABLED)
+    bottone_correlazione.config(state=tk.DISABLED)
     bottone_correlazione.grid(row=10, column=0)
 
     # EMPTY ROW
@@ -215,6 +221,7 @@ def App(finesta_principale):
                                     font=("Arial", 12),
                                     fg="black")
     bottone_distribuzioni.grid(row=6, column=3)
+    bottone_distribuzioni.config(state=tk.DISABLED)
 
     # BOTTONE SALVA
     bottone_salva = tk.Button(finesta_principale,
@@ -223,7 +230,7 @@ def App(finesta_principale):
                             bg="light grey",
                             font=("Arial", 12),
                             fg="black")
-    # bottone_salva.config(state=tk.DISABLED)
+    bottone_salva.config(state=tk.DISABLED)
     bottone_salva.grid(row=12, column=1)
 
     try:
@@ -244,29 +251,21 @@ def App(finesta_principale):
         print("Errore nel caricamento del logo: ", e)
 
 def Caricamento(label_file_in, bottone_carica_file, bottone_filtro, bottone_statistiche,bottone_correlazione, bottone_salva):
+    """
+    Funzione per caricare i file.
+    """
     # Riferimento alle variabili globali
     path, df_mTp = CaricaFile().file_input_sfoglia()
     label_file_in.config(text=path)
     if df_mTp is not None:
         df_DaUnire.append(df_mTp)
         print("Caricamento completato mTp")
-        # bottone_filtro.config(bg="light blue")
-        # bottone_filtro.config(state=tk.NORMAL)
         bottone_carica_file.config(bg="light blue")
-        # bottone_statistiche.config(bg="light blue")
-        # bottone_statistiche.config(state=tk.NORMAL)
-        # bottone_correlazione.config(bg="light blue")
-        # bottone_correlazione.config(state=tk.NORMAL)
-        # # bottone_grafici.config(bg="light blue")
-        # # bottone_grafici.config(state=tk.NORMAL)
-        # # bottone_grafici_stat.config(bg="light blue")
-        # # bottone_grafici_stat.config(state=tk.NORMAL)
-        # # bottone_grafici_corr.config(bg="light blue")
-        # # bottone_grafici_corr.config(state=tk.NORMAL)
-        # bottone_salva.config(bg="light blue")
-        # bottone_salva.config(state=tk.NORMAL)
 
 def Caricamento2(label_file_in, bottone_carica_file):
+    """
+    Funzione per caricare i file.
+    """
     # Utilizza la lista globale dfs_mRu per aggiungere nuovi DataFrame
     path, df= CaricaFile().file_input_sfoglia()  # Carica il file
     
@@ -317,7 +316,7 @@ def PulisciMRU(df):
 
     return df
 
-def UnisciFile():
+def UnisciFile(bottone_cop,bottone_filtro,bottone_statistiche,bottone_correlazione,bottone_salva,bottone_distribuzioni,bottone_unisci):
     global df_Unito
     df_MRU_Unito = UnisciMRU()
     if df_DaUnire:  # Check if df_DaUnire is empty
@@ -338,16 +337,27 @@ def UnisciFile():
 
         # Drop rows where all elements are NaN
         df_Unito.dropna(how='all', inplace=True)
-
+        bottone_unisci.config(bg="light green")
         print("Unione completata")
+
     else:
         df_Unito = df_MRU_Unito.copy()
     colonne = list(df_Unito.columns)
-    # aggiungi che se all'interno delle colonne c'è una colonna con il nome "Potenza generale QCO2" deve fare alcune operazioni
+    #! aggiungi che se all'interno delle colonne c'è una colonna con il nome "Potenza generale QCO2" deve fare alcune operazioni -> serve per calcolare la potenza totale
     if 'Potenza generale QCO2' in colonne:
         df_Unito['Potenza Totale'] = df_Unito['Potenza generale QCO2'] + df_Unito['Potenza compressore CO2 V110'] + df_Unito['Potenza chiller H2O F400']
     colonne = list(df_Unito.columns)
-    print(colonne)
+    # print(colonne)
+    #! Attiva i bottoni per le operazioni successive
+    try:
+        bottone_cop.config(state=tk.NORMAL)
+        bottone_filtro.config(state=tk.NORMAL)
+        bottone_statistiche.config(state=tk.NORMAL)
+        bottone_correlazione.config(state=tk.NORMAL)
+        bottone_salva.config(state=tk.NORMAL)
+        bottone_distribuzioni.config(state=tk.NORMAL)
+    except Exception as e:
+        print("Errore: ", e)
 
 def UnisciMRU():
     global df_MRU_Unito
@@ -473,43 +483,101 @@ def Correlzioniamo(finestra_principale, df_unione, df_filtrato, bottone_correlaz
         bottone_correlazione.config(bg="light green")
 
 def Distribuzioni(fine, df_u, df_filtrato, bottone_distribuzioni):
-    global df_distr, preferenze_dist
-    finestra_distr = FinestraDistribuzioni(root, df_Unito, df_filtrato)
-    finestra_distr.Finestra()
-    fine.wait_window(finestra_distr.finestra_dist)
-    distr_grezze, distr_filtrate, preferenze_dist = finestra_distr.get_distr()
-    print("Distribuzioni grezze0")
-    print(distr_grezze)
-    if distr_grezze is not None or distr_filtrate is not None:
-        bottone_distribuzioni.config(bg="light green")
+    global distribution, distribution_filt, DistribuzioniVarie,DistribuzioniVarie_filt
     
-    if distr_grezze is not None:
-        df_distr_grezze = []
-        for key in distr_grezze.keys():
-            print(key)
-            df_distr_grezze.append(pd.DataFrame(distr_grezze[key], index=[0]))
+    DistribuzioniVarie = pd.DataFrame(columns=['Statistica_Shapiro', 'P-Value_Shapiro','Statistica_Kolmogorov','p_value_Kolmogorov','Statistica_Jarque','p_value_Jarque'])
 
-    else:
-        df_distr_grezze = None
-    
-    if distr_filtrate is not None:
-        df_distr_filtrate = []
-        for key in distr_filtrate.keys():
-            df_distr_filtrate.append(pd.DataFrame(distr_filtrate[key], index=[0]))
+    DistribuzioniVarie_filt = pd.DataFrame(columns=['Statistica_Shapiro', 'P-Value_Shapiro','Statistica_Kolmogorov','p_value_Kolmogorov','Statistica_Jarque','p_value_Jarque'])
 
-        print("Distribuzioni filtrate")
-        print(df_distr_filtrate)
-    else:
-        df_distr_filtrate = None
-    print("Distribuzioni grezze")
-    print(df_distr_grezze)
+    df_u=df_Unito.copy()
+    # Inizializza le variabili come liste vuote
+    distribution = []
+    distribution_filt = []
 
-    df_distr = [df_distr_grezze, df_distr_filtrate]
-    print(type(df_distr[0]))
+    if not df_u.empty:
+        df_u2 = df_u.copy().drop(columns=['Data'], errors='ignore')
+        df_u2 = df_u2.apply(pd.to_numeric, errors='coerce')
 
+        print("Colonne di df_u2:", df_u2.columns)
+        print(type(df_u2))
+
+        for col in df_u2.columns:
+            print(col, type(df_u2[col]))
+            if pd.api.types.is_numeric_dtype(df_u2[col]):
+                # Calcolo della distribuzione
+                mean_value = df_u2[col].mean()
+                interval_size = 0.01 * mean_value  # Intervallo basato sulla media della colonna
+
+                # Test di normalità
+                try:
+                    shapiro_test = shapiro(df_u2[col].dropna())
+                    ks_test = kstest(df_u2[col].dropna(), 'norm', args=(df_u2[col].mean(), df_u2[col].std()))
+                    jb_test = jarque_bera(df_u2[col].dropna())
+                    da_inserire=[col,shapiro_test[0],shapiro_test[1]]
+
+                    #* Creare intervalli proporzionali alla media
+                    df_u2[f'{col}_intervallo'] = pd.cut(
+                        df_u2[col], 
+                        bins=pd.interval_range(start=df_u2[col].min(),
+                                               end=df_u2[col].max(), 
+                                               freq=interval_size))
+
+                    #* Contare i valori per ogni intervallo
+                    dist = df_u2[f'{col}_intervallo'].value_counts().sort_index()
+                    interval_means = [(interval.left + interval.right) / 2 for interval in dist.index]
+
+                    #* Sostituire gli intervalli con i loro valori medi
+                    dist.index = interval_means
+                    distribution.append((col, dist))
+                    da_inserire = pd.DataFrame([{'Colonna': col, 'Statistica_Shapiro': shapiro_test[0], 'P-Value_Shapiro': shapiro_test[1],'Statistica_Kolmogorov':ks_test[0],'p_value_Kolmogorov': ks_test[1],'Statistica_Jarque':jb_test[0],'p_value_Jarque':jb_test[1]}]) # Esempio di dati da inserire
+                    DistribuzioniVarie = pd.concat([DistribuzioniVarie, da_inserire], ignore_index=True)
+                    #print(f"Distribuzione di {col}:", dist.values)
+                except ValueError as e:
+                    print(f"Errore nella creazione degli intervalli per la colonna {col}: {e}")
+            else:
+                print(f"Colonna {col} non è numerica e verrà saltata.")
+
+        print(distribution)
+
+    # Ripeti la stessa logica per il dataframe filtrato
+    if df_filtrato is not None:
+        df_filtrato2 = df_filtrato.copy().drop(columns=['Data', 'Riferimento'], errors='ignore')
+        df_filtrato2 = df_filtrato2.apply(pd.to_numeric, errors='coerce')
+
+        # print("Colonne di df_filtrato2:", df_filtrato2.columns)
+
+        for col in df_filtrato2.columns:
+            if pd.api.types.is_numeric_dtype(df_filtrato2[col]):
+                mean_value = df_filtrato2[col].mean()
+                interval_size = 0.01 * mean_value
+                if interval_size > 0 and df_filtrato2[col].min() < df_filtrato2[col].max():
+                    try:
+                        df_filtrato2[f'{col}_intervallo'] = pd.cut(
+                            df_filtrato2[col], 
+                            bins=pd.interval_range(start=df_filtrato2[col].min(),
+                                                   end=df_filtrato2[col].max(), 
+                                                   freq=interval_size))
+                        dist = df_filtrato2[f'{col}_intervallo'].value_counts().sort_index()
+                        interval_means = [(interval.left + interval.right) / 2 for interval in dist.index]
+
+                        dist.index = interval_means
+                        distribution_filt.append((col, dist))
+                        # print(f"Distribuzione di {col}:", dist.values)
+                    except ValueError as e:
+                        print(f"Errore nella creazione degli intervalli per la colonna {col}: {e}")
+                        # Test di normalità
+                shapiro_test = shapiro(df_filtrato2[col].dropna())
+                ks_test = kstest(df_filtrato2[col].dropna(), 'norm', args=(df_filtrato2[col].mean(), df_filtrato2[col].std()))
+                jb_test = jarque_bera(df_filtrato2[col].dropna())
+                da_inserire = pd.DataFrame([{'Colonna': col, 'Statistica_Shapiro': shapiro_test[0], 'P-Value_Shapiro': shapiro_test[1],'Statistica_Kolmogorov':ks_test[0],'p_value_Kolmogorov': ks_test[1],'Statistica_Jarque':jb_test[0],'p_value_Jarque':jb_test[1]}]) # Esempio di dati da inserire
+                DistribuzioniVarie_filt = pd.concat([DistribuzioniVarie_filt, da_inserire], ignore_index=True)
+            else:
+                print(f"Colonna {col} non è numerica e verrà saltata.")
+    print(DistribuzioniVarie_filt)
+    bottone_distribuzioni.config(bg="light green")
 
 def Salva():
-    fines_salva=FinestraSalvataggio(root, df_Unito, df_filtrato, df_statistiche, df_correlazione, preferenze_corr, df_distr, preferenze_dist)
+    fines_salva=FinestraSalvataggio(root, df_Unito, df_filtrato, df_statistiche, df_correlazione, preferenze_corr,distribution,distribution_filt,DistribuzioniVarie,DistribuzioniVarie_filt)
     fines_salva.Finestra()
 
 def Grafici_Variabili():
@@ -554,6 +622,8 @@ try:
     preferenze_corr = None
     df_distr = None
     preferenze_dist = None
+    distribution = None
+    distribution_filt = None
     root = tk.Tk()
     app=App(root)
     root.mainloop()

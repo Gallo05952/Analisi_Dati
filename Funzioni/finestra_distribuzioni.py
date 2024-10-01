@@ -9,7 +9,6 @@ class FinestraDistribuzioni:
         self.df_filtrato = df_filtrato
 
     def Finestra(self):
-        print(self.df.columns)
         self.finestra_dist = tk.Toplevel(self.root)
         self.finestra_dist.title("Finestra Distribuzioni")
         self.finestra_dist.geometry("350x200")
@@ -98,7 +97,7 @@ class FinestraDistribuzioni:
         if self.Dati_grezzi_var.get() == True:
             print("Dati grezzi")
             dist_grezzi=self.DistribuzioneGrezzi()
-        else: disr_grezzi=None
+        else: dist_grezzi=None
         if self.Dati_filtrati_var.get() == True:
             print("Dati filtrati")
             dist_filtrati=self.DistribuzioneFiltrati()
@@ -111,6 +110,7 @@ class FinestraDistribuzioni:
         if self.Jarque_Bera_var.get() == True:
             preferenze.append("Jarque-Bera")
         self.finestra_dist.destroy()
+        print(dist_grezzi, dist_filtrati, preferenze)
         return dist_grezzi, dist_filtrati, preferenze
 
     def DistribuzioneGrezzi(self):
