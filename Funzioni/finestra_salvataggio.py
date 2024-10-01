@@ -5,15 +5,13 @@ import numpy as np
 
 class FinestraSalvataggio:
 
-    def __init__(self, root, df, df_filtrato, df_statistiche,df_corr, preferenze,df_distribuzioni,pref_distribuzioni,distribution,distribution_filt):
+    def __init__(self, root, df, df_filtrato, df_statistiche,df_corr, preferenze,distribution,distribution_filt,DistribuzioniVarie,DistribuzioniVarie_filt):
         self.root = root
         self.df = df
         self.df_filtrato = df_filtrato
         self.df_statistiche = df_statistiche
         self.df_corr = df_corr
         self.preferenze = preferenze
-        self.df_distribuzioni = df_distribuzioni
-        self.pref_distribuzioni = pref_distribuzioni
         self.percorso_path = None
         self.nomefile_entry = None
         self.lim_valvolaSfiato_var = None
@@ -29,6 +27,8 @@ class FinestraSalvataggio:
         self.percorso = None
         self.distribution = distribution
         self.distribution_filt = distribution_filt
+        self.distribuzioni_grezzi = DistribuzioniVarie
+        self.distribuzioni_filt = DistribuzioniVarie_filt
     
     def Finestra(self):
         self.finestra_salva = tk.Toplevel(self.root)
@@ -261,9 +261,12 @@ STATISTICHE DESCRITTIVE:
 - Kurtosis < 3: distribuzione più "piatta" (meno picchiata)
 
 DISTRIBUZIONE NORMALE TEST:
-- Shapiro-Wilk: se il p-value è minore di 0.05, la distribuzione NON è normale
-- Kolmogorov-Smirnov: se il p-value è minore di 0.05, la distribuzione NON è normale
-- Jarque-Bera: se il p-value è minore di 0.05, la distribuzione NON è normale
+- Shapiro-Wilk: Se il valore statistico è vicino a 1 e il p-value è alto (≥0.05), allora i dati seguono una distribuzione normale.
+Se il valore statistico è lontano da 1 e il p-value è basso (<0.05), allora i dati non seguono una distribuzione normale.
+- Kolmogorov-Smirnov: misura la distanza massima tra la distribuzione campionaria e la distribuzione teorica. Più il valore è elevato, maggiore è la differenza tra le distribuzioni.
+pvalue: basso indica che il campione probabilmente non proviene dalla distribuzione specificata.
+- Jarque-Bera: Rappresenta quanto si discostano la curtosi e la simmetria dei dati rispetto a una distribuzione normale. Un valore maggiore della statistica indica una maggiore deviazione dalla normalità.
+Un p-value basso indica che i dati non seguono una distribuzione normale.
 
 CORRELAZIONI:
 - Pearson: correlazione lineare e presuppone una distribuzione normale
@@ -350,146 +353,36 @@ CORRELAZIONI:
                             #     self.df_corr[1][j].to_excel(writer, sheet_name="Correlazioni Filtrati "+ self.preferenze[j])
                 if self.salva_disrtibuzioni.get():
                     print("Salvataggio distribuzione grezzi iniziato")
-                    if self.df_distribuzioni[0] is None and not self.distribution:
-                        messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
-                    elif self.distribution and self.df_distribuzioni[0] is None:   
-                        print(self.distribution) 
+                    if not self.distribution:
+                        messagebox.showinfo("Attenzione", "Non ci sono distribuzioni ad intervalli da salvare dei dati grezzi")
+                    else:
+                        print("Salvataggio distribuzione grezzi")   
                         df_all_distributions = pd.DataFrame()                   
                         for col, dist in self.distribution:
                                 df_dist = dist.reset_index()
                                 df_dist.columns = [f'{col}_intervallo', 'conteggio']
                                 df_all_distributions = pd.concat([df_all_distributions, df_dist], axis=1)
-                        df_all_distributions.to_excel(writer, sheet_name='Distribuzioni Grezzi', index=False)
+                        df_all_distributions.to_excel(writer, sheet_name='Distribuzioni Grezzi Intervalli', index=False)
+                    if self.distribuzioni_grezzi.empty:
+                        messagebox.showinfo("Attenzione", "Non ci sono statistiche di distribuzioni da salvare dei dati grezzi")
                     else:
-                        if len(self.df_distribuzioni[0]) == 0:
-                            messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati grezzi")
-                        else:
-                            # Creiamo un dizionario per raccogliere i dati per ogni test
-                            test_data = {
-                                "Shapiro-Wilk": [],
-                                "Kolmogorov-Smirnov": [],
-                                "Jarque-Bera": []
-                            }
-                            data_as_lists_SW = []
-                            data_as_lists_KS = []
-                            data_as_lists_JB = []
-                            # Iteriamo attraverso i DataFrame e raccogliamo i dati per ogni test
-                            for df in self.df_distribuzioni[0]:
-                                if df is not None:
-                                    if "Shapiro-Wilk" in df.columns:
-                                        test_data["Shapiro-Wilk"].append(df["Shapiro-Wilk"])
-                                        data_as_lists_SW = [serie.tolist() for serie in test_data["Shapiro-Wilk"]]
-                                    if "Kolmogorov-Smirnov" in df.columns:
-                                        test_data["Kolmogorov-Smirnov"].append(df["Kolmogorov-Smirnov"])
-                                        data_as_lists_KS = [serie.tolist() for serie in test_data["Kolmogorov-Smirnov"]]
-                                    if "Jarque-Bera" in df.columns:
-                                        test_data["Jarque-Bera"].append(df["Jarque-Bera"])
-                                        data_as_lists_JB = [serie.tolist() for serie in test_data["Jarque-Bera"]]
-
-                            # Scriviamo i dati raccolti in fogli di lavoro separati
-                            nomi_colonne = list(self.df.columns[1:])
-                            print("nomi colonne", nomi_colonne)  # 
-                            max_length = max(len(data_as_lists_SW), len(data_as_lists_KS), len(data_as_lists_JB),len(nomi_colonne))
-
-# Aggiungi NaN alle liste più corte fino a raggiungere la lunghezza massima
-                            data_as_lists_SW.extend([np.nan] * (max_length - len(data_as_lists_SW)))
-                            data_as_lists_KS.extend([np.nan] * (max_length - len(data_as_lists_KS)))
-                            data_as_lists_JB.extend([np.nan] * (max_length - len(data_as_lists_JB)))
-                            nomi_colonne.extend([np.nan] * (max_length - len(nomi_colonne)))
-                            # Crea un dizionario con i dati
-                            data_dict = {
-                                'Variabili': nomi_colonne,
-                                'Shapiro-Wilk': data_as_lists_SW,
-                                'Kolmogorov-Smirnov': data_as_lists_KS,
-                                'Jarque-Bera': data_as_lists_JB
-                            }
-
-                            # Crea il DataFrame utilizzando il dizionario
-                            df_prova = pd.DataFrame(data_dict)
-                            print("df_prova", df_prova)
-                            # Converti i valori delle colonne in numerici
-                            df_prova['Shapiro-Wilk'] = df_prova['Shapiro-Wilk'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
-                            df_prova['Kolmogorov-Smirnov'] = df_prova['Kolmogorov-Smirnov'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
-                            df_prova['Jarque-Bera'] = df_prova['Jarque-Bera'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
-
-                            # Assicurati che i valori siano di tipo numerico
-                            df_prova['Shapiro-Wilk'] = pd.to_numeric(df_prova['Shapiro-Wilk'], errors='coerce')
-                            df_prova['Kolmogorov-Smirnov'] = pd.to_numeric(df_prova['Kolmogorov-Smirnov'], errors='coerce')
-                            df_prova['Jarque-Bera'] = pd.to_numeric(df_prova['Jarque-Bera'], errors='coerce')
-
-                            print("df_prova", df_prova)
-                            df_prova.to_excel(writer, sheet_name="Distribuzione Grezzi")
+                        self.distribuzioni_grezzi.to_excel(writer, sheet_name='Distribuzioni Grezzi', index=False)
                 if self.salva_disrtibuzioni_filt.get():
                     print("Salvataggio correlazioni filtrati")
-                    if self.df_distribuzioni[1] is None and not self.distribution_filt:
+                    if not self.distribution_filt:
                         messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
-                    elif self.distribution_filt and self.df_distribuzioni[1] is None:   
+                    else:   
                         df_all_distributions_filt = pd.DataFrame()                   
                         for col, dist in self.distribution_filt:
                                 df_dist_f = dist.reset_index()
                                 df_dist_f.columns = [f'{col}_intervallo', 'conteggio']
                                 df_all_distributions_filt = pd.concat([df_all_distributions_filt, df_dist_f], axis=1)
-                        df_all_distributions_filt.to_excel(writer, sheet_name='Distribuzioni Filtrati', index=False)
+                        df_all_distributions_filt.to_excel(writer, sheet_name='Distribuzioni FiltIntervalli', index=False)
+                    if self.distribuzioni_filt.empty:
+                        messagebox.showinfo("Attenzione", "Non ci sono statistiche di distribuzioni da salvare dei dati grezzi")
                     else:
-                        if len(self.df_distribuzioni[1]) == 0:
-                            messagebox.showinfo("Attenzione", "Non ci sono correlazioni da salvare dei dati filtrati")
-                        else:
-                            # Creiamo un dizionario per raccogliere i dati per ogni test
-                            test_data = {
-                                "Shapiro-Wilk": [],
-                                "Kolmogorov-Smirnov": [],
-                                "Jarque-Bera": []
-                            }
-                            data_as_lists_SW = []
-                            data_as_lists_KS = []
-                            data_as_lists_JB = []
-                            # Iteriamo attraverso i DataFrame e raccogliamo i dati per ogni test
-                            for df in self.df_distribuzioni[1]:
-                                if df is not None:
-                                    if "Shapiro-Wilk" in df.columns:
-                                        test_data["Shapiro-Wilk"].append(df["Shapiro-Wilk"])
-                                        data_as_lists_SW = [serie.tolist() for serie in test_data["Shapiro-Wilk"]]
-                                    if "Kolmogorov-Smirnov" in df.columns:
-                                        test_data["Kolmogorov-Smirnov"].append(df["Kolmogorov-Smirnov"])
-                                        data_as_lists_KS = [serie.tolist() for serie in test_data["Kolmogorov-Smirnov"]]
-                                    if "Jarque-Bera" in df.columns:
-                                        test_data["Jarque-Bera"].append(df["Jarque-Bera"])
-                                        data_as_lists_JB = [serie.tolist() for serie in test_data["Jarque-Bera"]]
-
-                            # Scriviamo i dati raccolti in fogli di lavoro separati
-                            nomi_colonne = list(self.df.columns[1:])
-                            print("nomi colonne", nomi_colonne)
-                            max_length = max(len(data_as_lists_SW), len(data_as_lists_KS), len(data_as_lists_JB), len(nomi_colonne))
-
-                            # Aggiungi NaN alle liste più corte fino a raggiungere la lunghezza massima
-                            data_as_lists_SW.extend([np.nan] * (max_length - len(data_as_lists_SW)))
-                            data_as_lists_KS.extend([np.nan] * (max_length - len(data_as_lists_KS)))
-                            data_as_lists_JB.extend([np.nan] * (max_length - len(data_as_lists_JB)))
-                            nomi_colonne.extend([np.nan] * (max_length - len(nomi_colonne)))
-
-                            # Crea un dizionario con i dati
-                            data_dict = {
-                                'Variabili': nomi_colonne,
-                                'Shapiro-Wilk': data_as_lists_SW,
-                                'Kolmogorov-Smirnov': data_as_lists_KS,
-                                'Jarque-Bera': data_as_lists_JB
-                            }
-
-                            # Crea il DataFrame utilizzando il dizionario
-                            df_prova = pd.DataFrame(data_dict)
-                            print("df_prova", df_prova)
-                            # Converti i valori delle colonne in numerici
-                            df_prova['Shapiro-Wilk'] = df_prova['Shapiro-Wilk'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
-                            df_prova['Kolmogorov-Smirnov'] = df_prova['Kolmogorov-Smirnov'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
-                            df_prova['Jarque-Bera'] = df_prova['Jarque-Bera'].apply(lambda x: x[0] if isinstance(x, list) and len(x) > 0 else float('nan'))
-
-                            # Assicurati che i valori siano di tipo numerico
-                            df_prova['Shapiro-Wilk'] = pd.to_numeric(df_prova['Shapiro-Wilk'], errors='coerce')
-                            df_prova['Kolmogorov-Smirnov'] = pd.to_numeric(df_prova['Kolmogorov-Smirnov'], errors='coerce')
-                            df_prova['Jarque-Bera'] = pd.to_numeric(df_prova['Jarque-Bera'], errors='coerce')
-
-                            print("df_prova", df_prova)
-                            df_prova.to_excel(writer, sheet_name="Distribuzione Filtrati")                       
+                        self.distribuzioni_filt.to_excel(writer, sheet_name='Distribuzioni Filtrati', index=False)
+                      
             messagebox.showinfo("Salvataggio", "Salvataggio completato")
         else:
             messagebox.showinfo("Attenzione", "Selezionare un percorso")
